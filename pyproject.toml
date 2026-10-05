@@ -7,6 +7,7 @@ dependencies = ["jsonschema>=4.18,<5"]
 
 [project.scripts]
 validate-catalog = "scripts.validate_catalog:main"
+validate-geodata = "scripts.validate_geodata:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

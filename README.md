@@ -9,8 +9,9 @@ researchers, students, language communities, technologists, and funders who
 need a trustworthy starting point for work on Congolese languages.
 
 > **Project status:** Phase 0 — data foundations and governance. The schemas,
-> validation tooling, safety checks, tests, and continuous integration are in
-> place. The interactive application has not yet been scaffolded.
+> validation tooling, safety checks, geographic-source manifest, tests, and
+> continuous integration are in place. Prototype province and territory/city
+> sources are pinned; geometry review and the first metadata import come next.
 
 ## What the atlas will provide
 
@@ -51,6 +52,8 @@ The repository currently provides:
 - cross-record identifier and reference validation;
 - publication-safety checks that reject restricted content, credentials, and
   local filesystem paths;
+- a checksum-pinned manifest for prototype ADM1 and ADM2 geographic sources,
+  with licence, provenance, intended use, and review limitations;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -77,6 +80,7 @@ Without `make`:
 
 ```bash
 python3 -m scripts.validate_catalog
+python3 -m scripts.validate_geodata
 python3 -m unittest discover -v
 ```
 
@@ -131,7 +135,7 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 
 | Phase | Deliverable | Status |
 |---|---|---|
-| 0 | Schemas, governance, validation, geographic-source review | In progress |
+| 0 | Schemas, governance, validation, geographic-source review | In progress — source selected, geometry review pending |
 | 1 | Verified CongoLangBench metadata seed | Planned |
 | 2 | Interactive map, search, profiles, filters, and exports | Planned |
 | 3 | Expanded national language and resource catalogue | Planned |
@@ -181,5 +185,6 @@ correspondence, or sensitive community locations.
 - [Data model](docs/DATA_MODEL.md)
 - [Verification and evidence policy](docs/VERIFICATION_POLICY.md)
 - [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md)
+- [Geographic data source decision](docs/GEOGRAPHIC_DATA_SOURCE.md)
 - [Catalogue guide](data/catalog/README.md)
 - [Schema guide](data/schema/README.md)

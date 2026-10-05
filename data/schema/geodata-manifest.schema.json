@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/geodata-manifest.schema.json",
+  "title": "CongoLangAtlas geographic source manifest",
+  "type": "object",
+  "required": ["manifest_version", "country_iso3", "reviewed_at", "sources"],
+  "properties": {
+    "manifest_version": {"const": 1},
+    "country_iso3": {"const": "COD"},
+    "reviewed_at": {"type": "string", "format": "date"},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "admin_level", "canonical_name", "boundary_year", "provider", "source_organizations", "licence", "metadata_url", "download_url", "pinned_commit", "sha256", "feature_count", "geometry_types", "source_updated_at", "built_at", "review_status", "geometry_review", "intended_use", "limitations"],
+        "properties": {
+          "id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "admin_level": {"enum": ["ADM0", "ADM1", "ADM2"]},
+          "canonical_name": {"type": "string", "minLength": 1},
+          "boundary_year": {"type": "integer", "minimum": 1960},
+          "provider": {"type": "string", "minLength": 1},
+          "source_organizations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "licence": {
+            "type": "object",
+            "required": ["name", "url", "attribution"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "url": {"$ref": "definitions.schema.json#/$defs/url"},
+              "attribution": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "metadata_url": {"$ref": "definitions.schema.json#/$defs/url"},
+          "download_url": {"$ref": "definitions.schema.json#/$defs/url"},
+          "pinned_commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "feature_count": {"type": "integer", "minimum": 1},
+          "geometry_types": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["Polygon", "MultiPolygon"]}},
+          "source_updated_at": {"type": "string", "format": "date"},
+          "built_at": {"type": "string", "format": "date"},
+          "review_status": {"enum": ["candidate", "source-checked", "approved", "rejected"]},
+          "geometry_review": {"enum": ["pending", "structure-checked", "topology-reviewed"]},
+          "intended_use": {"type": "string", "minLength": 1},
+          "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
