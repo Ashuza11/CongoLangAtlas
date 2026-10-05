@@ -1,0 +1,23 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lej",
+  "atlas_language_id": "language-lej",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Lengola as ISO lej in the DRC. Bible in Every Language publishes the selected collection under CC BY-SA 4.0, matching the pinned extraction metadata; attribution and ShareAlike remain mandatory. A named human reviewer must approve promotion.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/leng1258",
+    "https://bibleineverylanguage.org/copyright-and-licensing/",
+    "https://doc-files.bibleineverylanguage.org/1735919439_1230981.pdf"
+  ]
+}

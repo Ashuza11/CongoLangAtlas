@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "hav",
+  "atlas_language_id": "language-hav",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Havu as ISO hav in the DRC. The official eBible edition is DRC-labelled and CC BY-SA 4.0, and the pinned coverage and checksum reconcile. Attribution, change notices, ShareAlike, and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/havu1238",
+    "https://ebible.org/find/details.php?id=hav"
+  ]
+}

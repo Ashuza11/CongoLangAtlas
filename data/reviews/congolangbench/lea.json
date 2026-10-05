@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lea",
+  "atlas_language_id": "language-lea",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Lega-Shabunda as ISO lea in the DRC and distinguishes it from Lega-Mwenga lgm. The official complete Scripture Earth edition is DRC-labelled and copyrighted. Text remains unavailable and restricted; named human approval cannot grant redistribution rights.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/lega1249",
+    "https://media.ipsapps.org/lea/osa/bible/"
+  ]
+}

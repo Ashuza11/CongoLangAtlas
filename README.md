@@ -13,9 +13,10 @@ need a trustworthy starting point for work on Congolese languages.
 > continuous integration are in place. Matched prototype province and
 > second-level sources pass the automated geometry quality gate. The first
 > CongoLangBench draft metadata exporter also reconciles and validates all 47
-> ready tracks. Four national-language tracks have evidence-linked source
-> audits, but none can be promoted without human approval and all unresolved
-> licence, access, variety, and geographic questions being closed.
+> ready tracks. Thirty-three tracks now have evidence-linked source audits,
+> including one representative from every non-national benchmark region, but
+> none can be promoted without human approval and all unresolved licence,
+> access, variety, and geographic questions being closed.
 
 ## What the atlas will provide
 
@@ -122,16 +123,23 @@ The queue detects existing atlas identities and prioritizes restricted,
 cross-border, and variety-ambiguous tracks. Structural validation alone never
 promotes a draft record into the public catalogue.
 
-Current review status: 4 of 47 tracks have automated source audits. Kikongo ya
-Leta and Congo Swahili pass all six technical source checks but still require a
-named human reviewer. Lingala retains DRC variety/geography questions, while
-Ciluba remains blocked by gated access, licence “other,” and uncertain DRC
-provenance.
+Current review status: 38 of 47 tracks have automated source audits. The four
+national tracks and one representative from each of the nine non-national
+regions are covered, along with a focused review of five high-risk open tracks.
+Three five-track restricted-source batches and a further five-track open-source
+batch are also complete. Twenty-eight technically complete audits still require
+a named human reviewer. Aushi, Alur, Bemba, Fuliiru, Lunda, and Nande retain
+geographic questions; Holoholo and
+Lingala retain variety/geography questions; and Ciluba and generic Kikongo
+remain blocked by gated access, licence “other,” and unresolved provenance.
+Every copyrighted track also remains restricted regardless of later identity
+approval.
 
 Reviewed source metadata is applied as a separate overlay, leaving the pinned
 CongoLangBench registries unchanged. The generated records now link directly
-to CLEAR Global, Google SMOL, or `multi-open` and preserve their actual access,
-licence, redistribution, and geographic-scope states.
+to CLEAR Global, Google SMOL, `multi-open`, MT560 wrappers, AfriSpeech Africa
+Corpus, eBible.org, or Bible in Every Language and preserve their actual
+access, licence, redistribution, and geographic-scope states.
 
 ## Repository structure
 

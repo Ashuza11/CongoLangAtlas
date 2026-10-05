@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "shr",
+  "atlas_language_id": "language-shr",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Shi/Mashi as ISO shr across the DRC, Burundi, and Rwanda. The official eBible edition is explicitly a DRC Shi edition under CC BY 4.0, and the pinned coverage and checksum reconcile. Attribution and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/shii1238",
+    "https://ebible.org/find/details.php?id=shr"
+  ]
+}

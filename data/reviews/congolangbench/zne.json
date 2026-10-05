@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "zne",
+  "atlas_language_id": "language-zne",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Zande as ISO zne across the DRC, Central African Republic, and South Sudan. The pinned package has the same cross-border label and marks the exact edition copyrighted, so text remains unavailable and redistribution restricted. Human approval cannot remove that restriction.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/zand1248",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

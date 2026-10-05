@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lub",
+  "atlas_language_id": "language-lub",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Luba-Katanga/Kiluba as ISO lub in the DRC and distinguishes it from Luba-Kasai. The MT560 wrapper labels the track as DRC and CC BY 4.0, with mixed upstream OPUS provenance documented. A named human reviewer must approve promotion.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/luba1250",
+    "https://huggingface.co/datasets/michsethowusu/english-luba-katanga_sentence-pairs_mt560"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lun",
+  "atlas_language_id": "language-lun",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Lunda as ISO lun across Angola, the DRC, and Zambia. The open CC BY 4.0 MT560 wrapper is explicitly Zambian, so it cannot establish DRC-specific variety provenance. Geographic and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/lund1266",
+    "https://huggingface.co/datasets/michsethowusu/english-lunda_sentence-pairs_mt560"
+  ]
+}

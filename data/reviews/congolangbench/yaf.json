@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "yaf",
+  "atlas_language_id": "language-yaf",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Yaka-Pelende-Lonzo as ISO yaf across the DRC and Angola. The pinned Africa Corpus package applies the same country labels and marks the exact Yaka and French editions public domain; the cross-border label must remain visible. A named human reviewer must approve promotion.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/yaka1269",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

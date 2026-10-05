@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "hoo",
+  "atlas_language_id": "language-hoo",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "unresolved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Holoholo as ISO hoo across multiple countries including the DRC. YouVersion confirms the official edition and publisher, but the edition does not identify a narrower subvariety or DRC-specific provenance. Variety, geography, human approval, and restricted-content blockers remain.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/holo1240",
+    "https://www.bible.com/versions/4460-hbt-holoholo-bible-translation"
+  ]
+}

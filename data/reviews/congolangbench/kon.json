@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "kon",
+  "atlas_language_id": "language-kon",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "unresolved",
+    "geographic_scope": "unresolved",
+    "licence": "unresolved",
+    "access": "rejected",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "The Library of Congress identifies the collective Kongo code kon, but the multi-open configuration only says Kikongo and provides no row-level country or subvariety provenance. Its files are gated and licence is listed as other. It must remain separate from Kituba ktu and specific Koongo varieties until expert review.",
+  "evidence_urls": [
+    "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?code_ID=241",
+    "https://huggingface.co/datasets/African-Languages-Lab/multi-open"
+  ]
+}

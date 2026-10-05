@@ -24,6 +24,142 @@
       "source_type": "primary-dataset",
       "licence_id": null,
       "verification_notes": "Dataset card identifies gated access and licence as other; reusable terms remain unresolved."
+    },
+    "source-mt560-tetela": {
+      "citation": "English--Tetela sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-tetela_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
+    },
+    "source-mt560-alur": {
+      "citation": "English--Alur sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-alur_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
+    },
+    "source-mt560-luba-katanga": {
+      "citation": "English--Luba-Katanga sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-luba-katanga_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
+    },
+    "source-afrispeech-africa-corpus": {
+      "citation": "AfriSpeech Africa Corpus",
+      "url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "publisher": "AfriSpeech",
+      "source_type": "primary-dataset",
+      "licence_id": null,
+      "verification_notes": "Dataset card reports licence as other. Exact edition rights and country labels were checked against the pinned CongoLangBench package metadata."
+    },
+    "source-bible-in-every-language": {
+      "citation": "Bible in Every Language Lengola collection",
+      "url": "https://bibleineverylanguage.org/copyright-and-licensing/",
+      "publisher": "Bible in Every Language",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-SA-4.0",
+      "verification_notes": "Publisher licence page and pinned Lengola extraction metadata checked directly; attribution and ShareAlike requirements apply."
+    },
+    "source-open-bible-aushi": {
+      "citation": "Aushi Bible Translation Project",
+      "url": "https://preview.open.bible/bibles/aushi-bible-translation-project",
+      "publisher": "The Word for the World International",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-SA-4.0",
+      "verification_notes": "Official product page confirms the Zambia label, provider, downloads, and CC BY-SA licence; pinned metadata records the actual downloaded coverage."
+    },
+    "source-mt560-bemba": {
+      "citation": "English--Bemba sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-bemba_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card confirms Bemba, Zambia provenance, and CC BY 4.0; upstream OPUS components remain mixed."
+    },
+    "source-mt560-lunda": {
+      "citation": "English--Lunda sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-lunda_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card confirms Lunda, Zambia provenance, and CC BY 4.0; upstream OPUS components remain mixed."
+    },
+    "source-jw-official-publications": {
+      "citation": "JW.org official publication catalogue and media API",
+      "url": "https://www.jw.org/",
+      "publisher": "Watch Tower Bible and Tract Society of Pennsylvania",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Matching official Kibembe and French EPUBs were resolved through the publisher media API and checksum-verified; no redistribution licence was granted."
+    },
+    "source-ebible-fuliiru": {
+      "citation": "Kifuliiru Bible edition",
+      "url": "https://ebible.org/Scriptures/details.php?id=flr",
+      "publisher": "Wycliffe Bible Translators, Inc.",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official edition page identifies Fuliiru, publisher copyright, complete coverage, and all-rights-reserved status."
+    },
+    "source-youversion-hunde": {
+      "citation": "Hunde Nouveau Testament, YouVersion 4565",
+      "url": "https://www.bible.com/versions/4565-hke-hunde-nouveau-testament",
+      "publisher": "The Seed Company",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official version page and pinned extraction metadata checked; no open corpus redistribution licence is displayed."
+    },
+    "source-youversion-holoholo": {
+      "citation": "Holoholo Bible Translation, YouVersion 4460",
+      "url": "https://www.bible.com/versions/4460-hbt-holoholo-bible-translation",
+      "publisher": "The Word for the World International",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official version page confirms the publisher and available books; pinned metadata records copyrighted local-only handling."
+    },
+    "source-scripture-earth-lega-shabunda": {
+      "citation": "Mikanda Zili mu Idagi, Lega-Shabunda Bible",
+      "url": "https://media.ipsapps.org/lea/osa/bible/",
+      "publisher": "UFM / CEEBCo via Scripture Earth",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official reader, complete edition metadata, and pinned verse extraction checked; redistribution is not authorized."
+    },
+    "source-ebible-havu": {
+      "citation": "Nouveau Testament Havu",
+      "url": "https://ebible.org/find/details.php?id=hav",
+      "publisher": "The Seed Company via eBible.org",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-SA-4.0",
+      "verification_notes": "Official edition page confirms ISO hav, DRC scope, downloadable formats, and CC BY-SA 4.0 terms; pinned extraction metadata and checksums were also checked."
+    },
+    "source-mt560-ruund": {
+      "citation": "English--Ruund sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-ruund_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
+    },
+    "source-ebible-mashi": {
+      "citation": "BIBLIYA NTAGATIFU OMU MASHI",
+      "url": "https://ebible.org/find/details.php?id=shr",
+      "publisher": "BUKAVU Mashi and other Kivu Languages Bible via eBible.org",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Official edition page confirms ISO shr, DRC scope, downloadable formats, and CC BY 4.0 terms; pinned extraction metadata and checksums were also checked."
+    },
+    "source-mt560-songe": {
+      "citation": "English--Songe sentence pairs from OPUS MT560",
+      "url": "https://huggingface.co/datasets/michsethowusu/english-songe_sentence-pairs_mt560",
+      "publisher": "michsethowusu",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
     }
   },
   "tracks": {
@@ -70,6 +206,380 @@
       "redistribution": "allowed",
       "geographic_scope": "drc-labelled",
       "limitations": "Downloadable Congo Swahili-French kits; attribution to CLEAR Global is required."
+    },
+    "tll": {
+      "source_id": "source-mt560-tetela",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-tetela_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-tetela_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The wrapper labels the data as DRC and CC BY 4.0, but mixes upstream OPUS domains; cite both the wrapper and OPUS MT560 guidance."
+    },
+    "alz": {
+      "source_id": "source-mt560-alur",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-alur_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-alur_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "uncertain",
+      "limitations": "The wrapper labels the data as DRC, but Alur is cross-border with Uganda and the corpus does not establish a DRC-specific variety; upstream OPUS provenance is mixed."
+    },
+    "nnb": {
+      "source_id": "source-clear-global-gamayun",
+      "homepage_url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits",
+      "download_url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits/tree/main/parallel/nnb-fra",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "uncertain",
+      "limitations": "Open Nande-French kits with required CLEAR Global attribution; Nande is cross-border with Uganda and the kit does not establish DRC-only provenance."
+    },
+    "lgm": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The exact Lega-Mwenga edition is marked copyrighted. Only metadata and preparation scripts may be published; corpus text remains excluded."
+    },
+    "zne": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Zande edition is copyrighted and labelled for DRC, Central African Republic, and South Sudan. Only metadata and scripts may be published."
+    },
+    "ngc": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus/tree/main",
+      "access_type": "open-download",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "allowed",
+      "geographic_scope": "cross-border",
+      "limitations": "Three exact Ngombe editions are marked public domain, while the aggregate dataset card uses licence other. The religious corpus is labelled for DRC and Central African Republic."
+    },
+    "lub": {
+      "source_id": "source-mt560-luba-katanga",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-luba-katanga_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-luba-katanga_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The wrapper labels Luba-Katanga data as DRC and CC BY 4.0, but mixes upstream OPUS domains; cite both the wrapper and OPUS MT560 guidance."
+    },
+    "lej": {
+      "source_id": "source-bible-in-every-language",
+      "homepage_url": "https://bibleineverylanguage.org/copyright-and-licensing/",
+      "download_url": "https://doc-files.bibleineverylanguage.org/1735919439_1230981.pdf",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The 23-book Lengola collection and English reference are CC BY-SA 4.0; attribution and ShareAlike requirements must be retained."
+    },
+    "yns": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus/tree/main",
+      "access_type": "open-download",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The exact Yansi edition and French reference are marked public domain, while the aggregate dataset card uses licence other; preserve edition and package attribution."
+    },
+    "auh": {
+      "source_id": "source-open-bible-aushi",
+      "homepage_url": "https://preview.open.bible/bibles/aushi-bible-translation-project",
+      "download_url": "https://doc-files.bibleineverylanguage.org/auh-reg-mrk_lbo_1c_c_chapter_clf.pdf",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "cross-border",
+      "limitations": "The CC BY-SA Aushi sources are explicitly Zambian. They establish open Aushi data, not a DRC-specific edition; actual downloaded coverage is four books rather than the product page's full-Bible label."
+    },
+    "bem": {
+      "source_id": "source-mt560-bemba",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-bemba_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-bemba_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "cross-border",
+      "limitations": "The wrapper explicitly labels the Bemba data as Zambia. It does not establish DRC-specific coverage, and mixed upstream OPUS provenance remains documented."
+    },
+    "kon": {
+      "source_id": "source-african-languages-lab-multi-open",
+      "homepage_url": "https://huggingface.co/datasets/African-Languages-Lab/multi-open",
+      "download_url": null,
+      "access_type": "gated",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "unknown",
+      "geographic_scope": "uncertain",
+      "limitations": "The gated english-kikongo configuration uses the collective Kongo label without row-level country or subvariety provenance. Licence is listed as other; it must remain distinct from Kituba and specific Koongo varieties."
+    },
+    "lun": {
+      "source_id": "source-mt560-lunda",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-lunda_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-lunda_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "cross-border",
+      "limitations": "The wrapper explicitly labels the Lunda data as Zambia. It does not establish DRC-specific coverage, and mixed upstream OPUS provenance remains documented."
+    },
+    "yaf": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus/tree/main",
+      "access_type": "open-download",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "allowed",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Yaka edition is marked public domain and labelled for both DRC and Angola, while the aggregate dataset card uses licence other; do not describe it as DRC-exclusive."
+    },
+    "bmb": {
+      "source_id": "source-jw-official-publications",
+      "homepage_url": "https://www.jw.org/",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "Matching official Kibembe and French EPUBs support deterministic paragraph alignment, but the copyrighted publication grants no redistribution permission. Text remains local and excluded."
+    },
+    "buu": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "Both exact Budu editions are marked copyrighted and DRC-labelled. Only metadata and preparation scripts may be published; aligned text remains excluded."
+    },
+    "flr": {
+      "source_id": "source-ebible-fuliiru",
+      "homepage_url": "https://ebible.org/Scriptures/details.php?id=flr",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "uncertain",
+      "limitations": "The complete Fuliiru edition is all rights reserved. Fuliiru is cross-border with Burundi and the edition does not establish DRC-specific provenance; text remains local and excluded."
+    },
+    "hke": {
+      "source_id": "source-youversion-hunde",
+      "homepage_url": "https://www.bible.com/versions/4565-hke-hunde-nouveau-testament",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The official copyrighted Hunde edition exposes only Mark, Luke, and John despite its New Testament title. No corpus redistribution licence is granted; text remains local and excluded."
+    },
+    "hoo": {
+      "source_id": "source-youversion-holoholo",
+      "homepage_url": "https://www.bible.com/versions/4460-hbt-holoholo-bible-translation",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "uncertain",
+      "limitations": "The copyrighted official edition provides 45 chapters but does not identify a narrower Holoholo subvariety or establish DRC-specific provenance. Text remains local and excluded."
+    },
+    "keo": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact copyrighted Kakwa edition is labelled for DRC, South Sudan, and Uganda. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "khy": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The exact Kele/Lokele edition is copyrighted, DRC-labelled, and published by the Bible Society of the DRC. Text remains local and excluded."
+    },
+    "kmw": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The exact Komo edition is copyrighted and DRC-labelled. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "kny": {
+      "source_id": "source-jw-official-publications",
+      "homepage_url": "https://www.jw.org/kny/cilamin-cya-mikand/bibl/nwt/books/",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The official Kanyok site exposes six verse-keyed books but grants no corpus redistribution licence. Derived text remains local and excluded."
+    },
+    "lea": {
+      "source_id": "source-scripture-earth-lega-shabunda",
+      "homepage_url": "https://media.ipsapps.org/lea/osa/bible/",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The complete official Lega-Shabunda edition is copyrighted and DRC-labelled. It remains distinct from Lega-Mwenga; aligned text stays local and excluded."
+    },
+    "log": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "Both exact Logo editions are copyrighted and labelled for DRC and South Sudan. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "lol": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "Both exact Mongo/Nkundo editions are copyrighted and DRC-labelled. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "loq": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Lobala edition is copyrighted and labelled for both DRC and the Republic of the Congo. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "mdm": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The exact Mayogo edition is copyrighted and DRC-labelled. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "ndp": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Ndo/Kebu edition is copyrighted and labelled for DRC and Uganda. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "hav": {
+      "source_id": "source-ebible-havu",
+      "homepage_url": "https://ebible.org/find/details.php?id=hav",
+      "download_url": "https://ebible.org/Scriptures/hav_vpl.zip",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The DRC-labelled Havu edition permits redistribution and adaptation under CC BY-SA 4.0; retain attribution, change notices, and ShareAlike terms."
+    },
+    "loo": {
+      "source_id": "source-bible-in-every-language",
+      "homepage_url": "https://bibleineverylanguage.org/copyright-and-licensing/",
+      "download_url": "https://doc-files.bibleineverylanguage.org/loo-reg-mrk_lbo_1c_c_chapter_clf.pdf",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The selected Lombo Mark and Luke documents are DRC-labelled and reusable under CC BY-SA 4.0; attribution and ShareAlike requirements must be retained."
+    },
+    "rnd": {
+      "source_id": "source-mt560-ruund",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-ruund_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-ruund_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The wrapper labels this cross-border language's data as DRC and CC BY 4.0, but mixes upstream OPUS domains; cite both the wrapper and OPUS MT560 guidance."
+    },
+    "shr": {
+      "source_id": "source-ebible-mashi",
+      "homepage_url": "https://ebible.org/find/details.php?id=shr",
+      "download_url": "https://ebible.org/Scriptures/shr_vpl.zip",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The selected Mashi/Shi edition is explicitly DRC-labelled and reusable under CC BY 4.0; preserve attribution and identify modifications."
+    },
+    "sop": {
+      "source_id": "source-mt560-songe",
+      "homepage_url": "https://huggingface.co/datasets/michsethowusu/english-songe_sentence-pairs_mt560",
+      "download_url": "https://huggingface.co/datasets/michsethowusu/english-songe_sentence-pairs_mt560/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The wrapper labels the Songe data as DRC and CC BY 4.0, but mixes upstream OPUS domains; cite both the wrapper and OPUS MT560 guidance."
     }
   }
 }

@@ -1,0 +1,23 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "auh",
+  "atlas_language_id": "language-auh",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Aushi as ISO auh across the DRC and Zambia. Open.Bible confirms the selected CC BY-SA source is Zambian, so it establishes open Aushi data but not DRC-specific variety provenance. Geographic and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/aush1241",
+    "https://preview.open.bible/bibles/aushi-bible-translation-project",
+    "https://doc-files.bibleineverylanguage.org/auh-reg-mrk_lbo_1c_c_chapter_clf.pdf"
+  ]
+}

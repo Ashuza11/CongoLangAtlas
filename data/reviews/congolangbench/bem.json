@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "bem",
+  "atlas_language_id": "language-bem",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Bemba as ISO bem across Zambia and several neighbouring countries, including the DRC, and distinguishes it from Bembe bmb. The open CC BY 4.0 MT560 wrapper is explicitly Zambian, so DRC-specific provenance and named human review remain unresolved.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/bemb1257",
+    "https://huggingface.co/datasets/michsethowusu/english-bemba_sentence-pairs_mt560"
+  ]
+}

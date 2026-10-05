@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "yns",
+  "atlas_language_id": "language-yns",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Yansi as ISO yns in the DRC. The pinned Africa Corpus package labels the exact Yansi edition and French reference public domain and records DRC provenance; the aggregate dataset card remains licence other, so edition-level rights must stay explicit. Named human approval is required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/yans1239",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

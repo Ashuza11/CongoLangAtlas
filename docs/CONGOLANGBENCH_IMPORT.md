@@ -129,6 +129,116 @@ access with unknown redistribution and no normalized licence, and records the
 CC BY 4.0 open-download sources for Lingala, Kikongo ya Leta, and Congo
 Swahili.
 
+### Regional representative source audit
+
+The second evidence pass adds one representative from each non-national region
+without treating the benchmark's region label as geographic proof:
+
+| Region | Track | Source result | Remaining blocker |
+|---|---|---|---|
+| Central DRC | Tetela (`tll`) | MT560 wrapper, CC BY 4.0 | Human approval; mixed OPUS provenance remains documented |
+| Ituri | Alur (`alz`) | MT560 wrapper, CC BY 4.0 | Cross-border geographic review and human approval |
+| Kivu | Nande (`nnb`) | CLEAR Global Gamayun, CC BY 4.0 | Cross-border geographic review and human approval |
+| Maniema | Lega-Mwenga (`lgm`) | Copyrighted Africa Corpus edition | Restricted content and human approval |
+| Northern DRC | Zande (`zne`) | Copyrighted, cross-border Africa Corpus edition | Restricted content and human approval |
+| Northwestern Congo Basin | Ngombe (`ngc`) | Three public-domain editions | Human approval; retain cross-border and religious-domain labels |
+| Southeastern DRC | Luba-Katanga (`lub`) | MT560 wrapper, CC BY 4.0 | Human approval; mixed OPUS provenance remains documented |
+| Tshopo | Lengola (`lej`) | Bible in Every Language, CC BY-SA 4.0 | Human approval; attribution and ShareAlike apply |
+| Western DRC | Yansi (`yns`) | Public-domain Africa Corpus edition | Human approval; retain edition-level rights evidence |
+
+The resulting draft catalogue contains 47 language records, 94 resource
+records, and 9 source records. All 13 reviewed tracks remain deferred: an
+automated source audit can reduce blockers, but only a named human decision can
+authorize catalogue promotion.
+
+### High-risk open-track audit
+
+A third evidence pass prioritizes records that look publishable in the source
+registry but could still mislead users about geography, variety, or reuse:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Aushi (`auh`) | Open.Bible, CC BY-SA 4.0, Zambia source | DRC-specific geographic review and human approval |
+| Bemba (`bem`) | MT560, CC BY 4.0, Zambia source | DRC-specific geographic review and human approval |
+| Kikongo (`kon`) | `multi-open`, gated, licence “other” | Variety, geography, access, licence, and human approval |
+| Lunda (`lun`) | MT560, CC BY 4.0, Zambia source | DRC-specific geographic review and human approval |
+| Yaka (`yaf`) | Public-domain DRC–Angola edition | Human approval; retain cross-border scope |
+
+After this pass the generated draft contains 47 language records, 94 resource
+records, and 12 source records. Eighteen tracks have deferred automated audits;
+none is ready for promotion.
+
+### Restricted-source audit batch 1
+
+The first restricted batch verifies five locally usable tracks without
+misrepresenting official reading or download access as redistribution rights:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Bembe/Kibembe (`bmb`) | Matching official copyrighted EPUBs, DRC-labelled | Restricted content and human approval |
+| Budu (`buu`) | Two copyrighted DRC-labelled Africa Corpus editions | Restricted content and human approval |
+| Fuliiru (`flr`) | Complete all-rights-reserved eBible edition | Geography, restricted content, and human approval |
+| Hunde (`hke`) | Copyrighted YouVersion edition with three available books | Restricted content and human approval |
+| Holoholo (`hoo`) | Copyrighted YouVersion edition with 45 available chapters | Variety, geography, restricted content, and human approval |
+
+The generated draft now contains 47 language records, 94 resource records, and
+16 source records. Twenty-three tracks have deferred automated audits; no
+restricted text, download URL, or reuse permission is emitted for this batch.
+
+### Restricted-source audit batch 2
+
+The second restricted batch resolves five identity and scope checks while
+retaining the source's copyright restrictions:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Kakwa (`keo`) | Copyrighted DRC–South Sudan–Uganda edition | Restricted content and human approval |
+| Kele/Lokele (`khy`) | Copyrighted DRC edition | Restricted content and human approval |
+| Komo (`kmw`) | Copyrighted DRC edition | Restricted content and human approval |
+| Kanyok (`kny`) | Six official copyrighted JW.org books | Restricted content and human approval |
+| Lega-Shabunda (`lea`) | Complete copyrighted DRC edition | Restricted content and human approval; keep separate from Lega-Mwenga |
+
+The generated draft now contains 47 language records, 94 resource records, and
+17 source records. Twenty-eight tracks have deferred automated audits; all five
+tracks in this batch pass the six technical checks but remain unpublishable at
+the content layer.
+
+### Restricted-source audit batch 3
+
+The third restricted batch verifies five further Africa Corpus tracks and
+retains their exact country scope:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Logo (`log`) | Two copyrighted DRC–South Sudan editions | Restricted content and human approval |
+| Mongo (`lol`) | Two copyrighted DRC editions | Restricted content and human approval |
+| Lobala (`loq`) | Copyrighted DRC–Republic of the Congo edition | Restricted content and human approval |
+| Mayogo (`mdm`) | Copyrighted DRC edition | Restricted content and human approval |
+| Ndo (`ndp`) | Copyrighted DRC–Uganda edition | Restricted content and human approval |
+
+The generated draft remains at 158 records because all five tracks reuse the
+reviewed Africa Corpus source. Thirty-three tracks now have deferred automated
+audits; all five tracks in this batch pass the six technical checks but remain
+unpublishable at the content layer.
+
+### Additional open-source audit
+
+This batch verifies five open sources whose pinned acquisitions already have
+reproducible checksums and coverage totals:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Havu (`hav`) | DRC Havu New Testament, CC BY-SA 4.0 | Human approval; attribution, change notices, and ShareAlike apply |
+| Lombo/Turumbu (`loo`) | DRC Mark and Luke documents, CC BY-SA 4.0 | Human approval; attribution and ShareAlike apply |
+| Ruund (`rnd`) | DRC-labelled MT560 wrapper, CC BY 4.0 | Human approval; cross-border identity and mixed OPUS provenance remain documented |
+| Mashi/Shi (`shr`) | DRC Bible edition, CC BY 4.0 | Human approval; cross-border identity remains documented |
+| Songe (`sop`) | DRC-labelled MT560 wrapper, CC BY 4.0 | Human approval; mixed OPUS provenance remains documented |
+
+The generated draft now contains 47 language records, 94 resource records, and
+21 source records, for 162 records total. Thirty-eight tracks have deferred
+automated audits. All five tracks in this batch pass the six technical checks,
+but none can be promoted without a named human decision.
+
 ## Known issues to preserve
 
 - Generic Kikongo and Kikongo ya Leta are distinct tracks.

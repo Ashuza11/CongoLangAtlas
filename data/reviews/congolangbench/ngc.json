@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "ngc",
+  "atlas_language_id": "language-ngc",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Ngombe as ISO ngc across the DRC and Central African Republic. The pinned package applies that cross-border label and marks all three selected editions public domain; the aggregate source still uses licence other, so edition-level rights and religious-domain limitations must remain visible. Named human approval is required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/ngom1268",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

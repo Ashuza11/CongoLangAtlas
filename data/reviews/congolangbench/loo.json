@@ -1,0 +1,23 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "loo",
+  "atlas_language_id": "language-loo",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Lombo, with Turumbu as an alternative name, as ISO loo in the DRC. Bible in Every Language publishes the selected Mark and Luke documents under CC BY-SA 4.0, matching the pinned extraction. Attribution, ShareAlike, and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/lomb1260",
+    "https://bibleineverylanguage.org/copyright-and-licensing/",
+    "https://doc-files.bibleineverylanguage.org/loo-reg-mrk_lbo_1c_c_chapter_clf.pdf"
+  ]
+}

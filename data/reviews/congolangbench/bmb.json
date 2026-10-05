@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "bmb",
+  "atlas_language_id": "language-bmb",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Bembe/Kibembe as ISO bmb, distinct from Bemba bem and Beembe beq. The pinned source uses the DRC-labelled Kibembe edition of an official JW.org publication. Matching files are copyrighted and redistribution is not authorized, so human approval cannot remove the restricted-content blocker.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/bemb1255",
+    "https://www.jw.org/en/bible-teachings/guided-bible-study-course/"
+  ]
+}

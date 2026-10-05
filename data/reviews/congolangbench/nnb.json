@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "nnb",
+  "atlas_language_id": "language-nnb",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Nande as ISO nnb across the DRC and Uganda. CLEAR Global publishes the selected Nande-French kits under CC BY 4.0, but the kit does not establish DRC-only provenance. Geographic and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/nand1264",
+    "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "kny",
+  "atlas_language_id": "language-kny",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Kanyok/Kanyoka as ISO kny in the DRC. The official Kanyok JW.org site provides six verse-keyed books, but does not grant corpus redistribution rights. Text remains unavailable and restricted; named human approval cannot change those terms.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/kany1247",
+    "https://www.jw.org/kny/cilamin-cya-mikand/bibl/nwt/books/"
+  ]
+}

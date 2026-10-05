@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "hke",
+  "atlas_language_id": "language-hke",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Hunde/Kihunde as ISO hke in the DRC. YouVersion identifies the official Hunde edition and publisher, while the pinned extraction records its actual three-book coverage and lack of open redistribution terms. Text remains restricted even after human identity review.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/hund1239",
+    "https://www.bible.com/versions/4565-hke-hunde-nouveau-testament"
+  ]
+}

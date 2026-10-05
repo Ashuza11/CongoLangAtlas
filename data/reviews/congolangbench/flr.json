@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "flr",
+  "atlas_language_id": "language-flr",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Fuliiru/Kifuliiru as ISO flr across the DRC and Burundi. The official eBible page confirms a complete copyrighted, all-rights-reserved edition, but does not establish DRC-specific text provenance. Geographic and human review remain required, and redistribution stays restricted.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/fuli1240",
+    "https://ebible.org/Scriptures/details.php?id=flr"
+  ]
+}

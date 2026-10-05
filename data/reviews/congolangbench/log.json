@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "log",
+  "atlas_language_id": "language-log",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Logo/Logoti as ISO log across the DRC and South Sudan. The pinned Africa Corpus editions carry the same cross-border scope and are copyrighted. Text remains unavailable and restricted; named human approval cannot grant redistribution rights.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/logo1259",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "kmw",
+  "atlas_language_id": "language-kmw",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies DRC Komo as ISO kmw, distinct from similarly named languages elsewhere. The pinned Africa Corpus edition is DRC-labelled and copyrighted. Text remains unavailable and restricted; named human approval cannot grant redistribution rights.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/komo1260",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}
