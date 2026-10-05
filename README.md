@@ -9,9 +9,10 @@ researchers, students, language communities, technologists, and funders who
 need a trustworthy starting point for work on Congolese languages.
 
 > **Project status:** Phase 0 — data foundations and governance. The schemas,
-> validation tooling, safety checks, geographic-source manifest, tests, and
-> continuous integration are in place. Prototype province and territory/city
-> sources are pinned; geometry review and the first metadata import come next.
+> validation tooling, safety checks, reproducible geodata pipeline, tests, and
+> continuous integration are in place. Matched prototype province and
+> second-level sources pass the automated geometry quality gate; administrative
+> currency review and the first metadata import come next.
 
 ## What the atlas will provide
 
@@ -54,6 +55,8 @@ The repository currently provides:
   local filesystem paths;
 - a checksum-pinned manifest for prototype ADM1 and ADM2 geographic sources,
   with licence, provenance, intended use, and review limitations;
+- deterministic downloading, geometry validation, parent assignment,
+  topology-preserving simplification, and quality reporting;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -83,6 +86,16 @@ python3 -m scripts.validate_catalog
 python3 -m scripts.validate_geodata
 python3 -m unittest discover -v
 ```
+
+Build the generated map layers from their pinned sources:
+
+```bash
+make geodata
+```
+
+This command requires network access the first time. Verified downloads are
+cached under `data/generated/`; generated sources, web layers, and quality
+reports are excluded from Git and remain reproducible from the manifest.
 
 ## Repository structure
 
@@ -135,7 +148,7 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 
 | Phase | Deliverable | Status |
 |---|---|---|
-| 0 | Schemas, governance, validation, geographic-source review | In progress — source selected, geometry review pending |
+| 0 | Schemas, governance, validation, geographic-source review | In progress — automated geometry gate passes; administrative review pending |
 | 1 | Verified CongoLangBench metadata seed | Planned |
 | 2 | Interactive map, search, profiles, filters, and exports | Planned |
 | 3 | Expanded national language and resource catalogue | Planned |

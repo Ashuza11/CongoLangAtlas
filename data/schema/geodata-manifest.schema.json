@@ -13,7 +13,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "admin_level", "canonical_name", "boundary_year", "provider", "source_organizations", "licence", "metadata_url", "download_url", "pinned_commit", "sha256", "feature_count", "geometry_types", "source_updated_at", "built_at", "review_status", "geometry_review", "intended_use", "limitations"],
+        "required": ["id", "admin_level", "canonical_name", "boundary_year", "provider", "source_organizations", "licence", "metadata_url", "download_url", "source_revision", "sha256", "feature_count", "geometry_types", "fields", "preprocessing", "source_updated_at", "built_at", "review_status", "geometry_review", "intended_use", "limitations"],
         "properties": {
           "id": {"$ref": "definitions.schema.json#/$defs/id"},
           "admin_level": {"enum": ["ADM0", "ADM1", "ADM2"]},
@@ -33,10 +33,26 @@
           },
           "metadata_url": {"$ref": "definitions.schema.json#/$defs/url"},
           "download_url": {"$ref": "definitions.schema.json#/$defs/url"},
-          "pinned_commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+          "source_revision": {"type": "string", "pattern": "^[A-Za-z0-9._-]{3,100}$"},
           "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
           "feature_count": {"type": "integer", "minimum": 1},
           "geometry_types": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["Polygon", "MultiPolygon"]}},
+          "fields": {
+            "type": "object",
+            "required": ["id", "name", "code"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "name": {"type": "string", "minLength": 1},
+              "code": {"type": "string", "minLength": 1},
+              "parent_code": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "preprocessing": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"enum": ["strip-trailing-system-io-memorystream"]}
+          },
           "source_updated_at": {"type": "string", "format": "date"},
           "built_at": {"type": "string", "format": "date"},
           "review_status": {"enum": ["candidate", "source-checked", "approved", "rejected"]},

@@ -3,11 +3,15 @@ name = "congolangatlas-data"
 version = "0.1.0"
 description = "Validation and publication-safety tooling for CongoLangAtlas metadata"
 requires-python = ">=3.10"
-dependencies = ["jsonschema>=4.18,<5"]
+dependencies = [
+  "jsonschema>=4.18,<5",
+  "shapely>=2.0,<3",
+]
 
 [project.scripts]
 validate-catalog = "scripts.validate_catalog:main"
 validate-geodata = "scripts.validate_geodata:main"
+build-geodata = "scripts.build_geodata:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

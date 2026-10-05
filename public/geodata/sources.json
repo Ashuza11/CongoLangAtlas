@@ -4,61 +4,74 @@
   "reviewed_at": "2026-10-05",
   "sources": [
     {
-      "id": "geoboundaries-cod-adm1-9469f09",
+      "id": "ocha-rgc-cod-adm1-2017",
       "admin_level": "ADM1",
       "canonical_name": "Provinces",
       "boundary_year": 2017,
-      "provider": "geoBoundaries",
-      "source_organizations": ["OpenStreetMap", "Wambacher"],
+      "provider": "World Bank Data Catalog mirror",
+      "source_organizations": ["OCHA DR Congo", "Référentiel Géographique Commun"],
       "licence": {
-        "name": "Open Data Commons Open Database License 1.0",
-        "url": "https://opendatacommons.org/licenses/odbl/1-0/",
-        "attribution": "© OpenStreetMap contributors; boundary distribution by geoBoundaries."
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": "OCHA DR Congo and Référentiel Géographique Commun; distributed by the World Bank Data Catalog."
       },
-      "metadata_url": "https://www.geoboundaries.org/api/current/gbOpen/COD/ADM1/",
-      "download_url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/COD/ADM1/geoBoundaries-COD-ADM1.geojson",
-      "pinned_commit": "9469f09",
-      "sha256": "3deb46256765a4ce78a2e8dadaf6f93f43869877e55d242d1e68139b45a5395a",
+      "metadata_url": "https://energydata.info/dataset/democratic-republic-congo-administrative-boundaries-2017",
+      "download_url": "https://datacatalogfiles.worldbank.org/ddh-published/0040240/1/DR0050122/codadmbndaadm120170407.geojson",
+      "source_revision": "0040240-v1-dr0050122",
+      "sha256": "123f137e25a64a1a2585129751ab799c5a83488f319c8de09a9a006d68e3e82a",
       "feature_count": 26,
-      "geometry_types": ["Polygon", "MultiPolygon"],
-      "source_updated_at": "2023-01-19",
-      "built_at": "2023-12-12",
+      "geometry_types": ["Polygon"],
+      "fields": {
+        "id": "PCode",
+        "name": "NOM",
+        "code": "PCode"
+      },
+      "preprocessing": ["strip-trailing-system-io-memorystream"],
+      "source_updated_at": "2017-04-07",
+      "built_at": "2017-04-07",
       "review_status": "source-checked",
-      "geometry_review": "structure-checked",
+      "geometry_review": "topology-reviewed",
       "intended_use": "Province navigation and administrative context; never a language boundary.",
       "limitations": [
         "The represented boundary year is 2017 and must not be described as a current legal boundary without renewed review.",
-        "Names and topology still require comparison with an independent authoritative DRC source before public release.",
-        "ODbL attribution and database-sharing obligations must be preserved in generated artifacts."
+        "The distributor appends a non-JSON System.IO.MemoryStream marker, which the build removes only after verifying the raw-file checksum.",
+        "Names require comparison with current authoritative DRC records before public release."
       ]
     },
     {
-      "id": "geoboundaries-cod-adm2-9469f09",
+      "id": "ocha-rgc-cod-adm2-2017",
       "admin_level": "ADM2",
-      "canonical_name": "Territories and cities",
-      "boundary_year": 2019,
-      "provider": "geoBoundaries",
-      "source_organizations": ["Référentiel Géographique Commun", "OCHA DR Congo"],
+      "canonical_name": "Territories, cities, and communes",
+      "boundary_year": 2017,
+      "provider": "World Bank Data Catalog mirror",
+      "source_organizations": ["OCHA DR Congo", "Référentiel Géographique Commun"],
       "licence": {
-        "name": "Creative Commons Attribution 3.0 IGO",
-        "url": "https://creativecommons.org/licenses/by/3.0/igo/",
-        "attribution": "Référentiel Géographique Commun and OCHA DR Congo; boundary distribution by geoBoundaries."
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": "OCHA DR Congo and Référentiel Géographique Commun; distributed by the World Bank Data Catalog."
       },
-      "metadata_url": "https://www.geoboundaries.org/api/current/gbOpen/COD/ADM2/",
-      "download_url": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/COD/ADM2/geoBoundaries-COD-ADM2.geojson",
-      "pinned_commit": "9469f09",
-      "sha256": "7e6a8509a3b40ad7256245f021cfa757a71582f1e0ec6ed8a30e48c6ab888a54",
-      "feature_count": 189,
+      "metadata_url": "https://energydata.info/dataset/democratic-republic-congo-administrative-boundaries-2017",
+      "download_url": "https://datacatalogfiles.worldbank.org/ddh-published/0040240/1/DR0050124/codadmbndaadm2rgc20170711.geojson",
+      "source_revision": "0040240-v1-dr0050124",
+      "sha256": "66eac533de0c7cb946d5b8fcc1b7d7f63d54c10c3e57454dc8f602308917e76d",
+      "feature_count": 240,
       "geometry_types": ["Polygon"],
-      "source_updated_at": "2023-01-19",
-      "built_at": "2023-12-12",
+      "fields": {
+        "id": "ADM2_PCODE",
+        "name": "ADM2_FR",
+        "code": "ADM2_PCODE",
+        "parent_code": "ADM1_PCODE"
+      },
+      "preprocessing": ["strip-trailing-system-io-memorystream"],
+      "source_updated_at": "2017-07-11",
+      "built_at": "2017-07-11",
       "review_status": "source-checked",
-      "geometry_review": "structure-checked",
-      "intended_use": "Territory/city navigation and administrative context; never a language boundary.",
+      "geometry_review": "topology-reviewed",
+      "intended_use": "Second-level navigation and administrative context; never a language boundary.",
       "limitations": [
-        "The layer mixes territories and cities, so ADM2 features cannot all be labelled as territories.",
-        "The represented boundary year is 2019 and requires renewed administrative review before public release.",
-        "Names, hierarchy, identifiers, and topology still require independent review against authoritative DRC records."
+        "The layer includes territories, cities, and communes and must not be presented as a territory-only inventory.",
+        "The represented boundary year is 2017 and requires renewed administrative review before public release.",
+        "The distributor appends a non-JSON System.IO.MemoryStream marker, which the build removes only after verifying the raw-file checksum."
       ]
     }
   ]

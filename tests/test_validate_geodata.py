@@ -26,7 +26,7 @@ class GeodataManifestValidationTests(unittest.TestCase):
 
     def test_rejects_unpinned_download(self) -> None:
         manifest = json.loads(DEFAULT_MANIFEST.read_text(encoding="utf-8"))
-        manifest["sources"][0]["pinned_commit"] = "current"
+        manifest["sources"][0]["source_revision"] = ""
 
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "sources.json"
