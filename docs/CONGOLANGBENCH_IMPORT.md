@@ -76,6 +76,24 @@ copied permanently into application code.
 9. Manually review cross-border resources and ambiguous varieties.
 10. Publish an import report with source commit, warnings, and rejected rows.
 
+## Implemented draft exporter
+
+The Phase 1 exporter is available as:
+
+```bash
+python3 -m scripts.import_congolangbench /path/to/CongoLangBench
+```
+
+It accepts only explicitly listed columns from `languages.csv`,
+`curation_readiness.csv`, and `benchmark_freeze.csv`. It pins the upstream Git
+commit, reconciles all documented totals, emits draft language and resource
+records, runs the atlas schema and publication-safety validator, and writes an
+import report under `data/generated/`.
+
+Generated records are not public catalogue records. Every licence, geographic
+scope, language-variety relationship, and source URL still requires manual
+field-level review before promotion into `data/catalog/`.
+
 ## Known issues to preserve
 
 - Generic Kikongo and Kikongo ya Leta are distinct tracks.

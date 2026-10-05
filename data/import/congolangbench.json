@@ -1,0 +1,9 @@
+{
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "repository_url": "https://github.com/Ashuza11/CongoLangBench",
+  "retrieved_at": "2026-10-05",
+  "expected_tracks": 47,
+  "expected_processed_pairs": 2233244,
+  "expected_restricted_tracks": 24,
+  "expected_benchmark_pairs": 70500
+}

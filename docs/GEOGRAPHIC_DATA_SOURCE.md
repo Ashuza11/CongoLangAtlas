@@ -90,6 +90,18 @@ Before these layers enter a public release:
 5. Clearly state that administrative geometry provides map navigation and does
    not define language territories.
 
+### Current authoritative review target
+
+The United Nations SALB catalogue lists a validated DRC administrative-units
+dataset supplied through the Institut Géographique du Congo, with temporal
+validity from 2018-05-30 and a last update of 2024-06-13. This is the preferred
+reference for the next name, classification, and hierarchy comparison.
+
+Automated access to its downloadable files was blocked during the 2026-10-05
+review. The atlas therefore records SALB as a review target but does not copy,
+infer, or claim validation from data it could not retrieve and inspect. Its
+terms must also be reviewed before any artifact is stored or redistributed.
+
 ## Language-map constraint
 
 The atlas will not combine administrative units into inferred language

@@ -11,8 +11,9 @@ need a trustworthy starting point for work on Congolese languages.
 > **Project status:** Phase 0 — data foundations and governance. The schemas,
 > validation tooling, safety checks, reproducible geodata pipeline, tests, and
 > continuous integration are in place. Matched prototype province and
-> second-level sources pass the automated geometry quality gate; administrative
-> currency review and the first metadata import come next.
+> second-level sources pass the automated geometry quality gate. The first
+> CongoLangBench draft metadata exporter also reconciles and validates all 47
+> ready tracks; administrative and field-level metadata review come next.
 
 ## What the atlas will provide
 
@@ -57,6 +58,8 @@ The repository currently provides:
   with licence, provenance, intended use, and review limitations;
 - deterministic downloading, geometry validation, parent assignment,
   topology-preserving simplification, and quality reporting;
+- an allow-listed, commit-pinned CongoLangBench metadata exporter that excludes
+  sentence text and reconciles source totals before producing draft records;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -96,6 +99,16 @@ make geodata
 This command requires network access the first time. Verified downloads are
 cached under `data/generated/`; generated sources, web layers, and quality
 reports are excluded from Git and remain reproducible from the manifest.
+
+Import the pinned CongoLangBench registry metadata from a sibling checkout:
+
+```bash
+make import-congolangbench
+```
+
+Override `CONGOLANGBENCH=/path/to/CongoLangBench` when the checkout is located
+elsewhere. The generated draft catalogue and reconciliation report are written
+under `data/generated/` and excluded from Git.
 
 ## Repository structure
 
@@ -149,7 +162,7 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 | Phase | Deliverable | Status |
 |---|---|---|
 | 0 | Schemas, governance, validation, geographic-source review | In progress — automated geometry gate passes; administrative review pending |
-| 1 | Verified CongoLangBench metadata seed | Planned |
+| 1 | Verified CongoLangBench metadata seed | In progress — draft exporter validates 47 tracks; manual review pending |
 | 2 | Interactive map, search, profiles, filters, and exports | Planned |
 | 3 | Expanded national language and resource catalogue | Planned |
 | 4 | Reproducible NLP benchmark and model-result integration | Planned |
