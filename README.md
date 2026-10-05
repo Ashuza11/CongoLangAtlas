@@ -128,6 +128,11 @@ named human reviewer. Lingala retains DRC variety/geography questions, while
 Ciluba remains blocked by gated access, licence “other,” and uncertain DRC
 provenance.
 
+Reviewed source metadata is applied as a separate overlay, leaving the pinned
+CongoLangBench registries unchanged. The generated records now link directly
+to CLEAR Global, Google SMOL, or `multi-open` and preserve their actual access,
+licence, redistribution, and geographic-scope states.
+
 ## Repository structure
 
 ```text

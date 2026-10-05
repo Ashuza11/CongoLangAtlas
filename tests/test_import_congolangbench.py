@@ -104,6 +104,43 @@ class CongoLangBenchImportTests(unittest.TestCase):
             with self.assertRaisesRegex(ImportError, "unexpected=.*source_text"):
                 read_registry(registry, filename)
 
+    def test_applies_reviewed_resource_metadata_without_changing_registry(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source, config = self.create_source(root)
+            overrides = root / "overrides.json"
+            overrides.write_text(json.dumps({
+                "reviewed_at": "2026-10-05",
+                "sources": {
+                    "source-reviewed-test": {
+                        "citation": "Reviewed source", "url": "https://example.org/dataset",
+                        "publisher": "Example", "source_type": "primary-dataset",
+                        "licence_id": "CC-BY-4.0", "verification_notes": "Directly checked"
+                    }
+                },
+                "tracks": {
+                    "tst": {
+                        "source_id": "source-reviewed-test",
+                        "homepage_url": "https://example.org/dataset",
+                        "download_url": "https://example.org/download",
+                        "access_type": "open-download", "licence_id": "CC-BY-4.0",
+                        "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+                        "redistribution": "allowed", "geographic_scope": "drc-labelled",
+                        "limitations": "Reviewed test override"
+                    }
+                }
+            }), encoding="utf-8")
+            output = root / "output"
+            with patch("scripts.import_congolangbench.repository_commit", return_value=self.commit):
+                report = import_metadata(source, config, output, root / "report.json", overrides)
+            bitext = json.loads(
+                (output / "resources" / "resource-congolangbench-tst-bitext.json").read_text()
+            )
+            self.assertEqual(bitext["source_id"], "source-reviewed-test")
+            self.assertEqual(bitext["access_type"], "open-download")
+            self.assertEqual(bitext["verification_status"], "source-checked")
+            self.assertEqual(report["generated_records"]["sources"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

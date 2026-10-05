@@ -121,6 +121,14 @@ These are deferred source-audit decisions, not V3 expert or V4 community
 reviews. Evidence URLs and notes are stored under
 `data/reviews/congolangbench/`.
 
+Reviewed source facts are applied through
+`data/import/congolangbench-resource-overrides.json`. This overlay keeps the
+pinned upstream registries immutable while ensuring generated resource records
+represent the actual primary source. It currently corrects Ciluba to `gated`
+access with unknown redistribution and no normalized licence, and records the
+CC BY 4.0 open-download sources for Lingala, Kikongo ya Leta, and Congo
+Swahili.
+
 ## Known issues to preserve
 
 - Generic Kikongo and Kikongo ya Leta are distinct tracks.

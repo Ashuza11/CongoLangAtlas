@@ -17,6 +17,7 @@ from scripts.validate_catalog import ROOT, load_json, validate_catalog
 
 
 DEFAULT_CONFIG = ROOT / "data" / "import" / "congolangbench.json"
+DEFAULT_OVERRIDES = ROOT / "data" / "import" / "congolangbench-resource-overrides.json"
 DEFAULT_OUTPUT = ROOT / "data" / "generated" / "congolangbench" / "catalog"
 DEFAULT_REPORT = ROOT / "data" / "generated" / "congolangbench" / "import-report.json"
 
@@ -102,8 +103,10 @@ def import_metadata(
     config_path: Path = DEFAULT_CONFIG,
     output_dir: Path = DEFAULT_OUTPUT,
     report_path: Path = DEFAULT_REPORT,
+    overrides_path: Path | None = DEFAULT_OVERRIDES,
 ) -> dict[str, Any]:
     config = load_json(config_path)
+    overrides = load_json(overrides_path) if overrides_path and overrides_path.exists() else {"sources": {}, "tracks": {}}
     actual_commit = repository_commit(source_root)
     if actual_commit != config["source_commit"]:
         raise ImportError(
@@ -160,6 +163,31 @@ def import_metadata(
     }
     write_json(output_dir / "sources" / f"{source_id}.json", source_record)
 
+    referenced_override_sources = {
+        override["source_id"]
+        for iso, override in overrides.get("tracks", {}).items()
+        if iso in ready_isos
+    }
+    missing_override_sources = sorted(referenced_override_sources - set(overrides.get("sources", {})))
+    if missing_override_sources:
+        raise ImportError(f"resource overrides reference missing sources: {missing_override_sources}")
+    for override_source_id in sorted(referenced_override_sources):
+        item = overrides["sources"][override_source_id]
+        write_json(output_dir / "sources" / f"{override_source_id}.json", {
+            "entity_type": "source",
+            "id": override_source_id,
+            "citation": item["citation"],
+            "url": item["url"],
+            "publisher": item["publisher"],
+            "authors": [],
+            "retrieved_at": overrides["reviewed_at"],
+            "source_type": item["source_type"],
+            "licence_id": item["licence_id"],
+            "verification_status": "source-checked",
+            "verification_notes": item["verification_notes"],
+            "last_reviewed_at": overrides["reviewed_at"],
+        })
+
     warnings: list[dict[str, str]] = []
     for iso in ready_isos:
         language_row = languages_by_iso[iso]
@@ -197,6 +225,7 @@ def import_metadata(
             else "Metadata-only import; original source licences require field-level review before any reuse claim."
         )
         bitext_id = f"resource-congolangbench-{iso}-bitext"
+        override = overrides.get("tracks", {}).get(iso)
         bitext_record = {
             "entity_type": "resource",
             "id": bitext_id,
@@ -229,6 +258,21 @@ def import_metadata(
             "limitations": handling_note,
             "last_reviewed_at": config["retrieved_at"],
         }
+        if override:
+            bitext_record.update({
+                "geographic_scope": override["geographic_scope"],
+                "homepage_url": override["homepage_url"],
+                "download_url": override["download_url"],
+                "access_type": override["access_type"],
+                "licence_id": override["licence_id"],
+                "terms_url": override["terms_url"],
+                "terms_checked_at": overrides["reviewed_at"],
+                "redistribution": override["redistribution"],
+                "source_id": override["source_id"],
+                "verification_status": "source-checked",
+                "limitations": override["limitations"],
+                "last_reviewed_at": overrides["reviewed_at"],
+            })
         write_json(output_dir / "resources" / f"{bitext_id}.json", bitext_record)
 
         benchmark_id = f"resource-congolangbench-{iso}-benchmark-{freeze_row['benchmark_version']}"
@@ -277,7 +321,17 @@ def import_metadata(
             for filename, fields in REGISTRY_FIELDS.items()
         },
         "reconciliation": {name: {"actual": actual, "expected": expected, "matches": actual == expected} for name, (actual, expected) in checks.items()},
-        "generated_records": {"sources": 1, "languages": len(ready_isos), "resources": len(ready_isos) * 2, "total": 1 + len(ready_isos) * 3},
+        "metadata_overrides": {
+            "path": str(overrides_path.relative_to(ROOT)) if overrides_path and overrides_path.is_relative_to(ROOT) else None,
+            "sha256": sha256_file(overrides_path) if overrides_path and overrides_path.exists() else None,
+            "applied_tracks": sorted(set(ready_isos) & set(overrides.get("tracks", {}))),
+        },
+        "generated_records": {
+            "sources": 1 + len(referenced_override_sources),
+            "languages": len(ready_isos),
+            "resources": len(ready_isos) * 2,
+            "total": 1 + len(referenced_override_sources) + len(ready_isos) * 3,
+        },
         "excluded_language_candidates": sorted(set(languages_by_iso) - set(ready_isos)),
         "manual_review_warnings": warnings,
         "forbidden_content_imported": False,
@@ -293,9 +347,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
+    parser.add_argument("--overrides", type=Path, default=DEFAULT_OVERRIDES)
     args = parser.parse_args(argv)
     try:
-        report = import_metadata(args.source.resolve(), args.config, args.output, args.report)
+        report = import_metadata(args.source.resolve(), args.config, args.output, args.report, args.overrides)
     except (ImportError, subprocess.CalledProcessError) as exc:
         print(f"CongoLangBench import failed: {exc}", file=sys.stderr)
         return 1

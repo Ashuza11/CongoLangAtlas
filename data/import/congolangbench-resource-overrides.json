@@ -1,0 +1,75 @@
+{
+  "reviewed_at": "2026-10-05",
+  "sources": {
+    "source-clear-global-gamayun": {
+      "citation": "CLEAR Global Gamayun Language Data Kits",
+      "url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits",
+      "publisher": "CLEAR Global",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card and language configurations checked directly."
+    },
+    "source-google-smol": {
+      "citation": "Google SMOL translation dataset",
+      "url": "https://huggingface.co/datasets/google/smol",
+      "publisher": "Google",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-4.0",
+      "verification_notes": "Dataset card, licence, and Kituba (DRC) configuration checked directly."
+    },
+    "source-african-languages-lab-multi-open": {
+      "citation": "African Languages Lab multi-open",
+      "url": "https://huggingface.co/datasets/African-Languages-Lab/multi-open",
+      "publisher": "African Languages Lab",
+      "source_type": "primary-dataset",
+      "licence_id": null,
+      "verification_notes": "Dataset card identifies gated access and licence as other; reusable terms remain unresolved."
+    }
+  },
+  "tracks": {
+    "lin": {
+      "source_id": "source-clear-global-gamayun",
+      "homepage_url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits",
+      "download_url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits/tree/main/parallel/lin-fra",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "uncertain",
+      "limitations": "Open Lingala-French kit; the source does not establish specifically DRC-only variety or geographic provenance."
+    },
+    "ktu": {
+      "source_id": "source-google-smol",
+      "homepage_url": "https://huggingface.co/datasets/google/smol",
+      "download_url": "https://huggingface.co/datasets/google/smol/tree/main",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "SMOL explicitly labels the configuration Kituba (DRC); retain the source's documented translation-quality warning."
+    },
+    "lua": {
+      "source_id": "source-african-languages-lab-multi-open",
+      "homepage_url": "https://huggingface.co/datasets/African-Languages-Lab/multi-open",
+      "download_url": null,
+      "access_type": "gated",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "unknown",
+      "geographic_scope": "uncertain",
+      "limitations": "Gated english-tshiluba configuration; licence is listed as other, and DRC-specific provenance and redistribution rights remain unresolved."
+    },
+    "swc": {
+      "source_id": "source-clear-global-gamayun",
+      "homepage_url": "https://mozilladatacollective.com/datasets/cmosl07v400w9nu07g3puif2t",
+      "download_url": "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits/tree/main/parallel/swc-fra",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "Downloadable Congo Swahili-French kits; attribution to CLEAR Global is required."
+    }
+  }
+}
