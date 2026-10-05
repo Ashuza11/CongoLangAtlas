@@ -1,0 +1,23 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "swc",
+  "atlas_language_id": "language-swc",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Congo Swahili as ISO swc in the DRC. CLEAR Global's downloadable Congo Swahili-French kits are explicitly CC BY 4.0 and distinct from generic Coastal or Standard Swahili. Automated source review passes, but a named human reviewer must approve promotion.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/cong1236",
+    "https://mozilladatacollective.com/datasets/cmosl07v400w9nu07g3puif2t",
+    "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits"
+  ]
+}

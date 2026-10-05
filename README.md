@@ -13,7 +13,9 @@ need a trustworthy starting point for work on Congolese languages.
 > continuous integration are in place. Matched prototype province and
 > second-level sources pass the automated geometry quality gate. The first
 > CongoLangBench draft metadata exporter also reconciles and validates all 47
-> ready tracks; administrative and field-level metadata review come next.
+> ready tracks. Four national-language tracks have evidence-linked source
+> audits, but none can be promoted without human approval and all unresolved
+> licence, access, variety, and geographic questions being closed.
 
 ## What the atlas will provide
 
@@ -109,6 +111,22 @@ make import-congolangbench
 Override `CONGOLANGBENCH=/path/to/CongoLangBench` when the checkout is located
 elsewhere. The generated draft catalogue and reconciliation report are written
 under `data/generated/` and excluded from Git.
+
+Create the manual-review queue:
+
+```bash
+make review-congolangbench
+```
+
+The queue detects existing atlas identities and prioritizes restricted,
+cross-border, and variety-ambiguous tracks. Structural validation alone never
+promotes a draft record into the public catalogue.
+
+Current review status: 4 of 47 tracks have automated source audits. Kikongo ya
+Leta and Congo Swahili pass all six technical source checks but still require a
+named human reviewer. Lingala retains DRC variety/geography questions, while
+Ciluba remains blocked by gated access, licence “other,” and uncertain DRC
+provenance.
 
 ## Repository structure
 

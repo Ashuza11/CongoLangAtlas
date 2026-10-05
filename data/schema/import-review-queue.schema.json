@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/import-review-queue.schema.json",
+  "title": "Imported metadata manual-review queue",
+  "type": "object",
+  "required": ["queue_version", "source_commit", "generated_at", "summary", "tracks"],
+  "properties": {
+    "queue_version": {"const": 1},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "generated_at": {"type": "string", "format": "date"},
+    "summary": {
+      "type": "object",
+      "required": ["total", "high_priority", "medium_priority", "existing_identity_matches", "restricted_tracks", "reviewed", "deferred", "ready_for_promotion"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "high_priority": {"type": "integer", "minimum": 0},
+        "medium_priority": {"type": "integer", "minimum": 0},
+        "existing_identity_matches": {"type": "integer", "minimum": 0},
+        "restricted_tracks": {"type": "integer", "minimum": 0},
+        "reviewed": {"type": "integer", "minimum": 0},
+        "deferred": {"type": "integer", "minimum": 0},
+        "ready_for_promotion": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "tracks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["iso_639_3", "imported_language_id", "preferred_name", "existing_atlas_language_id", "suggested_atlas_language_id", "priority", "publication_blockers", "required_checks", "review_status", "decision_file", "resource_ids", "ready_for_promotion"],
+        "properties": {
+          "iso_639_3": {"type": "string", "pattern": "^[a-z]{3}$"},
+          "imported_language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "preferred_name": {"type": "string", "minLength": 1},
+          "existing_atlas_language_id": {"type": ["string", "null"]},
+          "suggested_atlas_language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "priority": {"enum": ["high", "medium"]},
+          "publication_blockers": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"enum": ["identity-review", "variety-review", "geographic-review", "licence-review", "access-review", "source-link-review", "restricted-content", "human-approval"]}
+          },
+          "required_checks": {
+            "type": "object",
+            "required": ["language_identity", "variety_identity", "geographic_scope", "licence", "access", "source_links"],
+            "additionalProperties": {"enum": ["pending", "approved", "rejected", "unresolved"]}
+          },
+          "review_status": {"enum": ["pending", "approved", "rejected", "deferred"]},
+          "decision_file": {"type": ["string", "null"]},
+          "resource_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "definitions.schema.json#/$defs/id"}},
+          "ready_for_promotion": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

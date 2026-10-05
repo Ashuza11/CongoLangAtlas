@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lin",
+  "atlas_language_id": "language-lingala",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "unresolved",
+    "geographic_scope": "unresolved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog supports ISO lin and the existing atlas identity. CLEAR Global publishes the Lingala-French kit openly under CC BY 4.0, but the kit does not establish a specifically DRC-only variety or provenance. Human linguistic and geographic review remains required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/ling1263",
+    "https://huggingface.co/datasets/CLEAR-Global/Gamayun-kits"
+  ]
+}

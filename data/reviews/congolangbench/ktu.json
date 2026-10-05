@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "ktu",
+  "atlas_language_id": "language-ktu",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog separates DRC Kituba (ktu) from other Kongo/Kituba varieties, and Google SMOL explicitly labels its open CC BY 4.0 configuration Kituba (DRC). Automated source review passes, but a named human reviewer must approve promotion.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/kitu1246",
+    "https://huggingface.co/datasets/google/smol"
+  ]
+}

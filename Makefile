@@ -1,4 +1,4 @@
-.PHONY: validate test check geodata import-congolangbench
+.PHONY: validate test check geodata import-congolangbench review-congolangbench
 
 CONGOLANGBENCH ?= ../DRCongo_Lang_Benchmark
 
@@ -16,3 +16,6 @@ geodata:
 
 import-congolangbench:
 	python3 -m scripts.import_congolangbench "$(CONGOLANGBENCH)"
+
+review-congolangbench:
+	python3 -m scripts.build_import_review_queue

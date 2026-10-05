@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "lua",
+  "atlas_language_id": "language-lua",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-05",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "unresolved",
+    "licence": "unresolved",
+    "access": "rejected",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog supports ISO lua for Luba-Lulua/Luba-Kasai and distinguishes it from Luba-Katanga. The 397,971-pair track uses multi-open, whose card requires gated access and reports licence 'other'; the draft catalogue currently understates that access restriction. DRC-specific provenance and reusable terms remain unresolved.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/luba1249",
+    "https://huggingface.co/datasets/African-Languages-Lab/multi-open"
+  ]
+}

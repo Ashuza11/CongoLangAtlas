@@ -13,6 +13,7 @@ validate-catalog = "scripts.validate_catalog:main"
 validate-geodata = "scripts.validate_geodata:main"
 build-geodata = "scripts.build_geodata:main"
 import-congolangbench = "scripts.import_congolangbench:main"
+build-import-review-queue = "scripts.build_import_review_queue:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

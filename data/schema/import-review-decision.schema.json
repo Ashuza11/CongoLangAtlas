@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/import-review-decision.schema.json",
+  "title": "Imported track review decision",
+  "type": "object",
+  "required": ["decision_version", "source_commit", "iso_639_3", "atlas_language_id", "reviewer_id", "reviewed_at", "checks", "decision", "notes"],
+  "properties": {
+    "decision_version": {"const": 1},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "iso_639_3": {"type": "string", "pattern": "^[a-z]{3}$"},
+    "atlas_language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "reviewer_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "reviewed_at": {"type": "string", "format": "date"},
+    "checks": {
+      "type": "object",
+      "required": ["language_identity", "variety_identity", "geographic_scope", "licence", "access", "source_links"],
+      "properties": {
+        "language_identity": {"enum": ["approved", "rejected", "unresolved"]},
+        "variety_identity": {"enum": ["approved", "rejected", "unresolved"]},
+        "geographic_scope": {"enum": ["approved", "rejected", "unresolved"]},
+        "licence": {"enum": ["approved", "rejected", "unresolved"]},
+        "access": {"enum": ["approved", "rejected", "unresolved"]},
+        "source_links": {"enum": ["approved", "rejected", "unresolved"]}
+      },
+      "additionalProperties": false
+    },
+    "decision": {"enum": ["approve", "reject", "defer"]},
+    "notes": {"type": "string", "minLength": 1},
+    "evidence_urls": {"type": "array", "uniqueItems": true, "items": {"$ref": "definitions.schema.json#/$defs/url"}}
+  },
+  "additionalProperties": false
+}

@@ -94,6 +94,33 @@ Generated records are not public catalogue records. Every licence, geographic
 scope, language-variety relationship, and source URL still requires manual
 field-level review before promotion into `data/catalog/`.
 
+Generate the deterministic manual-review queue after importing:
+
+```bash
+python3 -m scripts.build_import_review_queue
+```
+
+The queue detects existing atlas identities by ISO code and prevents imported
+IDs from silently replacing stable atlas IDs. Every track remains blocked until
+language and variety identity, DRC geographic scope, licence, access, and
+source links receive an explicit review decision. Restricted and cross-border
+tracks receive higher priority; queue generation never promotes records.
+
+### Initial national-track source audit
+
+The first automated evidence pass covers the four national-language tracks:
+
+| Track | Result | Remaining blocker |
+|---|---|---|
+| Kikongo ya Leta (`ktu`) | All six source checks pass | Named human approval |
+| Congo Swahili (`swc`) | All six source checks pass | Named human approval |
+| Lingala (`lin`) | Identity, licence, access, and links pass | DRC-specific variety/geography and human approval |
+| Ciluba (`lua`) | Identity, variety, and link checks pass | Gated access, licence “other,” DRC provenance, and human approval |
+
+These are deferred source-audit decisions, not V3 expert or V4 community
+reviews. Evidence URLs and notes are stored under
+`data/reviews/congolangbench/`.
+
 ## Known issues to preserve
 
 - Generic Kikongo and Kikongo ya Leta are distinct tracks.
