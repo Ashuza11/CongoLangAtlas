@@ -1,0 +1,12 @@
+[project]
+name = "congolangatlas-data"
+version = "0.1.0"
+description = "Validation and publication-safety tooling for CongoLangAtlas metadata"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.18,<5"]
+
+[project.scripts]
+validate-catalog = "scripts.validate_catalog:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

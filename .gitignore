@@ -1,0 +1,21 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.next/
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+
+# Generated catalogue and map artifacts
+public/generated/
+data/generated/
+
+# Private or restricted research material must stay outside the repository
+data/private/
+data/restricted/

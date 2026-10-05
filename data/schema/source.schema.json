@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/source.schema.json",
+  "title": "Source",
+  "type": "object",
+  "required": ["entity_type", "id", "citation", "url", "publisher", "source_type", "retrieved_at", "verification_status", "last_reviewed_at"],
+  "properties": {
+    "entity_type": {"const": "source"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "citation": {"type": "string", "minLength": 3},
+    "url": {"$ref": "definitions.schema.json#/$defs/url"},
+    "archive_url": {"$ref": "definitions.schema.json#/$defs/url"},
+    "publisher": {"type": "string", "minLength": 1},
+    "authors": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "published_at": {"$ref": "definitions.schema.json#/$defs/date"},
+    "retrieved_at": {"$ref": "definitions.schema.json#/$defs/date"},
+    "source_type": {"enum": ["primary-dataset", "official-catalogue", "publication", "institutional-repository", "community-review", "project-documentation", "other"]},
+    "licence_id": {"type": ["string", "null"]},
+    "verification_status": {"$ref": "definitions.schema.json#/$defs/verificationStatus"},
+    "verification_notes": {"type": "string"},
+    "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"}
+  },
+  "additionalProperties": false
+}

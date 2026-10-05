@@ -1,0 +1,20 @@
+{
+  "entity_type": "language",
+  "id": "language-lingala",
+  "preferred_name": "Lingala",
+  "identifiers": {
+    "iso_639_3": "lin"
+  },
+  "alternate_names": [],
+  "variety_of": null,
+  "classification_note": "Draft fixture limited to identifier validation; geographic and classification claims have not been imported.",
+  "status": "draft",
+  "verification_status": "draft",
+  "citations": [
+    {
+      "source_id": "source-iso-639-3-lin",
+      "locator": "ISO 639-3 code page"
+    }
+  ],
+  "last_reviewed_at": "2026-10-05"
+}

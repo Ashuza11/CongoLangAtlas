@@ -1,0 +1,13 @@
+{
+  "entity_type": "source",
+  "id": "source-iso-639-3-lin",
+  "citation": "ISO 639-3: lin — Lingala",
+  "url": "https://iso639-3.sil.org/code/lin",
+  "publisher": "SIL International",
+  "retrieved_at": "2026-10-05",
+  "source_type": "official-catalogue",
+  "licence_id": null,
+  "verification_status": "draft",
+  "verification_notes": "Initial schema fixture; direct source review is still required before publication.",
+  "last_reviewed_at": "2026-10-05"
+}

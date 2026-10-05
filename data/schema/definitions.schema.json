@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/definitions.schema.json",
+  "title": "CongoLangAtlas shared definitions",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "date": {"type": "string", "format": "date"},
+    "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "languageIdentifier": {
+      "type": "object",
+      "properties": {
+        "iso_639_3": {"type": "string", "pattern": "^[a-z]{3}$"},
+        "glottocode": {"type": "string", "pattern": "^[a-z0-9]{4}[0-9]{4}$"}
+      },
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "verificationStatus": {
+      "enum": ["draft", "source-checked", "corroborated", "expert-reviewed", "community-reviewed", "disputed"]
+    },
+    "recordStatus": {"enum": ["draft", "reviewed", "disputed", "retired"]},
+    "confidence": {"enum": ["high", "medium", "low", "disputed"]},
+    "citation": {
+      "type": "object",
+      "required": ["source_id", "locator"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"},
+        "locator": {"type": "string", "minLength": 1, "maxLength": 500}
+      },
+      "additionalProperties": false
+    }
+  }
+}

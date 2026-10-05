@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/catalog.schema.json",
+  "title": "Any CongoLangAtlas catalogue record",
+  "oneOf": [
+    {"$ref": "source.schema.json"},
+    {"$ref": "language.schema.json"},
+    {"$ref": "place.schema.json"},
+    {"$ref": "language-presence-claim.schema.json"},
+    {"$ref": "resource.schema.json"},
+    {"$ref": "publication.schema.json"},
+    {"$ref": "nlp-result.schema.json"},
+    {"$ref": "review-event.schema.json"}
+  ]
+}

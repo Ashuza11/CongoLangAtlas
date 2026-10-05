@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/language-presence-claim.schema.json",
+  "title": "Language presence claim",
+  "type": "object",
+  "required": ["entity_type", "id", "language_id", "place_id", "geometry_type", "role", "source_id", "evidence_locator", "confidence", "verification_status", "last_reviewed_at"],
+  "properties": {
+    "entity_type": {"const": "language_presence_claim"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "place_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "geometry_type": {"enum": ["point", "territory-association", "corridor", "supported-area", "broad-region", "unknown"]},
+    "role": {"enum": ["l1", "l2", "lingua-franca", "heritage", "educational", "unspecified"]},
+    "time_start": {"type": ["string", "null"], "format": "date"},
+    "time_end": {"type": ["string", "null"], "format": "date"},
+    "source_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "evidence_locator": {"type": "string", "minLength": 1, "maxLength": 500},
+    "confidence": {"$ref": "definitions.schema.json#/$defs/confidence"},
+    "verification_status": {"$ref": "definitions.schema.json#/$defs/verificationStatus"},
+    "limitations": {"type": "string"},
+    "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"}
+  },
+  "additionalProperties": false
+}

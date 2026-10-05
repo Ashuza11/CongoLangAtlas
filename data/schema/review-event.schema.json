@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/review-event.schema.json",
+  "title": "Review event",
+  "type": "object",
+  "required": ["entity_type", "id", "record_id", "reviewer_id", "reviewer_role", "reviewed_at", "decision", "evidence_source_ids", "changed_fields"],
+  "properties": {
+    "entity_type": {"const": "review_event"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "record_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "reviewer_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "reviewer_role": {"enum": ["maintainer", "expert", "community-representative", "data-steward"]},
+    "reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"},
+    "decision": {"enum": ["approve", "request-changes", "dispute", "retire", "reject"]},
+    "evidence_source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "definitions.schema.json#/$defs/id"}},
+    "changed_fields": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "notes": {"type": "string"},
+    "conflict_of_interest": {"type": ["string", "null"]},
+    "consent_note": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

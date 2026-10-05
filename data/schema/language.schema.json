@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/language.schema.json",
+  "title": "Language",
+  "type": "object",
+  "required": ["entity_type", "id", "preferred_name", "identifiers", "alternate_names", "status", "verification_status", "citations", "last_reviewed_at"],
+  "properties": {
+    "entity_type": {"const": "language"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "preferred_name": {"type": "string", "minLength": 1},
+    "identifiers": {"$ref": "definitions.schema.json#/$defs/languageIdentifier"},
+    "alternate_names": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "source_id"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "source_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "usage_note": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "variety_of": {"type": ["string", "null"]},
+    "classification_note": {"type": "string"},
+    "status": {"$ref": "definitions.schema.json#/$defs/recordStatus"},
+    "verification_status": {"$ref": "definitions.schema.json#/$defs/verificationStatus"},
+    "citations": {"type": "array", "minItems": 1, "items": {"$ref": "definitions.schema.json#/$defs/citation"}},
+    "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"}
+  },
+  "additionalProperties": false
+}

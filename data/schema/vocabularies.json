@@ -1,0 +1,7 @@
+{
+  "verification_status": ["draft", "source-checked", "corroborated", "expert-reviewed", "community-reviewed", "disputed"],
+  "access_type": ["open-download", "gated", "registration", "request-only", "catalogue-only", "unavailable", "unknown"],
+  "redistribution": ["allowed", "metadata-only", "restricted", "prohibited", "unknown"],
+  "geographic_precision": ["point", "territory-association", "corridor", "supported-area", "broad-region", "unknown"],
+  "language_role": ["l1", "l2", "lingua-franca", "heritage", "educational", "unspecified"]
+}

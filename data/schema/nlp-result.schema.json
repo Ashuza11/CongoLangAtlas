@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/nlp-result.schema.json",
+  "title": "NLP result",
+  "type": "object",
+  "required": ["entity_type", "id", "language_id", "task", "model_id", "model_revision", "benchmark_id", "benchmark_version", "metric", "value", "protocol_url", "result_source_id", "verification_status", "last_reviewed_at"],
+  "properties": {
+    "entity_type": {"const": "nlp_result"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "task": {"type": "string", "minLength": 1},
+    "direction": {"type": ["string", "null"]},
+    "model_id": {"type": "string", "minLength": 1},
+    "model_revision": {"type": "string", "minLength": 1},
+    "benchmark_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "benchmark_version": {"type": "string", "minLength": 1},
+    "metric": {"type": "string", "minLength": 1},
+    "value": {"type": "number"},
+    "protocol_url": {"$ref": "definitions.schema.json#/$defs/url"},
+    "result_source_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "limitations": {"type": "string"},
+    "verification_status": {"$ref": "definitions.schema.json#/$defs/verificationStatus"},
+    "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"}
+  },
+  "additionalProperties": false
+}

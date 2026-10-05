@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/place.schema.json",
+  "title": "Place",
+  "type": "object",
+  "required": ["entity_type", "id", "name", "admin_level", "source_id", "verification_status", "last_reviewed_at"],
+  "properties": {
+    "entity_type": {"const": "place"},
+    "id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "name": {"type": "string", "minLength": 1},
+    "admin_level": {"enum": ["country", "province", "territory", "locality", "custom-region"]},
+    "parent_id": {"type": ["string", "null"]},
+    "geometry_id": {"type": ["string", "null"]},
+    "source_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "verification_status": {"$ref": "definitions.schema.json#/$defs/verificationStatus"},
+    "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"}
+  },
+  "additionalProperties": false
+}
