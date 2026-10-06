@@ -78,6 +78,22 @@ class SourceDiscoveryTests(unittest.TestCase):
             self.assertEqual(bundle["summary"]["candidates"], 2)
             self.assertTrue(all(item["candidates"][0]["provider"] == "OLAC" for item in bundle["languages"]))
 
+    def test_limits_refresh_to_a_sorted_language_batch(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            catalog = root / "catalog"
+            for name, iso in (("Zulu", "zul"), ("Ali", "ali"), ("Bemba", "bem")):
+                self.write_json(catalog / f"language-{iso}.json", {
+                    "entity_type": "language", "id": f"language-{iso}", "preferred_name": name,
+                    "identifiers": {"iso_639_3": iso}, "alternate_names": [],
+                })
+            bundle = build_discovery(
+                catalog, root / "output.json", root / "cache", providers=(),
+                offline=True, presence=None, language_offset=1, language_limit=1,
+            )
+            self.assertEqual(bundle["summary"]["languages"], 1)
+            self.assertEqual(bundle["languages"][0]["name"], "Bemba")
+
     def test_short_language_name_falls_back_to_iso_search_term(self) -> None:
         language = {
             "id": "language-msj", "preferred_name": "Ma (Democratic Republic of Congo)",

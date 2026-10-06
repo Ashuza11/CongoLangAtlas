@@ -55,6 +55,8 @@ export interface GeographicCandidate {
   evidence_type: "representative-point" | "documented-presence";
   role: string;
   speaker_percentage?: number;
+  percentage_basis?: string;
+  confidence?: "low" | "medium" | "high";
   review_status: "candidate" | "approve" | "reject" | "defer";
   limitations: string;
 }

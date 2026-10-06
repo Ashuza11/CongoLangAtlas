@@ -75,6 +75,7 @@ class WebDataBuildTests(unittest.TestCase):
                     "source_url": "https://example.org/map", "source_title": "Test map",
                     "evidence_locator": "Territory table", "role": "spoken-language",
                     "speaker_percentage": 15, "confidence": "high", "review_status": "candidate",
+                    "percentage_basis": "Share of the territory population in the source",
                     "limitations": "A test limitation."
                 }],
                 "approved_claims": [],
@@ -101,6 +102,11 @@ class WebDataBuildTests(unittest.TestCase):
             self.assertEqual(imported["discovered_sources"][0]["provider"], "OLAC")
             supplemental = next(item for item in bundle["languages"] if item["id"] == "language-sup")
             self.assertEqual(supplemental["geographic_candidates"][0]["speaker_percentage"], 15)
+            self.assertEqual(
+                supplemental["geographic_candidates"][0]["percentage_basis"],
+                "Share of the territory population in the source",
+            )
+            self.assertEqual(supplemental["geographic_candidates"][0]["confidence"], "high")
             self.assertEqual(bundle["summary"]["languages"], 2)
             self.assertNotIn("source_text", json.dumps(bundle))
 

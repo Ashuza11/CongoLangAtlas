@@ -13,6 +13,18 @@
       "doi": "https://doi.org/10.5281/zenodo.18840967",
       "licence_id": "CC-BY-4.0",
       "sha256": "1a50a393bc81568b656f9522be18aa4f80f38e94309ba6c863d583234adfbb89"
+    },
+    {
+      "id": "clear-global-caid-drc-languages-2016",
+      "citation": "CLEAR Global. DRC: Languages. Language data drawn from the 2016 CAID Rapport annuel de l’Administration du territoire, published at administrative level 2.",
+      "publisher": "CLEAR Global (previously Translators without Borders)",
+      "version": "2016-caid-hdx-2025-04-09",
+      "published_at": "2025-04-09",
+      "landing_page": "https://data.humdata.org/dataset/drc-languages",
+      "download_url": "https://data.humdata.org/dataset/0e616edb-dffa-4ebc-9aa1-90f6a4db33ff/resource/cc250cda-95b2-4b38-a3cc-cac1da090e27/download/cd_lang_admin2_v01.csv",
+      "doi": null,
+      "licence_id": "CC-BY-SA-4.0",
+      "sha256": "a231e33bb44c3d74f10a0c60a24f2f3c5d96f6e357da6495fe4ad0b1d1a7c8b0"
     }
   ]
 }

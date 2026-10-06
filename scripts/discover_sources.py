@@ -14,7 +14,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Callable
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlparse
 from urllib.request import Request, urlopen
 
 from scripts.validate_catalog import ROOT, load_json
@@ -127,6 +127,7 @@ class CachedClient:
     def __init__(self, cache: Path, offline: bool = False) -> None:
         self.cache = cache
         self.offline = offline
+        self.rate_limited_until: dict[str, float] = {}
         self.cache.mkdir(parents=True, exist_ok=True)
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> Any:
@@ -135,6 +136,11 @@ class CachedClient:
             return load_json(cache_path)
         if self.offline:
             raise DiscoveryError(f"offline cache miss: {url}")
+        host = urlparse(url).netloc
+        limited_until = self.rate_limited_until.get(host, 0)
+        if limited_until > time.time():
+            wait_seconds = max(1, round(limited_until - time.time()))
+            raise DiscoveryError(f"provider rate limit active for {host}; retry after {wait_seconds} seconds")
         request_headers = {"User-Agent": "CongoLangAtlas-source-discovery/0.1", **(headers or {})}
         if url.startswith("https://api.github.com/"):
             request_headers.update({
@@ -146,7 +152,19 @@ class CachedClient:
         try:
             with urlopen(Request(url, headers=request_headers), timeout=45) as response:
                 value = json.load(response)
-        except (HTTPError, URLError, TimeoutError) as exc:
+        except HTTPError as exc:
+            if exc.code == 429:
+                retry_after = exc.headers.get("Retry-After")
+                try:
+                    wait_seconds = max(1, int(retry_after or "60"))
+                except ValueError:
+                    wait_seconds = 60
+                self.rate_limited_until[host] = time.time() + wait_seconds
+                raise DiscoveryError(
+                    f"rate limited by {host}; retry after {wait_seconds} seconds"
+                ) from exc
+            raise DiscoveryError(f"request failed for {url}: {exc}") from exc
+        except (URLError, TimeoutError) as exc:
             raise DiscoveryError(f"request failed for {url}: {exc}") from exc
         cache_path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
         return value
@@ -307,6 +325,8 @@ def build_discovery(
     providers: tuple[str, ...] = PROVIDERS,
     offline: bool = False,
     presence: Path | None = DEFAULT_PRESENCE,
+    language_offset: int = 0,
+    language_limit: int | None = None,
 ) -> dict[str, Any]:
     if not catalog.exists():
         raise DiscoveryError("generated catalogue is missing; run the CongoLangBench importer first")
@@ -319,6 +339,13 @@ def build_discovery(
     if len(language_ids) != len(set(language_ids)):
         raise DiscoveryError("catalogue and presence inventory contain duplicate language IDs")
     languages.sort(key=lambda item: item["preferred_name"])
+    if language_offset < 0:
+        raise DiscoveryError("language offset must be zero or greater")
+    if language_limit is not None and language_limit < 1:
+        raise DiscoveryError("language limit must be greater than zero")
+    languages = languages[language_offset:]
+    if language_limit is not None:
+        languages = languages[:language_limit]
     results = []
     error_count = 0
     for index, language in enumerate(languages, 1):
@@ -334,6 +361,10 @@ def build_discovery(
         print(f"[{index:02d}/{len(languages)}] {language['preferred_name']}: {len(candidates)} candidate(s)", flush=True)
         if "github" in providers and not offline and index < len(languages):
             time.sleep(6.2)
+        elif "openalex" in providers and not offline and index < len(languages):
+            # OpenAlex's public API permits short bursts, but a full national
+            # inventory can otherwise exceed its per-second request budget.
+            time.sleep(0.15)
     bundle = {
         "bundle_version": 1,
         "generated_at": date.today().isoformat(),
@@ -363,10 +394,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--presence", type=Path, default=DEFAULT_PRESENCE)
     parser.add_argument("--providers", nargs="+", choices=PROVIDERS, default=list(PROVIDERS))
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--language-offset", type=int, default=0)
+    parser.add_argument("--language-limit", type=int)
     args = parser.parse_args(argv)
     try:
         bundle = build_discovery(
-            args.catalog, args.output, args.cache, tuple(args.providers), args.offline, args.presence
+            args.catalog,
+            args.output,
+            args.cache,
+            tuple(args.providers),
+            args.offline,
+            args.presence,
+            args.language_offset,
+            args.language_limit,
         )
     except DiscoveryError as exc:
         print(f"Source discovery failed: {exc}", file=sys.stderr)

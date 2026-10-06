@@ -7,6 +7,7 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -27,6 +28,16 @@ DEFAULT_REVIEWS = ROOT / "data" / "presence" / "reviews"
 DEFAULT_CURATED = ROOT / "data" / "presence" / "curated-presence.json"
 DEFAULT_SOURCE_DIR = ROOT / "data" / "generated" / "presence" / "source"
 DEFAULT_OUTPUT = ROOT / "data" / "generated" / "presence" / "candidates.json"
+
+GLOTTOLOG_SOURCE_ID = "glottolog-5-3-languages"
+CAID_SOURCE_ID = "clear-global-caid-drc-languages-2016"
+CAID_LANGUAGE_OVERRIDES = {
+    # The HDX HXL row either omits these well-established identifiers or, for
+    # Nande, carries an identifier for an unrelated language.
+    "Nande": "nnb",
+    "Tshiluba": "lua",
+    "Tshokwe": "cjk",
+}
 
 
 class PresenceBuildError(RuntimeError):
@@ -91,7 +102,7 @@ def _acquire(source: dict[str, Any], source_dir: Path, offline: bool) -> Path:
     if path.exists() and _sha256(path) == source["sha256"]:
         return path
     if offline:
-        raise PresenceBuildError("verified Glottolog source is unavailable in offline mode")
+        raise PresenceBuildError(f"verified source {source['id']} is unavailable in offline mode")
     source_dir.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".csv.tmp")
     request = urllib.request.Request(
@@ -103,13 +114,128 @@ def _acquire(source: dict[str, Any], source_dir: Path, offline: bool) -> Path:
                 output.write(block)
     except Exception as exc:
         temporary.unlink(missing_ok=True)
-        raise PresenceBuildError(f"Glottolog download failed: {exc}") from exc
+        raise PresenceBuildError(f"{source['id']} download failed: {exc}") from exc
     actual = _sha256(temporary)
     if actual != source["sha256"]:
         temporary.unlink(missing_ok=True)
         raise PresenceBuildError(f"Glottolog checksum mismatch: expected {source['sha256']}, got {actual}")
     temporary.replace(path)
     return path
+
+
+def _caid_documented_presence(
+    source_path: Path,
+    source: dict[str, Any],
+    inventory_languages: list[dict[str, Any]],
+    places: list[dict[str, Any]],
+    existing_pairs: set[tuple[str, str]],
+) -> list[dict[str, Any]]:
+    """Convert exact HXL ISO mappings and percentages into review candidates."""
+    with source_path.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.reader(handle)
+        try:
+            headers = next(reader)
+            hxl_tags = next(reader)
+        except StopIteration as exc:
+            raise PresenceBuildError("CLEAR Global/CAID source is missing its two header rows") from exc
+        rows = list(reader)
+
+    if len(headers) != len(hxl_tags):
+        raise PresenceBuildError("CLEAR Global/CAID headers and HXL tags have different lengths")
+    header_index = {name.strip(): index for index, name in enumerate(headers)}
+    required = {"Admin 2", "Adm 2 Pcode", "Adm 1 Pcode", "data_confidence"}
+    missing = sorted(required - set(header_index))
+    if missing:
+        raise PresenceBuildError("CLEAR Global/CAID source lacks columns: " + ", ".join(missing))
+
+    language_columns: list[tuple[int, str, str]] = []
+    for index, (name, tag) in enumerate(zip(headers, hxl_tags, strict=True)):
+        label = name.strip()
+        iso = CAID_LANGUAGE_OVERRIDES.get(label)
+        if not iso:
+            match = re.fullmatch(r"#indicator\+lang\+pct\+iso639-3_([a-z]{3})\s*", tag)
+            iso = match.group(1) if match else None
+        if iso:
+            language_columns.append((index, label, iso))
+
+    language_ids = {language["id"] for language in inventory_languages}
+    place_by_id = {place["id"]: place for place in places}
+    candidates: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for row_number, row in enumerate(rows, start=3):
+        if len(row) != len(headers):
+            raise PresenceBuildError(f"CLEAR Global/CAID CSV row {row_number} has an unexpected width")
+        territory_code = row[header_index["Adm 2 Pcode"]].strip().lower()
+        province_code = row[header_index["Adm 1 Pcode"]].strip().lower()
+        territory_id = f"place-cod-adm2-{territory_code}"
+        province_id = f"place-cod-adm1-{province_code}"
+        territory = place_by_id.get(territory_id)
+        province = place_by_id.get(province_id)
+        if not territory or not province or territory.get("parent_id") != province_id:
+            raise PresenceBuildError(
+                f"CLEAR Global/CAID CSV row {row_number} has an unknown administrative crosswalk "
+                f"({territory_code}, {province_code})"
+            )
+        source_confidence = row[header_index["data_confidence"]].strip() or "Unspecified"
+        for column_index, source_label, iso in language_columns:
+            raw_value = row[column_index].strip()
+            if not raw_value:
+                continue
+            try:
+                fraction = float(raw_value)
+            except ValueError as exc:
+                raise PresenceBuildError(
+                    f"CLEAR Global/CAID CSV row {row_number}, column {source_label} is not numeric"
+                ) from exc
+            if fraction <= 0:
+                continue
+            if fraction > 1:
+                raise PresenceBuildError(
+                    f"CLEAR Global/CAID CSV row {row_number}, column {source_label} exceeds 1"
+                )
+            language_id = f"language-{iso}"
+            pair = (language_id, territory_id)
+            if language_id not in language_ids or pair in existing_pairs:
+                continue
+            label_slug = re.sub(r"[^a-z0-9]+", "-", source_label.casefold()).strip("-")
+            candidate_id = f"presence-caid-2016-{iso}-{territory_code}-{label_slug}"
+            if candidate_id in seen_ids:
+                raise PresenceBuildError(f"duplicate generated CLEAR Global/CAID candidate {candidate_id}")
+            seen_ids.add(candidate_id)
+            percentage = round(fraction * 100, 6)
+            candidates.append({
+                "id": candidate_id,
+                "language_id": language_id,
+                "place_id": territory_id,
+                "province_place_id": province_id,
+                "source_id": source["id"],
+                "source_version": source["version"],
+                "source_url": source["landing_page"],
+                "source_title": "DRC: Languages (2016 CAID territory data)",
+                "evidence_locator": (
+                    f"CSV row {row_number}: Adm 2 Pcode={row[header_index['Adm 2 Pcode']]}, "
+                    f"column {source_label}={raw_value}"
+                ),
+                "role": "spoken-language",
+                "speaker_percentage": percentage,
+                "percentage_basis": (
+                    f"Share of the {territory['name']} administrative-area population reported "
+                    f"in the 2016 CAID dataset as speaking {source_label}"
+                ),
+                "confidence": "low",
+                "limitations": (
+                    f"The source marks this row's data confidence as {source_confidence}. The value "
+                    "does not measure proficiency, first-language identity, or exclusive distribution; "
+                    "the HXL ISO mapping and 2017 administrative crosswalk still require human review."
+                ),
+                "match_status": "documented-presence",
+                "evidence_type": "documented-presence",
+                "province_name": province["name"],
+                "territory_place_id": territory_id,
+                "territory_name": territory["name"],
+                "review_status": "candidate",
+            })
+    return candidates
 
 
 def _records(path: Path) -> list[dict[str, Any]]:
@@ -152,7 +278,10 @@ def build_presence_candidates(
     manifest_errors = _validate_document(manifest, "presence-source-manifest.schema.json")
     if manifest_errors:
         raise PresenceBuildError("invalid presence-source manifest: " + "; ".join(manifest_errors))
-    source = manifest["sources"][0]
+    source_by_id = {item["id"]: item for item in manifest["sources"]}
+    source = source_by_id.get(GLOTTOLOG_SOURCE_ID)
+    if not source:
+        raise PresenceBuildError(f"presence-source manifest lacks {GLOTTOLOG_SOURCE_ID}")
     source_path = _acquire(source, source_dir, offline)
     with source_path.open(encoding="utf-8", newline="") as handle:
         rows = {row["ISO639P3code"]: row for row in csv.DictReader(handle) if row.get("ISO639P3code")}
@@ -296,8 +425,8 @@ def build_presence_candidates(
                 })
         candidates.append(candidate)
 
+    curated_source_by_id = {item["id"]: item for item in curated.get("sources", [])}
     if curated.get("records"):
-        source_by_id = {item["id"]: item for item in curated.get("sources", [])}
         language_ids = {language["id"] for language in inventory_languages}
         place_by_id = {place["id"]: place for place in places}
         for record in curated.get("records", []):
@@ -305,7 +434,7 @@ def build_presence_candidates(
                 raise PresenceBuildError(f"{record['id']}: unknown language {record['language_id']}")
             place = place_by_id.get(record["place_id"])
             province = place_by_id.get(record["province_place_id"])
-            source_record = source_by_id.get(record["source_id"])
+            source_record = curated_source_by_id.get(record["source_id"])
             if not place or not province:
                 raise PresenceBuildError(f"{record['id']}: unknown place reference")
             if not source_record:
@@ -323,6 +452,17 @@ def build_presence_candidates(
                 candidate["territory_place_id"] = place["id"]
                 candidate["territory_name"] = place["name"]
             candidates.append(candidate)
+
+    caid_source = source_by_id.get(CAID_SOURCE_ID)
+    if caid_source:
+        caid_path = _acquire(caid_source, source_dir, offline)
+        curated_pairs = {
+            (record["language_id"], record["place_id"])
+            for record in curated.get("records", [])
+        }
+        candidates.extend(_caid_documented_presence(
+            caid_path, caid_source, inventory_languages, places, curated_pairs
+        ))
 
     candidate_ids = {candidate["id"] for candidate in candidates}
     unknown_decisions = sorted(set(decisions) - candidate_ids)

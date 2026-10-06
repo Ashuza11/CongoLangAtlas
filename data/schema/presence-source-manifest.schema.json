@@ -21,7 +21,12 @@
           "published_at": {"$ref": "definitions.schema.json#/$defs/date"},
           "landing_page": {"$ref": "definitions.schema.json#/$defs/url"},
           "download_url": {"$ref": "definitions.schema.json#/$defs/url"},
-          "doi": {"$ref": "definitions.schema.json#/$defs/url"},
+          "doi": {
+            "oneOf": [
+              {"$ref": "definitions.schema.json#/$defs/url"},
+              {"type": "null"}
+            ]
+          },
           "licence_id": {"type": "string", "minLength": 1},
           "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
         },

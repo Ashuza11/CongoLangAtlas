@@ -75,9 +75,9 @@ The repository currently provides:
 - a checksum-pinned Glottolog 5.3 inventory workflow that exposes 235
   ISO-coded DRC-associated rows and maps 188 representative-point candidates
   into administrative context without presenting them as language boundaries;
-- 37 source-linked documented-presence candidates, including broad regional
-  localization for the four national languages and territory-level
-  Kinyarwanda evidence for Masisi, Nyiragongo, and Rutshuru;
+- 460 source-linked documented-presence candidates: 99 individually curated
+  records plus 361 non-duplicative territory records generated from CLEAR
+  Global's checksum-pinned 2016 CAID dataset;
 - 236 language profiles: the original 47 benchmark tracks plus 189 provisional
   DRC inventory profiles whose identities and geographic evidence remain
   visibly reviewable;
@@ -163,12 +163,15 @@ record exists. This keeps the interface focused on sources users can actually
 investigate while retaining the complete audit trail in generated research
 records.
 
-An additional discovery pass identifies 453 candidate links across the original
-47 tracks: 64 datasets, 29 models, 40 GitHub repositories, 273 research records,
-and 47 OLAC catalogue pages. All 236 profiles now receive an OLAC link, while
-each of the 189 supplemental profiles also links back to its pinned Glottolog
-catalogue source, bringing the public bundle to 831 source leads. These are
-displayed as candidates—not verified records—and
+The original 47-track discovery pass identifies 453 candidate links. The
+expanded cached census now contains 1,149 candidates across all 236 profiles:
+217 Hugging Face datasets or models, 40 GitHub repositories, 656 OpenAlex
+research records, and 236 OLAC catalogue pages. Each of the 189 supplemental
+profiles also links back to its pinned Glottolog catalogue source, bringing the
+public bundle to 1,338 source leads. The 189 uncached GitHub searches and 92
+OpenAlex searches blocked by the current provider quota remain explicit
+provider errors. All links are displayed as candidates—not verified
+records—and
 must pass language, variety, geographic, licence, and access review before
 promotion.
 
@@ -203,9 +206,26 @@ an explicit former-Katanga-to-current-province crosswalk and a separately
 sourced Lunda presence candidate. At territory level,
 the CLEAR Global North Kivu source adds Kinyarwanda in Masisi and Nyiragongo,
 and preserves the source's Kinyabwisha note for Rutshuru. These highlights are
-not language borders or complete distributions. Forty-seven cross-border or
-catalogue points fall outside the DRC layers, generic Kikongo has no one-to-one
-Glottolog coordinate, and no place claim has named-human approval yet.
+not language borders or complete distributions. CLEAR Global maps now also
+add source-linked, CAID-derived language-use estimates for seven Équateur
+territories, five Ituri territories, and seven Tanganyika territories, plus
+Nande and Swahili evidence for Beni Territory. The interface preserves each
+map's warning that these percentages do not measure proficiency or exclusive
+language identity. Broad labels such as Luba and Hemba remain explicit review
+candidates rather than silently resolved varieties. A separate 2026 Ngaliema
+school study adds explicit Kinshasa candidates for Lingala, Kikongo,
+Kiswahili, and Tshiluba; its percentages are labelled as shares of 500
+surveyed students rather than citywide speaker estimates. Together with 188
+catalogue points, the public bundle contains 648 geographic leads. The pinned
+CLEAR Global/CAID import contributes low-confidence numeric evidence across
+128 territories, 25 provinces, and 71 ISO-matched language identities. With
+the separate Kinshasa evidence, every province now has locally grounded
+documentary evidence and at least one territory-level record. This is coverage
+of evidence availability, not proof that every language or territory has been
+fully documented. Forty-seven cross-border catalogue points fall outside the
+DRC layers, generic Kikongo has
+no one-to-one Glottolog coordinate, and no place claim has named-human approval
+yet.
 Online discovery requires network access; cached results can be rebuilt with
 `python3 -m scripts.discover_sources --offline`. See the
 [source-discovery guide](docs/SOURCE_DISCOVERY.md) for providers, relevance

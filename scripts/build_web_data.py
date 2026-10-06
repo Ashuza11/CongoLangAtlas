@@ -170,6 +170,8 @@ def build_web_data(
                 "evidence_type": candidate.get("evidence_type", "representative-point"),
                 "role": candidate.get("role", "unspecified"),
                 "speaker_percentage": candidate.get("speaker_percentage"),
+                "percentage_basis": candidate.get("percentage_basis"),
+                "confidence": candidate.get("confidence"),
                 "review_status": candidate["review_status"],
                 "limitations": candidate["limitations"],
             }

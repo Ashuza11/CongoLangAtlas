@@ -127,7 +127,12 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
           <div><p className="eyebrow">{candidate.evidence_type === "documented-presence" ? "Documented presence" : "Geographic candidate"}</p><span>{humanize(candidate.role)}</span></div>
           <strong>{candidate.territory_name ? `${candidate.territory_name}, ` : ""}{candidate.province_name}</strong>
           {candidate.evidence_type === "documented-presence" ? (
-            <p>{candidate.speaker_percentage !== undefined ? `${candidate.speaker_percentage}% reported speaking the language. ` : ""}{candidate.evidence_locator}.</p>
+            <p>
+              {candidate.speaker_percentage !== undefined
+                ? `${candidate.speaker_percentage}% — ${candidate.percentage_basis ?? "reported speaking the language"}. `
+                : ""}
+              {candidate.evidence_locator}.
+            </p>
           ) : candidate.point ? (
             <p>Glottolog identifies this row as {candidate.source_language_name} ({candidate.glottocode}). The point at {candidate.point.latitude.toFixed(4)}, {candidate.point.longitude.toFixed(4)} falls inside this administrative context.</p>
           ) : null}

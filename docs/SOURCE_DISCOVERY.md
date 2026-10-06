@@ -32,6 +32,14 @@ GitHub applies stricter limits to unauthenticated search. Set `GITHUB_TOKEN`
 to a read-only token when available; the token is used only as an HTTP header
 and is never written to the cache or generated bundle.
 
+Online runs pace GitHub repository searches and OpenAlex requests to respect
+their public API limits. Provider throttling or temporary failures remain
+visible in each language's `errors` list and can be retried safely because
+successful responses are cached before the next profile is processed.
+When a provider returns HTTP 429, the client records its `Retry-After` window
+and opens a host-level circuit breaker for the rest of that run instead of
+repeating requests that cannot succeed.
+
 Provider responses are cached under
 `data/generated/source-discovery-cache/`. Repeat the filtering and bundle step
 without network access with:
@@ -42,6 +50,20 @@ python3 -m scripts.discover_sources --offline
 
 Both the cache and `data/generated/source-discovery.json` are generated files
 and remain outside version control.
+
+Large online refreshes can be resumed in deterministic alphabetical batches.
+Write batch output outside the public bundle, then run the complete offline
+build after all batches have populated the shared cache:
+
+```bash
+python3 -m scripts.discover_sources --providers huggingface openalex \
+  --language-offset 0 --language-limit 20 --output /tmp/source-batch.json
+python3 -m scripts.discover_sources --offline
+```
+
+Offsets apply to the sorted full inventory. Batch output is diagnostic and
+must not replace the complete public bundle; the final offline build combines
+all cached provider responses for all profiles.
 
 An offline rebuild preserves cached provider results for the original tracks
 and still creates deterministic OLAC links for every supplemental profile.

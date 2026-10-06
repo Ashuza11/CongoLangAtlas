@@ -4,7 +4,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.build_presence_candidates import build_presence_candidates, validate_presence_bundle
+from scripts.build_presence_candidates import (
+    _caid_documented_presence,
+    build_presence_candidates,
+    validate_presence_bundle,
+)
 
 
 class PresenceCandidateBuildTests(unittest.TestCase):
@@ -80,6 +84,44 @@ class PresenceCandidateBuildTests(unittest.TestCase):
             self.assertEqual(approved["summary"]["approved"], 1)
             self.assertEqual(approved["approved_claims"][0]["place_id"], "place-cod-adm2-test")
             self.assertFalse(validate_presence_bundle(approved))
+
+    def test_builds_low_confidence_caid_records_from_hxl_iso_columns(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_path = root / "caid.csv"
+            source_path.write_text(
+                "Admin 2,Adm 2 Pcode,Admin 1,Adm 1 Pcode,data_confidence,Lingala,Nande\n"
+                "#adm2+name,#adm2+code,#adm1+name,#adm1+code,#meta+confidence,"
+                "#indicator+lang+pct+iso639-3_lin,#indicator+lang+pct+iso639-3_nmb\n"
+                "Example,CD1001,Province,CD10,Low,0.8,0.25\n",
+                encoding="utf-8",
+            )
+            languages = [
+                {"id": "language-lin", "preferred_name": "Lingala"},
+                {"id": "language-nnb", "preferred_name": "Nande"},
+            ]
+            places = [
+                {"id": "place-cod-adm1-cd10", "name": "Province", "admin_level": "province"},
+                {
+                    "id": "place-cod-adm2-cd1001", "name": "Example",
+                    "admin_level": "territory", "parent_id": "place-cod-adm1-cd10",
+                },
+            ]
+            source = {
+                "id": "clear-global-caid-drc-languages-2016",
+                "version": "test", "landing_page": "https://example.org/caid",
+            }
+
+            records = _caid_documented_presence(
+                source_path, source, languages, places,
+                {("language-lin", "place-cod-adm2-cd1001")},
+            )
+
+            self.assertEqual(len(records), 1)
+            self.assertEqual(records[0]["language_id"], "language-nnb")
+            self.assertEqual(records[0]["speaker_percentage"], 25)
+            self.assertEqual(records[0]["confidence"], "low")
+            self.assertIn("HXL ISO mapping", records[0]["limitations"])
 
 
 if __name__ == "__main__":

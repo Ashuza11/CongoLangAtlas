@@ -74,6 +74,7 @@
           "evidence_locator": {"type": "string", "minLength": 1},
           "role": {"enum": ["national-language-region", "spoken-language", "lingua-franca"]},
           "speaker_percentage": {"type": "number", "minimum": 0, "maximum": 100},
+          "percentage_basis": {"type": "string", "minLength": 1},
           "confidence": {"enum": ["low", "medium", "high"]},
           "limitations": {"type": "string", "minLength": 1}
         },

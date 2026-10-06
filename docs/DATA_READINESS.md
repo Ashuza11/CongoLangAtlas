@@ -81,8 +81,8 @@ layers, 47 fall outside, and generic Kikongo has no one-to-one coordinate.
 These are catalogue points—not distribution polygons or speaker locations—and
 zero candidates currently have named-human approval.
 
-A separate curated-presence bundle contributes 37 source-linked candidates.
-It localizes the four national languages as broad, non-exclusive regional
+A separate presence pipeline contributes 460 source-linked candidates. Its 99
+individually curated records localize the four national languages as broad, non-exclusive regional
 contexts and adds CLEAR Global's territory-level Kinyarwanda evidence for
 Masisi (15%), Nyiragongo (60%), and Rutshuru (70% Kinyabwisha, retained as a
 related-variety note). The Lualaba Congo Swahili match is an explicit
@@ -91,23 +91,46 @@ speaker survey; an independent secondary source also lists Lunda among the
 province's principal spoken languages.
 The official Kasaï-Oriental 2023–2027 development plan additionally documents
 Tshiluba as the province's common language, Lingala at 10%, and Swahili at 20%,
-while leaving the relevant territories and survey method unspecified. Together
-with the Glottolog candidates, the public bundle now contains 225 geographic
-leads across 236 language profiles. All curated records remain candidates
-pending named-human review.
+while leaving the relevant territories and survey method unspecified. A 2026
+study of 500 third-year literary students in six Ngaliema secondary schools
+adds sample-scoped Kinshasa evidence for Lingala, Kikongo, Kiswahili, and
+Tshiluba. Its percentages are not treated as citywide population estimates.
+CLEAR Global maps add 58 further territory records: 17 across seven Équateur
+territories, 15 across five Ituri territories, 24 across seven Tanganyika
+territories, and two for Beni Territory in Nord-Kivu. The underlying CAID
+percentages remain labelled as source-reported language use, not proficiency,
+first-language identity, exclusive distribution, or complete statistics.
+Broad labels such as Luba and Hemba retain explicit variety-review warnings,
+and duplicate city/territory names retain their administrative crosswalk notes.
+
+The same pipeline downloads CLEAR Global's open CSV from HDX, verifies its
+SHA-256 checksum, reads the HXL ISO mappings, and generates 361 additional
+non-duplicative candidates. These cover 128 second-level areas, all 25
+non-Kinshasa provinces, and 71 matched language identities. The source marks
+the data confidence as low, so the atlas preserves that rating and does not
+reinterpret the 2016 CAID fractions as modern census results. Rows without an
+exact ISO mapping remain excluded unless the repository documents a narrow,
+reviewable override; this currently applies only to Nande, Tshiluba, and
+Tshokwe. Together with the Glottolog candidates, the public bundle now contains
+648 geographic leads across 236 language profiles. All presence records remain
+candidates pending named-human review.
 
 `make coverage-report` audits all 26 provinces against the generated bundle.
-After this pass no province is empty; Kinshasa remains the only province with
-fewer than three language leads, and Kasaï-Oriental remains the only province
-without territory-level evidence. The report flags these gaps rather than
-filling them through inference.
+After this pass no province is empty or has fewer than three language leads.
+Every province now has locally grounded documentary evidence and at least one
+territory-level record. This is an evidence-availability milestone, not a claim
+that every language, territory, percentage, or current community distribution
+has been documented. The 2016 CAID rows remain low-confidence candidates and
+all publication claims still require named-human review.
 
-Source discovery now covers the same 236-profile inventory. Cached Hugging
-Face, GitHub, and OpenAlex results remain available for the original reviewed
-tracks; every supplemental profile receives deterministic OLAC and Glottolog
-catalogue links. The public bundle contains 831 source leads in total. Offline
-cache misses are recorded as provider errors and are not treated as evidence
-that no resource exists.
+Source discovery now covers the same 236-profile inventory. The refreshed
+cache contains 1,149 provider candidates: 217 Hugging Face datasets or models,
+40 GitHub repositories, 656 OpenAlex research records, and 236 OLAC catalogue
+pages. Every supplemental profile also receives a deterministic Glottolog
+catalogue link, bringing the public bundle to 1,338 source leads. GitHub has
+189 uncached supplemental-profile searches and OpenAlex has 92 searches held
+until its reported quota reset; all 281 gaps remain provider errors and are not
+treated as evidence that no resource exists.
 
 The UN SALB catalogue identifies a validated DRC dataset from the Institut
 Géographique du Congo with temporal validity beginning 2018-05-30 and a listed
