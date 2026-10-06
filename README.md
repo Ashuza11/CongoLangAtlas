@@ -13,10 +13,9 @@ need a trustworthy starting point for work on Congolese languages.
 > continuous integration are in place. Matched prototype province and
 > second-level sources pass the automated geometry quality gate. The first
 > CongoLangBench draft metadata exporter also reconciles and validates all 47
-> ready tracks. Thirty-three tracks now have evidence-linked source audits,
-> including one representative from every non-national benchmark region, but
-> none can be promoted without human approval and all unresolved licence,
-> access, variety, and geographic questions being closed.
+> ready tracks. All 47 tracks now have evidence-linked automated source audits,
+> but none can be promoted without named human approval and all unresolved
+> licence, access, variety, and geographic questions being closed.
 
 ## What the atlas will provide
 
@@ -90,6 +89,7 @@ Without `make`:
 ```bash
 python3 -m scripts.validate_catalog
 python3 -m scripts.validate_geodata
+python3 -m scripts.validate_reviews
 python3 -m unittest discover -v
 ```
 
@@ -123,17 +123,14 @@ The queue detects existing atlas identities and prioritizes restricted,
 cross-border, and variety-ambiguous tracks. Structural validation alone never
 promotes a draft record into the public catalogue.
 
-Current review status: 38 of 47 tracks have automated source audits. The four
-national tracks and one representative from each of the nine non-national
-regions are covered, along with a focused review of five high-risk open tracks.
-Three five-track restricted-source batches and a further five-track open-source
-batch are also complete. Twenty-eight technically complete audits still require
-a named human reviewer. Aushi, Alur, Bemba, Fuliiru, Lunda, and Nande retain
-geographic questions; Holoholo and
-Lingala retain variety/geography questions; and Ciluba and generic Kikongo
-remain blocked by gated access, licence “other,” and unresolved provenance.
-Every copyrighted track also remains restricted regardless of later identity
-approval.
+Current review status: all 47 tracks have automated source audits. Thirty-six
+tracks pass all six technical checks but still require a named human reviewer.
+Aushi, Alur, Bemba, Fuliiru, Lunda, and Nande retain geographic questions;
+Holoholo and Lingala retain variety/geography questions; Ciluba and generic
+Kikongo remain blocked by gated access, licence “other,” and unresolved
+provenance; and Nyanga retains a conflict between package public-domain
+metadata and the absence of matching publisher terms. Every copyrighted track
+also remains restricted regardless of later identity approval.
 
 Reviewed source metadata is applied as a separate overlay, leaving the pinned
 CongoLangBench registries unchanged. The generated records now link directly
@@ -173,7 +170,9 @@ CongoLangAtlas/
    metadata and permitted aggregates—not protected corpus text or audio.
 
 See the [data model](docs/DATA_MODEL.md) and
-[verification policy](docs/VERIFICATION_POLICY.md) for the complete rules.
+[verification policy](docs/VERIFICATION_POLICY.md) for the complete rules. The
+[data-readiness report](docs/DATA_READINESS.md) summarizes the current handoff
+state and the external approvals that automation cannot replace.
 
 ## Initial metadata seed
 
@@ -193,7 +192,7 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 | Phase | Deliverable | Status |
 |---|---|---|
 | 0 | Schemas, governance, validation, geographic-source review | In progress — automated geometry gate passes; administrative review pending |
-| 1 | Verified CongoLangBench metadata seed | In progress — draft exporter validates 47 tracks; manual review pending |
+| 1 | Verified CongoLangBench metadata seed | In progress — all 47 automated source audits complete; named human review pending |
 | 2 | Interactive map, search, profiles, filters, and exports | Planned |
 | 3 | Expanded national language and resource catalogue | Planned |
 | 4 | Reproducible NLP benchmark and model-result integration | Planned |

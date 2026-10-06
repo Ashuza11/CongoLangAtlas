@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "zmb",
+  "atlas_language_id": "language-zmb",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-06",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Zimba as ISO zmb in the DRC. The official YouVersion page confirms the copyrighted DRC edition, publisher, and 14 available New Testament books or portions, but grants no corpus redistribution licence. Restricted content and named human approval remain blockers.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/zimb1251",
+    "https://www.bible.com/versions/3489-zmb-zimba-nouveau-testament-portions"
+  ]
+}

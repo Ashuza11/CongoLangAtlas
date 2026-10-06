@@ -239,6 +239,29 @@ The generated draft now contains 47 language records, 94 resource records, and
 automated audits. All five tracks in this batch pass the six technical checks,
 but none can be promoted without a named human decision.
 
+### Final source-audit batch
+
+The final batch closes automated evidence review for every imported track:
+
+| Track | Source result | Remaining blocker |
+|---|---|---|
+| Ngbaka (`nga`) | Copyrighted DRC–Central African Republic–Republic of the Congo edition | Restricted content and human approval |
+| Northern Ngbandi (`ngb`) | Copyrighted DRC–Central African Republic edition | Restricted content and human approval |
+| Ngiti (`niy`) | Copyrighted DRC–Uganda edition | Restricted content and human approval |
+| Nyanga (`nyj`) | Official DRC four-book edition | Conflicting licence evidence, restricted content, and human approval |
+| Amba (`rwm`) | Copyrighted DRC–Uganda edition | Restricted content and human approval |
+| Tabwa (`tap`) | DRC edition, CC BY-SA 4.0 | Human approval; attribution, discrepancy disclosure, and ShareAlike apply |
+| Tembo (`tbt`) | Copyrighted DRC New Testament | Restricted content and human approval |
+| Yombe (`yom`) | DRC New Testament and Psalms, CC BY-SA 4.0 | Human approval; attribution, trademark handling, and ShareAlike apply |
+| Zimba (`zmb`) | Official copyrighted DRC edition | Restricted content and human approval |
+
+The complete generated draft contains 47 language records, 94 resource
+records, and 26 source records, for 167 records total. All 47 tracks now have
+deferred automated audits; 36 pass all six technical checks. No record is
+promotion-ready because named human review is deliberately outside the
+automated audit role. Nyanga also remains blocked by a licence conflict between
+package metadata and the official publisher page.
+
 ## Known issues to preserve
 
 - Generic Kikongo and Kikongo ya Leta are distinct tracks.

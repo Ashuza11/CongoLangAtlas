@@ -5,6 +5,7 @@ CONGOLANGBENCH ?= ../DRCongo_Lang_Benchmark
 validate:
 	python3 -m scripts.validate_catalog
 	python3 -m scripts.validate_geodata
+	python3 -m scripts.validate_reviews
 
 test:
 	python3 -m unittest discover -v

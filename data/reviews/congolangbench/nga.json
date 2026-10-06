@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "nga",
+  "atlas_language_id": "language-nga",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-06",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Ngbaka Minagende as ISO nga across the DRC, Central African Republic, and Republic of the Congo. The pinned Africa Corpus edition has the same cross-border scope and is copyrighted, so only metadata may be published. Restricted content and named human approval remain blockers.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/ngba1285",
+    "https://huggingface.co/datasets/AfriSpeech/africa-corpus"
+  ]
+}

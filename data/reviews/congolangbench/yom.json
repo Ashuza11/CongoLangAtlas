@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "yom",
+  "atlas_language_id": "language-yom",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-06",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Yombe/Kiyombe as ISO yom across Angola, the DRC, and the Republic of the Congo. The selected Biblica edition is explicitly DRC-labelled and CC BY-SA 4.0, and its pinned checksums and New Testament-plus-Psalms coverage reconcile. Attribution, trademark handling, ShareAlike, and named human review remain required.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/yomb1244",
+    "https://ebible.org/Bible/details.php?id=yom"
+  ]
+}

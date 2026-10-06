@@ -160,6 +160,46 @@
       "source_type": "primary-dataset",
       "licence_id": "CC-BY-4.0",
       "verification_notes": "Dataset card, DRC country label, licence, and pinned local acquisition metadata checked directly; upstream OPUS components remain mixed."
+    },
+    "source-youversion-nyanga": {
+      "citation": "TRADUCTION BILBE EN KINYANGA, YouVersion 4564",
+      "url": "https://www.bible.com/versions/4564-nyj-traduction-bilbe-en-kinyanga",
+      "publisher": "GAPLCDI / The Seed Company",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official version page confirms Nyanga, publisher, and four-book coverage. Package metadata says public domain, but the publisher page exposes no matching open redistribution terms, so the conflict is resolved conservatively."
+    },
+    "source-ebible-tabwa": {
+      "citation": "Kitaabua New Testament",
+      "url": "https://ebible.org/Scriptures/details.php?id=tap",
+      "publisher": "The Word for the World International via eBible.org",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-SA-4.0",
+      "verification_notes": "Official edition page confirms ISO tap, DRC scope, downloadable formats, and CC BY-SA 4.0 terms; pinned extraction metadata and checksums were also checked."
+    },
+    "source-youversion-tembo": {
+      "citation": "Echilaano Chiyayaya, YouVersion 3997",
+      "url": "https://www.bible.com/versions/3997-tbt-echilaano-chiyayaya",
+      "publisher": "Wycliffe Bible Translators, Inc.",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official version page confirms Tembo, publisher, copyright, and New Testament coverage; no corpus redistribution licence is displayed."
+    },
+    "source-ebible-yombe": {
+      "citation": "Biblica Open Nkanda wu Moyo, Nguizani Yimona ayi Minkunga 2002",
+      "url": "https://ebible.org/Bible/details.php?id=yom",
+      "publisher": "Biblica, Inc. via eBible.org",
+      "source_type": "primary-dataset",
+      "licence_id": "CC-BY-SA-4.0",
+      "verification_notes": "Official edition page confirms ISO yom, DRC scope, downloadable formats, and CC BY-SA 4.0 terms; pinned archive checksums and coverage were also checked."
+    },
+    "source-youversion-zimba": {
+      "citation": "Zimba Nouveau Testament Portions, YouVersion 3489",
+      "url": "https://www.bible.com/versions/3489-zmb-zimba-nouveau-testament-portions",
+      "publisher": "The Seed Company / Forum Communautaire des Traducteurs de la Bible et Alphabetisation",
+      "source_type": "official-catalogue",
+      "licence_id": null,
+      "verification_notes": "Official version page confirms Zimba, publisher, copyright, and available portions; no corpus redistribution licence is displayed."
     }
   },
   "tracks": {
@@ -580,6 +620,105 @@
       "redistribution": "allowed",
       "geographic_scope": "drc-labelled",
       "limitations": "The wrapper labels the Songe data as DRC and CC BY 4.0, but mixes upstream OPUS domains; cite both the wrapper and OPUS MT560 guidance."
+    },
+    "nga": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Ngbaka Minagende edition is copyrighted and labelled for DRC, the Central African Republic, and the Republic of the Congo. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "ngb": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Northern Ngbandi edition is copyrighted and labelled for DRC and the Central African Republic. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "niy": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Ngiti edition is copyrighted and labelled for DRC and Uganda. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "nyj": {
+      "source_id": "source-youversion-nyanga",
+      "homepage_url": "https://www.bible.com/versions/4564-nyj-traduction-bilbe-en-kinyanga",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The DRC Nyanga edition is readable through the official publisher page, but package public-domain metadata conflicts with the absence of explicit open terms. Text remains local and excluded pending written permission or matching licence evidence."
+    },
+    "rwm": {
+      "source_id": "source-afrispeech-africa-corpus",
+      "homepage_url": "https://huggingface.co/datasets/AfriSpeech/africa-corpus",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "cross-border",
+      "limitations": "The exact Amba edition is copyrighted and labelled for DRC and Uganda. Only metadata and scripts may be published; aligned text remains excluded."
+    },
+    "tap": {
+      "source_id": "source-ebible-tabwa",
+      "homepage_url": "https://ebible.org/Scriptures/details.php?id=tap",
+      "download_url": "https://ebible.org/Scriptures/tap_vpl.zip",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The DRC-labelled Taabwa edition permits redistribution and adaptation under CC BY-SA 4.0. The registry calls it a New Testament, but the pinned package exposes 12 Old Testament books or portions; retain that discrepancy and all attribution, change-notice, and ShareAlike duties."
+    },
+    "tbt": {
+      "source_id": "source-youversion-tembo",
+      "homepage_url": "https://www.bible.com/versions/3997-tbt-echilaano-chiyayaya",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The official Tembo New Testament is copyrighted and grants no corpus redistribution licence. Reading and app access do not authorize extraction; aligned text remains local and excluded."
+    },
+    "yom": {
+      "source_id": "source-ebible-yombe",
+      "homepage_url": "https://ebible.org/Bible/details.php?id=yom",
+      "download_url": "https://ebible.org/Scriptures/yom_vpl.zip",
+      "access_type": "open-download",
+      "licence_id": "CC-BY-SA-4.0",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "redistribution": "allowed",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The selected DRC Yombe New Testament and Psalms are reusable under CC BY-SA 4.0. Preserve Biblica attribution and ShareAlike; remove the Biblica trademark from modified derivatives and identify changes."
+    },
+    "zmb": {
+      "source_id": "source-youversion-zimba",
+      "homepage_url": "https://www.bible.com/versions/3489-zmb-zimba-nouveau-testament-portions",
+      "download_url": null,
+      "access_type": "unavailable",
+      "licence_id": null,
+      "terms_url": null,
+      "redistribution": "restricted",
+      "geographic_scope": "drc-labelled",
+      "limitations": "The official DRC Zimba edition contains 14 available New Testament books or portions but grants no corpus redistribution licence. Text remains local and excluded."
     }
   }
 }

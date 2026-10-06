@@ -97,10 +97,11 @@ dataset supplied through the Institut Géographique du Congo, with temporal
 validity from 2018-05-30 and a last update of 2024-06-13. This is the preferred
 reference for the next name, classification, and hierarchy comparison.
 
-Automated access to its downloadable files was blocked during the 2026-10-05
-review. The atlas therefore records SALB as a review target but does not copy,
-infer, or claim validation from data it could not retrieve and inspect. Its
-terms must also be reviewed before any artifact is stored or redistributed.
+The catalogue entry was reconfirmed on 2026-10-06, but direct automated access
+to its downloadable files remained blocked. The atlas therefore records SALB
+as a review target but does not copy, infer, or claim validation from data it
+could not retrieve and inspect. Its terms must also be reviewed before any
+artifact is stored or redistributed.
 
 ## Language-map constraint
 

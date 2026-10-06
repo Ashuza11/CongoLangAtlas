@@ -1,0 +1,22 @@
+{
+  "decision_version": 1,
+  "source_commit": "43c9a763459021d6feb7fc90c37ef13dbe4824d1",
+  "iso_639_3": "tbt",
+  "atlas_language_id": "language-tbt",
+  "reviewer_id": "reviewer-automated-source-audit",
+  "reviewed_at": "2026-10-06",
+  "checks": {
+    "language_identity": "approved",
+    "variety_identity": "approved",
+    "geographic_scope": "approved",
+    "licence": "approved",
+    "access": "approved",
+    "source_links": "approved"
+  },
+  "decision": "defer",
+  "notes": "Glottolog identifies Tembo/Kitembo as ISO tbt in the DRC. The official YouVersion page confirms the copyrighted Wycliffe New Testament and the pinned 27-book coverage, but grants no corpus redistribution licence. Restricted content and named human approval remain blockers.",
+  "evidence_urls": [
+    "https://glottolog.org/resource/languoid/id/temb1270",
+    "https://www.bible.com/versions/3997-tbt-echilaano-chiyayaya"
+  ]
+}
