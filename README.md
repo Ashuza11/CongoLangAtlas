@@ -11,7 +11,8 @@ need a trustworthy starting point for work on Congolese languages.
 > **Project status:** Phase 2 research preview. The complete 47-track data audit
 > now feeds a static Next.js and MapLibre interface with catalogue search,
 > evidence filters, clickable province and territory context, and resource
-> profiles. All
+> profiles. The map can filter 41 representative-point candidates while
+> distinguishing them from the current zero human-approved place claims. All
 > records remain visibly marked as drafts: none can be promoted without named
 > human approval and all unresolved licence, access, variety, and geographic
 > questions being closed.
@@ -59,6 +60,8 @@ The repository currently provides:
   with licence, provenance, intended use, and review limitations;
 - deterministic downloading, geometry validation, parent assignment,
   topology-preserving simplification, and quality reporting;
+- a generated catalogue of one country, 26 provinces, and 240 second-level
+  administrative places linked to their source geometry;
 - an allow-listed, commit-pinned CongoLangBench metadata exporter that excludes
   sentence text and reconciles source totals before producing draft records;
 - a deterministic public-safe web bundle containing metadata only;
@@ -68,6 +71,9 @@ The repository currently provides:
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,
   GitHub, and OpenAlex, with ambiguous-name filtering and review labels;
+- a checksum-pinned Glottolog 5.3 coordinate workflow that maps 41
+  representative-point candidates into administrative context without
+  presenting them as language boundaries;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -104,11 +110,14 @@ Build the generated map layers from their pinned sources:
 
 ```bash
 make geodata
+make places
 ```
 
 This command requires network access the first time. Verified downloads are
 cached under `data/generated/`; generated sources, web layers, and quality
 reports are excluded from Git and remain reproducible from the manifest.
+The place build emits 267 schema-valid catalogue records derived from those
+layers, including the country and complete parent hierarchy.
 
 Import the pinned CongoLangBench registry metadata from a sibling checkout:
 
@@ -161,6 +170,7 @@ Build the metadata-only bundle used by the interface, install frontend
 dependencies, and start the research preview:
 
 ```bash
+make presence-candidates
 make discover-sources
 make web-data
 npm install
@@ -172,8 +182,11 @@ been generated as described above. The map also expects the reproducible ADM1
 and ADM2 layers created by `make geodata`. Administrative polygons provide
 navigation context only and are never presented as language boundaries.
 Selecting a province or territory updates the catalogue context immediately.
-Until reviewed presence claims are added, the panel continues to show the
-national catalogue and clearly labels the missing place-specific evidence.
+The current map filter uses Glottolog representative-point candidates and
+labels them accordingly. It never implies that the matched administrative area
+is the language's complete distribution. Five cross-border representative
+points fall outside the DRC layers, generic Kikongo has no one-to-one
+Glottolog language coordinate, and no place claim has named-human approval yet.
 Online discovery requires network access; cached results can be rebuilt with
 `python3 -m scripts.discover_sources --offline`. See the
 [source-discovery guide](docs/SOURCE_DISCOVERY.md) for providers, relevance
@@ -196,6 +209,7 @@ artifacts remain excluded from Git.
 CongoLangAtlas/
 ├── data/
 │   ├── catalog/        # Version-controlled metadata records
+│   ├── presence/       # Geographic source pins and human review decisions
 │   └── schema/         # JSON Schemas and controlled vocabularies
 ├── docs/               # Product, evidence, and import policies
 ├── public/geodata/     # Geographic source manifest and guidance

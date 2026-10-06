@@ -26,6 +26,18 @@ function resourceLabel(type: string) {
   return labels[type] ?? humanize(type);
 }
 
+function matchesPlace(language: AtlasLanguage, place: AtlasPlaceSelection, approvedOnly = false) {
+  const claimMatches = language.place_claims.some((claim) =>
+    place.adminLevel === "province" ? claim.province_place_id === place.id : claim.place_id === place.id,
+  );
+  if (claimMatches || approvedOnly) return claimMatches;
+  return language.geographic_candidates.some((candidate) =>
+    place.adminLevel === "province"
+      ? candidate.province_place_id === place.id
+      : candidate.territory_place_id === place.id,
+  );
+}
+
 function ResourceCard({ resource }: { resource: AtlasResource }) {
   const link = resource.download_url || resource.homepage_url;
   return (
@@ -107,6 +119,15 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
         <div><span>Reviewed</span><strong>{language.last_reviewed_at}</strong></div>
       </div>
       <p className="classification">{language.classification_note}</p>
+      {language.geographic_candidates.map((candidate) => (
+        <div className="geographic-lead" key={candidate.id}>
+          <div><p className="eyebrow">Geographic candidate</p><span>Representative point</span></div>
+          <strong>{candidate.territory_name}, {candidate.province_name}</strong>
+          <p>Glottolog identifies this row as {candidate.source_language_name} ({candidate.glottocode}). The point at {candidate.point.latitude.toFixed(4)}, {candidate.point.longitude.toFixed(4)} falls inside this administrative context.</p>
+          <p>{candidate.limitations}</p>
+          <a href={candidate.source_url} target="_blank" rel="noreferrer" className="text-link">Open Glottolog source <span aria-hidden>↗</span></a>
+        </div>
+      ))}
       <div className="review-box">
         <h3>Evidence review</h3>
         {unresolved.length ? (
@@ -174,9 +195,17 @@ export default function AtlasExplorer() {
     return (bundle?.languages ?? []).filter((language) => {
       const matchesText = !term || [language.name, language.iso, ...language.aliases].some((value) => value.toLowerCase().includes(term));
       const matchesAccess = access === "all" || (access === "open" ? language.resources.some(resourceIsOpen) : !language.resources.some(resourceIsOpen));
-      return matchesText && matchesAccess && (region === "all" || language.region === region);
+      const matchesGeography = !selectedPlace || matchesPlace(language, selectedPlace);
+      return matchesText && matchesAccess && matchesGeography && (region === "all" || language.region === region);
     });
-  }, [access, bundle, query, region]);
+  }, [access, bundle, query, region, selectedPlace]);
+  const placeCounts = useMemo(() => {
+    if (!selectedPlace || !bundle) return null;
+    return {
+      approved: bundle.languages.filter((language) => matchesPlace(language, selectedPlace, true)).length,
+      candidates: bundle.languages.filter((language) => matchesPlace(language, selectedPlace)).length,
+    };
+  }, [bundle, selectedPlace]);
 
   if (error) return <main className="state-page"><h1>Catalogue unavailable</h1><p>{error}</p><code>make web-data</code></main>;
   if (!bundle) return <main className="state-page"><div className="loader" /><p>Preparing the atlas…</p></main>;
@@ -190,7 +219,7 @@ export default function AtlasExplorer() {
       <section className="workspace" id="atlas">
         <aside className="catalogue-panel">
           <div className="panel-heading"><div><p className="eyebrow">{selectedPlace ? `${selectedPlace.adminLevel} selected` : "National catalogue"}</p><h2>{selectedPlace?.name || "Languages"}</h2></div><span>{languages.length} / {bundle.languages.length}</span></div>
-          {selectedPlace && <div className="place-context"><strong>Showing the full catalogue</strong><span>Place-specific language links have not yet passed review for {selectedPlace.name}.</span><button onClick={() => setSelectedPlace(null)}>Clear selection</button></div>}
+          {selectedPlace && <div className="place-context"><strong>{placeCounts?.candidates || 0} geographic lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed claim{placeCounts?.approved === 1 ? "" : "s"}; remaining matches use representative Glottolog points and are not complete language distributions.</span><button onClick={() => setSelectedPlace(null)}>Show all languages</button></div>}
           <label className="search-field"><span className="sr-only">Search languages</span><span aria-hidden>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, alias, or ISO code" /></label>
           <div className="filters">
             <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
@@ -202,10 +231,10 @@ export default function AtlasExplorer() {
             {languages.map((language) => {
               const hasOpen = language.resources.some(resourceIsOpen);
               return <button className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => setSelected(language)} key={language.id}>
-                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{language.region} · {language.resources.length + language.discovered_sources.length} source links</small></span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
+                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Representative-point candidate") : `${language.region} · ${language.resources.length + language.discovered_sources.length} source links`}</small></span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
               </button>;
             })}
-            {!languages.length && <p className="empty-state">No tracks match these filters.</p>}
+            {!languages.length && <p className="empty-state">No mapped language leads match this place and the active filters.</p>}
           </div>
         </aside>
 
@@ -215,7 +244,7 @@ export default function AtlasExplorer() {
             <div className="segmented"><button className={detailLevel === "provinces" ? "active" : ""} onClick={() => changeDetailLevel("provinces")}>Provinces</button><button className={detailLevel === "territories" ? "active" : ""} onClick={() => changeDetailLevel("territories")}>Territories</button></div>
           </div>
           <AtlasMap detailLevel={detailLevel} onPlaceSelect={handlePlaceSelect} />
-          <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to update the catalogue panel.</strong> Language-to-place links will appear as their supporting sources pass review.</p></div>
+          <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads.</strong> Candidate matches use representative catalogue points—not language borders, complete distributions, or speaker totals.</p></div>
         </section>
 
         {selected && <LanguageProfile key={selected.id} language={selected} onClose={() => setSelected(null)} />}

@@ -64,7 +64,7 @@ class WebDataBuildTests(unittest.TestCase):
                 }],
             })
 
-            bundle = build_web_data(catalog, queue, root / "web.json", discovery)
+            bundle = build_web_data(catalog, queue, root / "web.json", discovery, None)
             self.assertEqual(bundle["languages"][0]["region"], "Test region")
             self.assertEqual(len(bundle["languages"][0]["resources"]), 1)
             self.assertEqual(bundle["languages"][0]["resources"][0]["type"], "bitext")

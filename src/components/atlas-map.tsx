@@ -100,7 +100,7 @@ export default function AtlasMap({ detailLevel, onPlaceSelect }: AtlasMapProps) 
         map.setFeatureState({ source, id: selectedIds[source] }, { selected: true });
       }
       onPlaceSelect({
-        id: String(feature.properties?.id ?? feature.id ?? "unknown"),
+        id: `place-${String(feature.properties?.id ?? feature.id ?? "unknown")}`,
         name: String(feature.properties?.name ?? "Unknown place"),
         adminLevel: detailRef.current === "territories" ? "territory" : "province",
         parentId: feature.properties?.parent_id ? String(feature.properties.parent_id) : undefined,

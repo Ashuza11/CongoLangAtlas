@@ -35,6 +35,40 @@ export interface AtlasLanguage {
   };
   resources: AtlasResource[];
   discovered_sources: DiscoveredSource[];
+  geographic_candidates: GeographicCandidate[];
+  place_claims: PlaceClaim[];
+}
+
+export interface GeographicCandidate {
+  id: string;
+  province_place_id: string;
+  province_name: string;
+  territory_place_id: string;
+  territory_name: string;
+  point: { latitude: number; longitude: number };
+  glottocode: string;
+  source_language_name: string;
+  source_url: string;
+  evidence_locator: string;
+  review_status: "candidate" | "approve" | "reject" | "defer";
+  limitations: string;
+}
+
+export interface PlaceClaim {
+  id: string;
+  language_id: string;
+  place_id: string;
+  province_place_id: string;
+  geometry_type: "point";
+  role: string;
+  point: { latitude: number; longitude: number };
+  source_id: string;
+  source_url: string;
+  evidence_locator: string;
+  confidence: string;
+  verification_status: string;
+  last_reviewed_at: string;
+  limitations: string;
 }
 
 export interface DiscoveredSource {
@@ -76,6 +110,9 @@ export interface AtlasBundle {
     sources: number;
     open_download_tracks: number;
     discovered_sources: number;
+    mapped_geographic_candidates: number;
+    approved_place_claims: number;
+    unmapped_language_tracks: number;
   };
   languages: AtlasLanguage[];
 }

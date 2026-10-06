@@ -17,9 +17,10 @@ by Git.
 
 Administrative geometry is context for navigating the DRC. It must not be
 described or styled as evidence of language boundaries or presence.
-Province and territory clicks update the catalogue context, but filtering by
-place must remain disabled until reviewed `language_presence_claim` records
-connect languages to those administrative identifiers.
+Province and territory clicks filter profiles using representative-point
+candidates from the pinned Glottolog source. The interface labels these as
+geographic leads rather than reviewed `language_presence_claim` records and
+explains that a representative point is not a complete language distribution.
 
 Language profiles display reviewed resources separately from automatically
 discovered source leads. Candidate datasets, models, repositories, research,

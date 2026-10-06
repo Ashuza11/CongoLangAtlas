@@ -141,9 +141,13 @@ source review; imported counts reconcile with the source registry snapshot.
 
 ### Phase 2 — Minimum viable interactive atlas
 
-1. Build the DRC map with province and territory selection.
+1. Build the DRC map with province and territory selection. **Implemented for
+   the static research preview; administrative-currency review remains.**
 2. Add language search, filters, profile pages, and resource cards.
+   **Implemented with reviewed resources and separately labelled source
+   candidates.**
 3. Add evidence and uncertainty labels directly to the interface.
+   **Implemented for resource and representative-point candidate states.**
 4. Implement stable, shareable URLs and metadata exports.
 5. Publish source citations and a visible last-reviewed date.
 6. Test on mobile devices and low-bandwidth connections.

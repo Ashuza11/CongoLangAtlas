@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/presence-review-decision.schema.json",
+  "title": "Language-presence candidate review decision",
+  "type": "object",
+  "required": ["decision_version", "candidate_id", "source_version", "reviewer_id", "reviewed_at", "checks", "decision", "notes"],
+  "properties": {
+    "decision_version": {"const": 1},
+    "candidate_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "source_version": {"type": "string", "minLength": 1},
+    "reviewer_id": {"$ref": "definitions.schema.json#/$defs/id"},
+    "reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"},
+    "checks": {
+      "type": "object",
+      "required": ["language_identity", "representative_location", "administrative_match", "temporal_relevance"],
+      "properties": {
+        "language_identity": {"enum": ["approved", "rejected", "unresolved"]},
+        "representative_location": {"enum": ["approved", "rejected", "unresolved"]},
+        "administrative_match": {"enum": ["approved", "rejected", "unresolved"]},
+        "temporal_relevance": {"enum": ["approved", "rejected", "unresolved"]}
+      },
+      "additionalProperties": false
+    },
+    "decision": {"enum": ["approve", "reject", "defer"]},
+    "notes": {"type": "string", "minLength": 1},
+    "evidence_urls": {"type": "array", "uniqueItems": true, "items": {"$ref": "definitions.schema.json#/$defs/url"}}
+  },
+  "additionalProperties": false
+}

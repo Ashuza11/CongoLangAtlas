@@ -23,6 +23,17 @@ Generated artifacts live under `public/generated/geodata/` and
 `source-checked` layers still require the administrative-currency review
 described in `docs/GEOGRAPHIC_DATA_SOURCE.md` before publication.
 
+Convert the generated feature identifiers and parent hierarchy into validated
+catalogue place records with:
+
+```bash
+make places
+```
+
+The resulting country, province, and second-level records live under
+`data/generated/places/`. Afterward, `make presence-candidates` can spatially
+match pinned representative language points for human review.
+
 Language polygons must not be derived from intuition or presented as exact
 boundaries. Use points, administrative associations, broad regions, or
 explicit uncertainty unless a cited source supports a stronger geometry.

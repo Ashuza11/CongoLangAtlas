@@ -12,12 +12,14 @@ from typing import Any
 
 from scripts.validate_catalog import ROOT, load_json, validate_catalog
 from scripts.discover_sources import validate_discovery
+from scripts.build_presence_candidates import validate_presence_bundle
 
 
 DEFAULT_CATALOG = ROOT / "data" / "generated" / "congolangbench" / "catalog"
 DEFAULT_QUEUE = ROOT / "data" / "generated" / "congolangbench" / "review-queue.json"
 DEFAULT_OUTPUT = ROOT / "public" / "generated" / "atlas" / "catalog.json"
 DEFAULT_DISCOVERY = ROOT / "data" / "generated" / "source-discovery.json"
+DEFAULT_PRESENCE = ROOT / "data" / "generated" / "presence" / "candidates.json"
 
 
 class WebDataError(RuntimeError):
@@ -58,6 +60,7 @@ def build_web_data(
     queue_path: Path = DEFAULT_QUEUE,
     output: Path = DEFAULT_OUTPUT,
     discovery_path: Path | None = DEFAULT_DISCOVERY,
+    presence_path: Path | None = DEFAULT_PRESENCE,
 ) -> dict[str, Any]:
     if not catalog.exists() or not queue_path.exists():
         raise WebDataError("generated import is missing; run the importer and review queue first")
@@ -84,6 +87,20 @@ def build_web_data(
         if discovery_errors:
             raise WebDataError("source discovery is invalid: " + "; ".join(discovery_errors))
         discovery_by_language = {item["language_id"]: item for item in discovery.get("languages", [])}
+    presence_candidates_by_language: dict[str, list[dict[str, Any]]] = {}
+    approved_claims_by_language: dict[str, list[dict[str, Any]]] = {}
+    presence_summary: dict[str, Any] = {}
+    if presence_path and presence_path.exists():
+        presence = load_json(presence_path)
+        presence_errors = validate_presence_bundle(presence)
+        if presence_errors:
+            raise WebDataError("presence candidates are invalid: " + "; ".join(presence_errors))
+        presence_summary = presence.get("summary", {})
+        for candidate in presence.get("candidates", []):
+            if candidate.get("match_status") == "mapped-candidate":
+                presence_candidates_by_language.setdefault(candidate["language_id"], []).append(candidate)
+        for claim in presence.get("approved_claims", []):
+            approved_claims_by_language.setdefault(claim["language_id"], []).append(claim)
 
     languages = []
     for language in sorted(_records(catalog, "language"), key=lambda item: item["preferred_name"]):
@@ -116,6 +133,23 @@ def build_web_data(
                 },
             })
         discovered_sources = discovery_by_language.get(language["id"], {}).get("candidates", [])
+        geographic_candidates = [
+            {
+                "id": candidate["id"],
+                "province_place_id": candidate["province_place_id"],
+                "province_name": candidate["province_name"],
+                "territory_place_id": candidate["territory_place_id"],
+                "territory_name": candidate["territory_name"],
+                "point": candidate["point"],
+                "glottocode": candidate["glottocode"],
+                "source_language_name": candidate["source_language_name"],
+                "source_url": candidate["source_url"],
+                "evidence_locator": candidate["evidence_locator"],
+                "review_status": candidate["review_status"],
+                "limitations": candidate["limitations"],
+            }
+            for candidate in presence_candidates_by_language.get(language["id"], [])
+        ]
         languages.append({
             "id": language["id"],
             "name": language["preferred_name"],
@@ -133,6 +167,8 @@ def build_web_data(
             },
             "resources": language_resources,
             "discovered_sources": discovered_sources,
+            "geographic_candidates": geographic_candidates,
+            "place_claims": approved_claims_by_language.get(language["id"], []),
         })
 
     displayed_resource_count = sum(len(language["resources"]) for language in languages)
@@ -149,6 +185,12 @@ def build_web_data(
             "sources": displayed_source_count,
             "open_download_tracks": sum(any(item["access"] == "open-download" for item in language["resources"]) for language in languages),
             "discovered_sources": sum(len(language["discovered_sources"]) for language in languages),
+            "mapped_geographic_candidates": sum(len(language["geographic_candidates"]) for language in languages),
+            "approved_place_claims": sum(len(language["place_claims"]) for language in languages),
+            "unmapped_language_tracks": (
+                presence_summary.get("no-coordinate-match", 0)
+                + presence_summary.get("representative-point-outside-drc", 0)
+            ),
         },
         "languages": languages,
     }
@@ -163,9 +205,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--queue", type=Path, default=DEFAULT_QUEUE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--discovery", type=Path, default=DEFAULT_DISCOVERY)
+    parser.add_argument("--presence", type=Path, default=DEFAULT_PRESENCE)
     args = parser.parse_args(argv)
     try:
-        bundle = build_web_data(args.catalog, args.queue, args.output, args.discovery)
+        bundle = build_web_data(args.catalog, args.queue, args.output, args.discovery, args.presence)
     except WebDataError as exc:
         print(f"Web data build failed: {exc}", file=sys.stderr)
         return 1

@@ -84,6 +84,11 @@ a { color: inherit; }
 .coverage-grid span { margin-top: 8px; font-size: 10px; font-weight: 750; }
 .coverage-grid small { margin-top: 3px; color: var(--ink-soft); font-size: 8px; }
 .classification { color: var(--ink-soft); font-size: 11px; line-height: 1.55; }
+.geographic-lead { margin: 20px 0; padding: 16px; border: 1px solid var(--line); background: #eef3ed; }
+.geographic-lead > div { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.geographic-lead > div span { color: #30745e; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+.geographic-lead > strong { display: block; margin: 3px 0 10px; font: 600 16px Georgia, serif; }
+.geographic-lead p:not(.eyebrow) { color: var(--ink-soft); font-size: 10px; line-height: 1.55; }
 .review-box { padding: 18px; border: 1px solid var(--line); margin: 22px 0 28px; }
 .review-box h3, .section-heading h3 { margin: 0; font: 600 18px Georgia, serif; }
 .review-box p { color: var(--ink-soft); font-size: 11px; line-height: 1.55; }

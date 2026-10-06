@@ -11,3 +11,9 @@ before a future exporter may include it in a public release.
 Each JSON file contains one record and declares its schema using
 `entity_type`. Identifiers are repository-wide and references must resolve to
 another catalogue record.
+
+Generated administrative place records live under
+`data/generated/places/catalog/` after `make places`. Geographic language
+candidates live separately under `data/generated/presence/`; they do not
+become catalogue presence claims until a named review decision approves every
+required check.

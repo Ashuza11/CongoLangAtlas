@@ -72,6 +72,15 @@ geometry or within-level overlap is reported. These 2017 OCHA/RGC layers are
 suitable for a clearly labelled prototype navigation map, not a claim of
 current legal administrative boundaries.
 
+The derived place-catalogue build produces 267 schema-valid records: one
+country, 26 provinces, and 240 second-level areas. Glottolog 5.3 provides
+ISO-linked representative coordinates for 46 of the 47 language tracks. Of
+those, 41 points fall inside the prototype DRC layers and become geographic
+review candidates. Five cross-border representative points fall outside the
+DRC, and generic Kikongo has no one-to-one Glottolog language coordinate.
+These are catalogue points—not distribution polygons or speaker locations—and
+zero candidates currently have named-human approval.
+
 The UN SALB catalogue identifies a validated DRC dataset from the Institut
 Géographique du Congo with temporal validity beginning 2018-05-30 and a listed
 update of 2024-06-13. Its downloadable artifacts and terms still require direct
