@@ -23,6 +23,7 @@ from scripts.validate_catalog import ROOT, load_json
 DEFAULT_CATALOG = ROOT / "data" / "generated" / "congolangbench" / "catalog"
 DEFAULT_OUTPUT = ROOT / "data" / "generated" / "source-discovery.json"
 DEFAULT_CACHE = ROOT / "data" / "generated" / "source-discovery-cache"
+DEFAULT_PRESENCE = ROOT / "data" / "generated" / "presence" / "candidates.json"
 PROVIDERS = ("huggingface", "github", "openalex")
 PROVIDER_LABELS = {"OLAC", "Hugging Face", "GitHub", "OpenAlex"}
 CANDIDATE_KINDS = {"catalogue", "dataset", "model", "repository", "research"}
@@ -48,6 +49,14 @@ class DiscoveryError(RuntimeError):
     """Raised when source discovery cannot produce a valid census."""
 
 
+class PartialDiscoveryError(DiscoveryError):
+    """Carries valid cached candidates alongside one or more request errors."""
+
+    def __init__(self, message: str, candidates: list[dict[str, Any]]) -> None:
+        super().__init__(message)
+        self.candidates = candidates
+
+
 def _records(catalog: Path, entity_type: str) -> list[dict[str, Any]]:
     records = []
     for path in sorted(catalog.rglob("*.json")):
@@ -62,11 +71,17 @@ def _terms(language: dict[str, Any]) -> list[str]:
     values.extend(item["name"] for item in language.get("alternate_names", []))
     terms: list[str] = []
     for value in values:
-        cleaned = re.sub(r"\([^)]*\)", "", value)
-        for part in re.split(r"\s*/\s*|\s+or\s+", cleaned):
+        # Parenthetical qualifiers often distinguish separate ISO identities
+        # (for example Bemba vs. Bemba (Democratic Republic of Congo)). Keep
+        # the qualified name intact so generic cached results are not silently
+        # assigned to the narrower identity.
+        search_value = value if re.search(r"\([^)]*\)", value) else re.sub(r"\([^)]*\)", "", value)
+        for part in re.split(r"\s*/\s*|\s+or\s+", search_value):
             part = part.strip()
             if len(part) >= 3 and part.casefold() not in {item.casefold() for item in terms}:
                 terms.append(part)
+    if not terms:
+        terms.append(language["identifiers"]["iso_639_3"])
     return terms[:4]
 
 
@@ -141,11 +156,19 @@ def _huggingface(language: dict[str, Any], get: Callable[[str], Any]) -> list[di
     iso = language["identifiers"]["iso_639_3"]
     terms = _terms(language)
     candidates: list[dict[str, Any]] = []
+    request_errors: list[DiscoveryError] = []
+    successful_requests = 0
     for entity, kind in (("datasets", "dataset"), ("models", "model")):
         seen: set[str] = set()
         for term in terms[:2]:
             query = urlencode({"search": term, "limit": 30, "full": "true"})
-            for item in get(f"https://huggingface.co/api/{entity}?{query}"):
+            try:
+                payload = get(f"https://huggingface.co/api/{entity}?{query}")
+            except DiscoveryError as exc:
+                request_errors.append(exc)
+                continue
+            successful_requests += 1
+            for item in payload:
                 item_id = item.get("id")
                 if not item_id or item_id in seen or not _is_relevant(item, terms, iso):
                     continue
@@ -162,6 +185,11 @@ def _huggingface(language: dict[str, Any], get: Callable[[str], Any]) -> list[di
                     access="gated" if item.get("gated") else "public-page",
                     matched_terms=[term],
                 ))
+    if request_errors:
+        raise PartialDiscoveryError(
+            f"{len(request_errors)} request(s) unavailable; retained {successful_requests} successful response(s)",
+            candidates,
+        )
     return candidates
 
 
@@ -236,6 +264,9 @@ def discover_language(
     for provider in providers:
         try:
             candidates.extend(functions[provider](language, get))
+        except PartialDiscoveryError as exc:
+            candidates.extend(exc.candidates)
+            errors.append(f"{provider}: {exc}")
         except DiscoveryError as exc:
             errors.append(f"{provider}: {exc}")
     deduplicated = {candidate["url"]: candidate for candidate in candidates}
@@ -275,11 +306,19 @@ def build_discovery(
     cache: Path = DEFAULT_CACHE,
     providers: tuple[str, ...] = PROVIDERS,
     offline: bool = False,
+    presence: Path | None = DEFAULT_PRESENCE,
 ) -> dict[str, Any]:
     if not catalog.exists():
         raise DiscoveryError("generated catalogue is missing; run the CongoLangBench importer first")
     client = CachedClient(cache, offline)
-    languages = sorted(_records(catalog, "language"), key=lambda item: item["preferred_name"])
+    languages = _records(catalog, "language")
+    if presence and presence.exists():
+        presence_bundle = load_json(presence)
+        languages.extend(presence_bundle.get("supplemental_languages", []))
+    language_ids = [language["id"] for language in languages]
+    if len(language_ids) != len(set(language_ids)):
+        raise DiscoveryError("catalogue and presence inventory contain duplicate language IDs")
+    languages.sort(key=lambda item: item["preferred_name"])
     results = []
     error_count = 0
     for index, language in enumerate(languages, 1):
@@ -321,11 +360,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
+    parser.add_argument("--presence", type=Path, default=DEFAULT_PRESENCE)
     parser.add_argument("--providers", nargs="+", choices=PROVIDERS, default=list(PROVIDERS))
     parser.add_argument("--offline", action="store_true")
     args = parser.parse_args(argv)
     try:
-        bundle = build_discovery(args.catalog, args.output, args.cache, tuple(args.providers), args.offline)
+        bundle = build_discovery(
+            args.catalog, args.output, args.cache, tuple(args.providers), args.offline, args.presence
+        )
     except DiscoveryError as exc:
         print(f"Source discovery failed: {exc}", file=sys.stderr)
         return 1

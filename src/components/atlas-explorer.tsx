@@ -6,6 +6,7 @@ import type { AtlasBundle, AtlasLanguage, AtlasPlaceSelection, AtlasResource, Di
 
 const AtlasMap = dynamic(() => import("./atlas-map"), { ssr: false });
 type AccessFilter = "all" | "open" | "restricted";
+const NATIONAL_LANGUAGE_IDS = ["language-ktu", "language-lin", "language-swc", "language-lua"];
 
 function resourceIsOpen(resource: AtlasResource) {
   return resource.access === "open-download";
@@ -92,6 +93,8 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
     + language.discovered_sources.filter((source) => source.kind === "model").length;
   const research = language.resources.filter((resource) => ["publication", "grammar", "dictionary", "orthography"].includes(resource.type)).length
     + language.discovered_sources.filter((source) => source.kind === "research").length;
+  const geographicSources = new Set(language.geographic_candidates.map((candidate) => candidate.source_url)).size;
+  const sourceTotal = language.resources.length + language.discovered_sources.length + geographicSources;
   const filteredSources = language.discovered_sources.filter((source) => sourceKind === "all" || source.kind === sourceKind);
   const visibleSources = showAllSources ? filteredSources : filteredSources.slice(0, 10);
   return (
@@ -108,7 +111,7 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
         <h3>Coverage at a glance</h3>
         <div className="coverage-grid">
           <div><strong>—</strong><span>Speakers</span><small>No reviewed estimate</small></div>
-          <div><strong>{language.resources.length + language.discovered_sources.length}</strong><span>Digital sources</span><small>Reviewed and candidate links</small></div>
+          <div><strong>{sourceTotal}</strong><span>Digital sources</span><small>Resource and geographic evidence links</small></div>
           <div><strong>{datasets}</strong><span>Datasets</span><small>Text or speech</small></div>
           <div><strong>{models}</strong><span>Models</span><small>Verified records</small></div>
           <div><strong>{research}</strong><span>Linguistic research</span><small>Publications and descriptions</small></div>
@@ -121,11 +124,15 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
       <p className="classification">{language.classification_note}</p>
       {language.geographic_candidates.map((candidate) => (
         <div className="geographic-lead" key={candidate.id}>
-          <div><p className="eyebrow">Geographic candidate</p><span>Representative point</span></div>
-          <strong>{candidate.territory_name}, {candidate.province_name}</strong>
-          <p>Glottolog identifies this row as {candidate.source_language_name} ({candidate.glottocode}). The point at {candidate.point.latitude.toFixed(4)}, {candidate.point.longitude.toFixed(4)} falls inside this administrative context.</p>
+          <div><p className="eyebrow">{candidate.evidence_type === "documented-presence" ? "Documented presence" : "Geographic candidate"}</p><span>{humanize(candidate.role)}</span></div>
+          <strong>{candidate.territory_name ? `${candidate.territory_name}, ` : ""}{candidate.province_name}</strong>
+          {candidate.evidence_type === "documented-presence" ? (
+            <p>{candidate.speaker_percentage !== undefined ? `${candidate.speaker_percentage}% reported speaking the language. ` : ""}{candidate.evidence_locator}.</p>
+          ) : candidate.point ? (
+            <p>Glottolog identifies this row as {candidate.source_language_name} ({candidate.glottocode}). The point at {candidate.point.latitude.toFixed(4)}, {candidate.point.longitude.toFixed(4)} falls inside this administrative context.</p>
+          ) : null}
           <p>{candidate.limitations}</p>
-          <a href={candidate.source_url} target="_blank" rel="noreferrer" className="text-link">Open Glottolog source <span aria-hidden>↗</span></a>
+          <a href={candidate.source_url} target="_blank" rel="noreferrer" className="text-link">Open {candidate.source_title} <span aria-hidden>↗</span></a>
         </div>
       ))}
       <div className="review-box">
@@ -178,6 +185,12 @@ export default function AtlasExplorer() {
     setDetailLevel(level);
     setSelectedPlace(null);
   };
+  const selectLanguage = (language: AtlasLanguage) => {
+    setSelected(language);
+    if (language.geographic_candidates.some((candidate) => candidate.territory_place_id)) {
+      setDetailLevel("territories");
+    }
+  };
 
   useEffect(() => {
     fetch("/generated/atlas/catalog.json")
@@ -206,6 +219,15 @@ export default function AtlasExplorer() {
       candidates: bundle.languages.filter((language) => matchesPlace(language, selectedPlace)).length,
     };
   }, [bundle, selectedPlace]);
+  const nationalLanguages = NATIONAL_LANGUAGE_IDS
+    .map((id) => bundle?.languages.find((language) => language.id === id))
+    .filter((language): language is AtlasLanguage => Boolean(language));
+  const highlightedProvinceIds = selected
+    ? [...new Set(selected.geographic_candidates.map((candidate) => candidate.province_place_id))]
+    : [];
+  const highlightedTerritoryIds = selected
+    ? [...new Set(selected.geographic_candidates.flatMap((candidate) => candidate.territory_place_id ? [candidate.territory_place_id] : []))]
+    : [];
 
   if (error) return <main className="state-page"><h1>Catalogue unavailable</h1><p>{error}</p><code>make web-data</code></main>;
   if (!bundle) return <main className="state-page"><div className="loader" /><p>Preparing the atlas…</p></main>;
@@ -219,7 +241,7 @@ export default function AtlasExplorer() {
       <section className="workspace" id="atlas">
         <aside className="catalogue-panel">
           <div className="panel-heading"><div><p className="eyebrow">{selectedPlace ? `${selectedPlace.adminLevel} selected` : "National catalogue"}</p><h2>{selectedPlace?.name || "Languages"}</h2></div><span>{languages.length} / {bundle.languages.length}</span></div>
-          {selectedPlace && <div className="place-context"><strong>{placeCounts?.candidates || 0} geographic lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed claim{placeCounts?.approved === 1 ? "" : "s"}; remaining matches use representative Glottolog points and are not complete language distributions.</span><button onClick={() => setSelectedPlace(null)}>Show all languages</button></div>}
+          {selectedPlace && <div className="place-context"><strong>{placeCounts?.candidates || 0} geographic lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed claim{placeCounts?.approved === 1 ? "" : "s"}; other matches are documented candidates or representative points, never complete language distributions.</span><button onClick={() => setSelectedPlace(null)}>Show all languages</button></div>}
           <label className="search-field"><span className="sr-only">Search languages</span><span aria-hidden>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, alias, or ISO code" /></label>
           <div className="filters">
             <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
@@ -230,8 +252,8 @@ export default function AtlasExplorer() {
           <div className="language-list">
             {languages.map((language) => {
               const hasOpen = language.resources.some(resourceIsOpen);
-              return <button className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => setSelected(language)} key={language.id}>
-                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Representative-point candidate") : `${language.region} · ${language.resources.length + language.discovered_sources.length} source links`}</small></span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
+              return <button className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => selectLanguage(language)} key={language.id}>
+                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Documented geographic lead") : `${language.region} · ${language.resources.length + language.discovered_sources.length + new Set(language.geographic_candidates.map((candidate) => candidate.source_url)).size} source links`}</small></span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
               </button>;
             })}
             {!languages.length && <p className="empty-state">No mapped language leads match this place and the active filters.</p>}
@@ -243,8 +265,12 @@ export default function AtlasExplorer() {
             <div><p className="eyebrow">{selectedPlace?.adminLevel || "Map"}</p><strong>{selectedPlace?.name || "Select a province or territory"}</strong></div>
             <div className="segmented"><button className={detailLevel === "provinces" ? "active" : ""} onClick={() => changeDetailLevel("provinces")}>Provinces</button><button className={detailLevel === "territories" ? "active" : ""} onClick={() => changeDetailLevel("territories")}>Territories</button></div>
           </div>
-          <AtlasMap detailLevel={detailLevel} onPlaceSelect={handlePlaceSelect} />
-          <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads.</strong> Candidate matches use representative catalogue points—not language borders, complete distributions, or speaker totals.</p></div>
+          <div className="national-language-switcher" aria-label="Locate a national language">
+            <span>Locate a national language</span>
+            {nationalLanguages.map((language) => <button key={language.id} className={selected?.id === language.id ? "active" : ""} onClick={() => { setSelectedPlace(null); setDetailLevel("provinces"); setSelected(language); }}>{language.name}</button>)}
+          </div>
+          <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} onPlaceSelect={handlePlaceSelect} />
+          <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p></div>
         </section>
 
         {selected && <LanguageProfile key={selected.id} language={selected} onClose={() => setSelected(null)} />}

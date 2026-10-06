@@ -1,4 +1,4 @@
-.PHONY: validate test check geodata places presence-candidates import-congolangbench review-congolangbench discover-sources web-data
+.PHONY: validate test check geodata places presence-candidates coverage-report import-congolangbench review-congolangbench discover-sources web-data
 
 CONGOLANGBENCH ?= ../DRCongo_Lang_Benchmark
 
@@ -21,6 +21,9 @@ places:
 
 presence-candidates:
 	python3 -u -m scripts.build_presence_candidates
+
+coverage-report:
+	python3 -m scripts.build_coverage_report
 
 import-congolangbench:
 	python3 -m scripts.import_congolangbench "$(CONGOLANGBENCH)"

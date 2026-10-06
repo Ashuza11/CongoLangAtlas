@@ -73,13 +73,41 @@ suitable for a clearly labelled prototype navigation map, not a claim of
 current legal administrative boundaries.
 
 The derived place-catalogue build produces 267 schema-valid records: one
-country, 26 provinces, and 240 second-level areas. Glottolog 5.3 provides
-ISO-linked representative coordinates for 46 of the 47 language tracks. Of
-those, 41 points fall inside the prototype DRC layers and become geographic
-review candidates. Five cross-border representative points fall outside the
-DRC, and generic Kikongo has no one-to-one Glottolog language coordinate.
+country, 26 provinces, and 240 second-level areas. The pinned Glottolog 5.3
+table contains 235 ISO-coded rows associated with country code `CD`. Combined
+with generic Kikongo from the benchmark, this produces 236 provisional language
+profiles. Of their representative points, 188 fall inside the prototype DRC
+layers, 47 fall outside, and generic Kikongo has no one-to-one coordinate.
 These are catalogue points—not distribution polygons or speaker locations—and
 zero candidates currently have named-human approval.
+
+A separate curated-presence bundle contributes 37 source-linked candidates.
+It localizes the four national languages as broad, non-exclusive regional
+contexts and adds CLEAR Global's territory-level Kinyarwanda evidence for
+Masisi (15%), Nyiragongo (60%), and Rutshuru (70% Kinyabwisha, retained as a
+related-variety note). The Lualaba Congo Swahili match is an explicit
+administrative crosswalk from the source's former Katanga region, not a new
+speaker survey; an independent secondary source also lists Lunda among the
+province's principal spoken languages.
+The official Kasaï-Oriental 2023–2027 development plan additionally documents
+Tshiluba as the province's common language, Lingala at 10%, and Swahili at 20%,
+while leaving the relevant territories and survey method unspecified. Together
+with the Glottolog candidates, the public bundle now contains 225 geographic
+leads across 236 language profiles. All curated records remain candidates
+pending named-human review.
+
+`make coverage-report` audits all 26 provinces against the generated bundle.
+After this pass no province is empty; Kinshasa remains the only province with
+fewer than three language leads, and Kasaï-Oriental remains the only province
+without territory-level evidence. The report flags these gaps rather than
+filling them through inference.
+
+Source discovery now covers the same 236-profile inventory. Cached Hugging
+Face, GitHub, and OpenAlex results remain available for the original reviewed
+tracks; every supplemental profile receives deterministic OLAC and Glottolog
+catalogue links. The public bundle contains 831 source leads in total. Offline
+cache misses are recorded as provider errors and are not treated as evidence
+that no resource exists.
 
 The UN SALB catalogue identifies a validated DRC dataset from the Institut
 Géographique du Congo with temporal validity beginning 2018-05-30 and a listed

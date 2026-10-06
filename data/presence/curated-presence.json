@@ -1,0 +1,485 @@
+{
+  "bundle_version": 1,
+  "reviewed_at": "2026-10-06",
+  "sources": [
+    {
+      "id": "source-un-cescr-cod-5",
+      "title": "Fifth periodic report of the Democratic Republic of the Congo to the Committee on Economic, Social and Cultural Rights",
+      "publisher": "United Nations Economic and Social Council",
+      "url": "https://digitallibrary.un.org/record/654283/files/E_C.12_COD_5-EN.pdf",
+      "published_at": "2009-02-20",
+      "licence_id": null
+    },
+    {
+      "id": "source-clear-global-national-languages-drc",
+      "title": "The four national languages of DRC",
+      "publisher": "CLEAR Global / Translators without Borders",
+      "url": "https://clearglobal.org/four-national-languages-DRC/",
+      "published_at": "2020-07-01",
+      "licence_id": "CC-BY-NC-SA-4.0"
+    },
+    {
+      "id": "source-clear-global-north-kivu-2019",
+      "title": "Language map of North Kivu, DRC",
+      "publisher": "Translators without Borders (now CLEAR Global)",
+      "url": "https://clearglobal.org/wp-content/uploads/2022/04/Language-map-North-Kivu-EN.pdf",
+      "published_at": "2019-01-01",
+      "licence_id": "CC-BY-NC-SA-4.0"
+    },
+    {
+      "id": "source-congovirtuelle-lualaba-languages",
+      "title": "Découpage territorial et conflit ethnique dans la province du Lualaba",
+      "publisher": "Congovirtuelle",
+      "url": "https://congovirtuelle.com/decoupage-territorial-et-conflit-ethnique-dans-la-province-du-lualaba/",
+      "published_at": null,
+      "licence_id": null
+    },
+    {
+      "id": "source-drc-plan-kasai-oriental-2023-2027",
+      "title": "Plan de Développement Provincial du Kasaï-Oriental 2023-2027",
+      "publisher": "Ministère du Plan, République démocratique du Congo",
+      "url": "https://plan.gouv.cd/plan_developpemen/pdp-kasai-oriental-2023-2027/",
+      "published_at": null,
+      "licence_id": null
+    }
+  ],
+  "supplemental_languages": [
+    {
+      "id": "language-kin",
+      "preferred_name": "Kinyarwanda",
+      "identifiers": {"iso_639_3": "kin"},
+      "alternate_names": [{"name": "Ikinyarwanda"}],
+      "region": "Kivu",
+      "classification_note": "Added as a documented DRC language profile outside the original 47 CongoLangBench tracks. Kinyabwisha is kept as a related North Kivu variety note, not collapsed into the language identifier.",
+      "last_reviewed_at": "2026-10-06",
+      "review": {
+        "review_status": "deferred",
+        "priority": "high",
+        "publication_blockers": ["human-approval", "variety-identity-review", "resource-review"],
+        "required_checks": {
+          "language_identity": "approved",
+          "variety_identity": "unresolved",
+          "geographic_scope": "approved",
+          "licence": "approved",
+          "access": "approved",
+          "source_links": "approved"
+        },
+        "ready_for_promotion": false
+      }
+    }
+  ],
+  "records": [
+    {
+      "id": "presence-clear-kin-masisi",
+      "language_id": "language-kin",
+      "place_id": "place-cod-adm2-cd6103",
+      "province_place_id": "place-cod-adm1-cd61",
+      "source_id": "source-clear-global-north-kivu-2019",
+      "evidence_locator": "Masisi table: Kinyarwanda, 15%",
+      "role": "spoken-language",
+      "speaker_percentage": 15,
+      "confidence": "high",
+      "limitations": "The source reports the percentage of the population speaking the language; it does not measure proficiency, first-language identity, or exclusive territorial distribution."
+    },
+    {
+      "id": "presence-clear-kin-nyiragongo",
+      "language_id": "language-kin",
+      "place_id": "place-cod-adm2-cd6102",
+      "province_place_id": "place-cod-adm1-cd61",
+      "source_id": "source-clear-global-north-kivu-2019",
+      "evidence_locator": "Nyiragongo table: Kinyarwanda, 60%",
+      "role": "spoken-language",
+      "speaker_percentage": 60,
+      "confidence": "high",
+      "limitations": "The source reports the percentage of the population speaking the language; it does not measure proficiency, first-language identity, or exclusive territorial distribution."
+    },
+    {
+      "id": "presence-clear-kin-rutshuru",
+      "language_id": "language-kin",
+      "place_id": "place-cod-adm2-cd6111",
+      "province_place_id": "place-cod-adm1-cd61",
+      "source_id": "source-clear-global-north-kivu-2019",
+      "evidence_locator": "Rutshuru table: Kinyabwisha, 70%; source note identifies it as a mutually intelligible dialect of Kinyarwanda",
+      "role": "spoken-language",
+      "speaker_percentage": 70,
+      "confidence": "medium",
+      "limitations": "The source labels the reported variety Kinyabwisha. It states mutual intelligibility with Kinyarwanda, but the atlas does not treat the two labels as identical. The percentage does not measure proficiency."
+    },
+    {
+      "id": "presence-un-swc-nord-kivu",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd61",
+      "province_place_id": "place-cod-adm1-cd61",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in Nord-Kivu",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Broad national-language region, not a language boundary or territory-level survey."
+    },
+    {
+      "id": "presence-un-swc-sud-kivu",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd62",
+      "province_place_id": "place-cod-adm1-cd62",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in Sud-Kivu",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Broad national-language region, not a language boundary or territory-level survey."
+    },
+    {
+      "id": "presence-un-swc-maniema",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd63",
+      "province_place_id": "place-cod-adm1-cd63",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in Maniema",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Broad national-language region, not a language boundary or territory-level survey."
+    },
+    {
+      "id": "presence-un-swc-lualaba",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd72",
+      "province_place_id": "place-cod-adm1-cd72",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Katanga; Lualaba is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Katanga to present-day Lualaba. This is broad regional evidence, not a current territory survey or speaker estimate."
+    },
+    {
+      "id": "presence-congovirtuelle-lun-lualaba",
+      "language_id": "language-lun",
+      "place_id": "place-cod-adm1-cd72",
+      "province_place_id": "place-cod-adm1-cd72",
+      "source_id": "source-congovirtuelle-lualaba-languages",
+      "evidence_locator": "Aspect culturel, lines 558-564: Lunda in the list of principal languages spoken in Lualaba",
+      "role": "spoken-language",
+      "confidence": "medium",
+      "limitations": "Secondary online reproduction of a provincial description. It supports province-level presence only and provides no speaker estimate, territory distribution, or proficiency measure."
+    },
+    {
+      "id": "presence-un-swc-haut-katanga",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd71",
+      "province_place_id": "place-cod-adm1-cd71",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Katanga; Haut-Katanga is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Katanga; broad regional evidence only."
+    },
+    {
+      "id": "presence-un-swc-haut-lomami",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd73",
+      "province_place_id": "place-cod-adm1-cd73",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Katanga; Haut-Lomami is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Katanga; broad regional evidence only."
+    },
+    {
+      "id": "presence-un-swc-tanganyika",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd74",
+      "province_place_id": "place-cod-adm1-cd74",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Katanga; Tanganyika is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Katanga; broad regional evidence only."
+    },
+    {
+      "id": "presence-un-swc-bas-uele",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd52",
+      "province_place_id": "place-cod-adm1-cd52",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Orientale; Bas-Uele is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-swc-haut-uele",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd53",
+      "province_place_id": "place-cod-adm1-cd53",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Orientale; Haut-Uele is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-swc-ituri",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd54",
+      "province_place_id": "place-cod-adm1-cd54",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Orientale; Ituri is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-swc-tshopo",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd51",
+      "province_place_id": "place-cod-adm1-cd51",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Swahili in former Orientale; Tshopo is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-clear-national-lingala-kinshasa",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd10",
+      "province_place_id": "place-cod-adm1-cd10",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: Kinshasa and northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-clear-national-lingala-equateur",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd41",
+      "province_place_id": "place-cod-adm1-cd41",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-clear-national-lingala-mongala",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd44",
+      "province_place_id": "place-cod-adm1-cd44",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-clear-national-lingala-nord-ubangi",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd43",
+      "province_place_id": "place-cod-adm1-cd43",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-clear-national-lingala-sud-ubangi",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd42",
+      "province_place_id": "place-cod-adm1-cd42",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-clear-national-lingala-tshuapa",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd45",
+      "province_place_id": "place-cod-adm1-cd45",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Lingala distribution: northwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution, not an exclusive boundary or speaker estimate."
+    },
+    {
+      "id": "presence-un-lingala-bas-uele",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd52",
+      "province_place_id": "place-cod-adm1-cd52",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Lingala in former Orientale; Bas-Uele is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-lingala-haut-uele",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd53",
+      "province_place_id": "place-cod-adm1-cd53",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Lingala in former Orientale; Haut-Uele is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-lingala-ituri",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd54",
+      "province_place_id": "place-cod-adm1-cd54",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Lingala in former Orientale; Ituri is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-un-lingala-tshopo",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd51",
+      "province_place_id": "place-cod-adm1-cd51",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Lingala in former Orientale; Tshopo is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from the broad former Orientale region; local prevalence can differ substantially."
+    },
+    {
+      "id": "presence-clear-national-ktu-kongo-central",
+      "language_id": "language-ktu",
+      "place_id": "place-cod-adm1-cd20",
+      "province_place_id": "place-cod-adm1-cd20",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Kituba (Kikongo) distribution: southwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution. The source uses Kituba (Kikongo); the atlas track is Kikongo ya Leta (ISO 639-3 ktu)."
+    },
+    {
+      "id": "presence-clear-national-ktu-kwango",
+      "language_id": "language-ktu",
+      "place_id": "place-cod-adm1-cd31",
+      "province_place_id": "place-cod-adm1-cd31",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Kituba (Kikongo) distribution: southwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution. The source uses Kituba (Kikongo); variety identity remains explicit."
+    },
+    {
+      "id": "presence-clear-national-ktu-kwilu",
+      "language_id": "language-ktu",
+      "place_id": "place-cod-adm1-cd32",
+      "province_place_id": "place-cod-adm1-cd32",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Kituba (Kikongo) distribution: southwest cluster",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Generalized national-language distribution. The source uses Kituba (Kikongo); variety identity remains explicit."
+    },
+    {
+      "id": "presence-clear-national-ktu-mai-ndombe",
+      "language_id": "language-ktu",
+      "place_id": "place-cod-adm1-cd33",
+      "province_place_id": "place-cod-adm1-cd33",
+      "source_id": "source-clear-global-national-languages-drc",
+      "evidence_locator": "Kituba (Kikongo) distribution: southwest cluster",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Generalized national-language distribution. Local prevalence and variety identity require more granular review."
+    },
+    {
+      "id": "presence-un-lua-kasai",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd92",
+      "province_place_id": "place-cod-adm1-cd92",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Chiluba in former Kasaï-Occidental; Kasaï is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Kasaï-Occidental; broad regional evidence only."
+    },
+    {
+      "id": "presence-un-lua-kasai-central",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd91",
+      "province_place_id": "place-cod-adm1-cd91",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Chiluba in former Kasaï-Occidental; Kasaï-Central is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Kasaï-Occidental; broad regional evidence only."
+    },
+    {
+      "id": "presence-un-lua-kasai-oriental",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd82",
+      "province_place_id": "place-cod-adm1-cd82",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Chiluba in former Kasaï-Oriental; current Kasaï-Oriental is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "medium",
+      "limitations": "Derived administrative crosswalk from former Kasaï-Oriental; broad regional evidence only."
+    },
+    {
+      "id": "presence-plan-lua-kasai-oriental",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd82",
+      "province_place_id": "place-cod-adm1-cd82",
+      "source_id": "source-drc-plan-kasai-oriental-2023-2027",
+      "evidence_locator": "Page 5: Tshiluba described as the province's common language and a major element of cohesion",
+      "role": "spoken-language",
+      "confidence": "high",
+      "limitations": "Current province-level evidence, but the plan does not provide a Tshiluba speaker percentage or territory-by-territory distribution."
+    },
+    {
+      "id": "presence-plan-lin-kasai-oriental",
+      "language_id": "language-lin",
+      "place_id": "place-cod-adm1-cd82",
+      "province_place_id": "place-cod-adm1-cd82",
+      "source_id": "source-drc-plan-kasai-oriental-2023-2027",
+      "evidence_locator": "Page 5: Lingala reported at 10% in certain territories",
+      "role": "spoken-language",
+      "speaker_percentage": 10,
+      "confidence": "medium",
+      "limitations": "The provincial plan cites a 2016 UNDP profile but does not identify the territories, sampling method, denominator, or proficiency threshold on this page."
+    },
+    {
+      "id": "presence-plan-swc-kasai-oriental",
+      "language_id": "language-swc",
+      "place_id": "place-cod-adm1-cd82",
+      "province_place_id": "place-cod-adm1-cd82",
+      "source_id": "source-drc-plan-kasai-oriental-2023-2027",
+      "evidence_locator": "Page 5: Swahili reported at 20% in certain territories",
+      "role": "spoken-language",
+      "speaker_percentage": 20,
+      "confidence": "medium",
+      "limitations": "The provincial plan cites a 2016 UNDP profile but does not identify the territories, sampling method, denominator, or proficiency threshold on this page."
+    },
+    {
+      "id": "presence-un-lua-lomami",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd81",
+      "province_place_id": "place-cod-adm1-cd81",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Chiluba in former Kasaï-Oriental; Lomami is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from former Kasaï-Oriental; local language prevalence can differ."
+    },
+    {
+      "id": "presence-un-lua-sankuru",
+      "language_id": "language-lua",
+      "place_id": "place-cod-adm1-cd83",
+      "province_place_id": "place-cod-adm1-cd83",
+      "source_id": "source-un-cescr-cod-5",
+      "evidence_locator": "Paragraph 19: Chiluba in former Kasaï-Oriental; Sankuru is a 2015 successor province",
+      "role": "national-language-region",
+      "confidence": "low",
+      "limitations": "Derived administrative crosswalk from former Kasaï-Oriental; local language prevalence can differ."
+    }
+  ]
+}

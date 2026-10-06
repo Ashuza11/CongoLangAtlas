@@ -57,7 +57,8 @@ class PresenceCandidateBuildTests(unittest.TestCase):
             output = root / "candidates.json"
 
             bundle = build_presence_candidates(
-                manifest, languages, places, geodata, reviews, source_dir, output, offline=True,
+                manifest, languages, places, geodata, reviews, source_dir, output,
+                offline=True, curated_path=None,
             )
             self.assertEqual(bundle["summary"]["mapped-candidate"], 1)
             self.assertEqual(bundle["summary"]["approved"], 0)
@@ -73,7 +74,8 @@ class PresenceCandidateBuildTests(unittest.TestCase):
                 "decision": "approve", "notes": "Test approval.",
             })
             approved = build_presence_candidates(
-                manifest, languages, places, geodata, reviews, source_dir, output, offline=True,
+                manifest, languages, places, geodata, reviews, source_dir, output,
+                offline=True, curated_path=None,
             )
             self.assertEqual(approved["summary"]["approved"], 1)
             self.assertEqual(approved["approved_claims"][0]["place_id"], "place-cod-adm2-test")

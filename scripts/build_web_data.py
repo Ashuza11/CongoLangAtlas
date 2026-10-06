@@ -90,6 +90,7 @@ def build_web_data(
     presence_candidates_by_language: dict[str, list[dict[str, Any]]] = {}
     approved_claims_by_language: dict[str, list[dict[str, Any]]] = {}
     presence_summary: dict[str, Any] = {}
+    presence: dict[str, Any] = {}
     if presence_path and presence_path.exists():
         presence = load_json(presence_path)
         presence_errors = validate_presence_bundle(presence)
@@ -97,16 +98,21 @@ def build_web_data(
             raise WebDataError("presence candidates are invalid: " + "; ".join(presence_errors))
         presence_summary = presence.get("summary", {})
         for candidate in presence.get("candidates", []):
-            if candidate.get("match_status") == "mapped-candidate":
+            if candidate.get("match_status") in {"mapped-candidate", "documented-presence"}:
                 presence_candidates_by_language.setdefault(candidate["language_id"], []).append(candidate)
         for claim in presence.get("approved_claims", []):
             approved_claims_by_language.setdefault(claim["language_id"], []).append(claim)
 
+    catalog_languages = _records(catalog, "language")
+    supplemental_languages = presence.get("supplemental_languages", [])
+    supplemental_language_ids = {language["id"] for language in supplemental_languages}
     languages = []
-    for language in sorted(_records(catalog, "language"), key=lambda item: item["preferred_name"]):
+    for language in sorted([*catalog_languages, *supplemental_languages], key=lambda item: item["preferred_name"]):
         review = reviews.get(language["id"])
-        if review is None:
+        if review is None and language["id"] not in supplemental_language_ids:
             raise WebDataError(f"{language['id']}: missing review queue entry")
+        if review is None:
+            review = language["review"]
         language_resources = []
         display_resources = _display_resources(resources_by_language.get(language["id"], []))
         for resource in sorted(display_resources, key=lambda item: item["resource_type"]):
@@ -133,18 +139,37 @@ def build_web_data(
                 },
             })
         discovered_sources = discovery_by_language.get(language["id"], {}).get("candidates", [])
+        if language["id"] in supplemental_language_ids:
+            glottolog_source = presence.get("source", {})
+            discovered_sources = [
+                {
+                    "id": f"candidate-glottolog-{language['identifiers']['iso_639_3']}",
+                    "provider": "Glottolog",
+                    "kind": "catalogue",
+                    "title": f"Glottolog catalogue record for {language['preferred_name']}",
+                    "url": glottolog_source.get("landing_page", "https://glottolog.org/"),
+                    "review_status": "candidate",
+                    "licence": glottolog_source.get("licence_id"),
+                },
+                *discovered_sources,
+            ]
         geographic_candidates = [
             {
                 "id": candidate["id"],
                 "province_place_id": candidate["province_place_id"],
                 "province_name": candidate["province_name"],
-                "territory_place_id": candidate["territory_place_id"],
-                "territory_name": candidate["territory_name"],
-                "point": candidate["point"],
-                "glottocode": candidate["glottocode"],
-                "source_language_name": candidate["source_language_name"],
+                "place_id": candidate.get("place_id", candidate.get("territory_place_id")),
+                "territory_place_id": candidate.get("territory_place_id"),
+                "territory_name": candidate.get("territory_name"),
+                "point": candidate.get("point"),
+                "glottocode": candidate.get("glottocode"),
+                "source_language_name": candidate.get("source_language_name"),
                 "source_url": candidate["source_url"],
+                "source_title": candidate.get("source_title", "Glottolog 5.3"),
                 "evidence_locator": candidate["evidence_locator"],
+                "evidence_type": candidate.get("evidence_type", "representative-point"),
+                "role": candidate.get("role", "unspecified"),
+                "speaker_percentage": candidate.get("speaker_percentage"),
                 "review_status": candidate["review_status"],
                 "limitations": candidate["limitations"],
             }
@@ -155,7 +180,7 @@ def build_web_data(
             "name": language["preferred_name"],
             "iso": language["identifiers"]["iso_639_3"],
             "aliases": [item["name"] for item in language.get("alternate_names", [])],
-            "region": _region(language.get("classification_note")),
+            "region": language.get("region") or _region(language.get("classification_note")),
             "classification_note": language.get("classification_note"),
             "last_reviewed_at": language["last_reviewed_at"],
             "review": {

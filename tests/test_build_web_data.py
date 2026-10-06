@@ -63,14 +63,45 @@ class WebDataBuildTests(unittest.TestCase):
                     }],
                 }],
             })
+            presence = root / "presence.json"
+            self.write_json(presence, {
+                "summary": {"documented-presence": 1},
+                "candidates": [{
+                    "id": "presence-supplemental", "language_id": "language-sup",
+                    "match_status": "documented-presence", "evidence_type": "documented-presence",
+                    "place_id": "place-cod-adm2-test", "province_place_id": "place-cod-adm1-test",
+                    "province_name": "Province", "territory_place_id": "place-cod-adm2-test",
+                    "territory_name": "Territory", "source_id": "source-map",
+                    "source_url": "https://example.org/map", "source_title": "Test map",
+                    "evidence_locator": "Territory table", "role": "spoken-language",
+                    "speaker_percentage": 15, "confidence": "high", "review_status": "candidate",
+                    "limitations": "A test limitation."
+                }],
+                "approved_claims": [],
+                "supplemental_languages": [{
+                    "id": "language-sup", "preferred_name": "Supplemental",
+                    "identifiers": {"iso_639_3": "sup"}, "alternate_names": [], "region": "Test region",
+                    "classification_note": "Documented outside the benchmark.", "last_reviewed_at": "2026-10-06",
+                    "review": {
+                        "review_status": "deferred", "priority": "high",
+                        "publication_blockers": ["human-approval"],
+                        "required_checks": {"geographic_scope": "approved"},
+                        "ready_for_promotion": False
+                    }
+                }]
+            })
 
-            bundle = build_web_data(catalog, queue, root / "web.json", discovery, None)
-            self.assertEqual(bundle["languages"][0]["region"], "Test region")
-            self.assertEqual(len(bundle["languages"][0]["resources"]), 1)
-            self.assertEqual(bundle["languages"][0]["resources"][0]["type"], "bitext")
+            bundle = build_web_data(catalog, queue, root / "web.json", discovery, presence)
+            imported = next(item for item in bundle["languages"] if item["id"] == "language-tst")
+            self.assertEqual(imported["region"], "Test region")
+            self.assertEqual(len(imported["resources"]), 1)
+            self.assertEqual(imported["resources"][0]["type"], "bitext")
             self.assertEqual(bundle["summary"]["resources"], 1)
-            self.assertEqual(bundle["summary"]["discovered_sources"], 1)
-            self.assertEqual(bundle["languages"][0]["discovered_sources"][0]["provider"], "OLAC")
+            self.assertEqual(bundle["summary"]["discovered_sources"], 2)
+            self.assertEqual(imported["discovered_sources"][0]["provider"], "OLAC")
+            supplemental = next(item for item in bundle["languages"] if item["id"] == "language-sup")
+            self.assertEqual(supplemental["geographic_candidates"][0]["speaker_percentage"], 15)
+            self.assertEqual(bundle["summary"]["languages"], 2)
             self.assertNotIn("source_text", json.dumps(bundle))
 
 

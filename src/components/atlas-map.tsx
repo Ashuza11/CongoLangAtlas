@@ -7,6 +7,8 @@ import type { AtlasPlaceSelection } from "@/lib/types";
 
 interface AtlasMapProps {
   detailLevel: "provinces" | "territories";
+  highlightedProvinceIds: string[];
+  highlightedTerritoryIds: string[];
   onPlaceSelect: (place: AtlasPlaceSelection) => void;
 }
 
@@ -16,10 +18,37 @@ const EMPTY_STYLE: maplibregl.StyleSpecification = {
   layers: [{ id: "background", type: "background", paint: { "background-color": "#ede7da" } }],
 };
 
-export default function AtlasMap({ detailLevel, onPlaceSelect }: AtlasMapProps) {
+function geometryIds(placeIds: string[]) {
+  return placeIds.map((id) => id.replace(/^place-/, ""));
+}
+
+function fillExpression(ids: string[], baseColor: string): maplibregl.ExpressionSpecification {
+  return [
+    "case",
+    ["boolean", ["feature-state", "selected"], false], "#d96f43",
+    ["in", ["get", "id"], ["literal", geometryIds(ids)]], "#356f66",
+    baseColor,
+  ];
+}
+
+export default function AtlasMap({
+  detailLevel,
+  highlightedProvinceIds,
+  highlightedTerritoryIds,
+  onPlaceSelect,
+}: AtlasMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const detailRef = useRef(detailLevel);
+  const highlightsRef = useRef({ provinces: highlightedProvinceIds, territories: highlightedTerritoryIds });
+
+  useEffect(() => {
+    highlightsRef.current = { provinces: highlightedProvinceIds, territories: highlightedTerritoryIds };
+    const map = mapRef.current;
+    if (!map?.isStyleLoaded()) return;
+    map.setPaintProperty("province-fill", "fill-color", fillExpression(highlightedProvinceIds, "#c9d7c7"));
+    map.setPaintProperty("territory-fill", "fill-color", fillExpression(highlightedTerritoryIds, "#f1cf87"));
+  }, [highlightedProvinceIds, highlightedTerritoryIds]);
 
   useEffect(() => {
     detailRef.current = detailLevel;
@@ -54,7 +83,7 @@ export default function AtlasMap({ detailLevel, onPlaceSelect }: AtlasMapProps) 
         type: "fill",
         source: "provinces",
         paint: {
-          "fill-color": ["case", ["boolean", ["feature-state", "selected"], false], "#d96f43", "#c9d7c7"],
+          "fill-color": fillExpression(highlightsRef.current.provinces, "#c9d7c7"),
           "fill-opacity": ["case", ["boolean", ["feature-state", "selected"], false], 0.72, 0.78],
         },
       });
@@ -70,7 +99,7 @@ export default function AtlasMap({ detailLevel, onPlaceSelect }: AtlasMapProps) 
         source: "territories",
         layout: { visibility: detailRef.current === "territories" ? "visible" : "none" },
         paint: {
-          "fill-color": ["case", ["boolean", ["feature-state", "selected"], false], "#d96f43", "#f1cf87"],
+          "fill-color": fillExpression(highlightsRef.current.territories, "#f1cf87"),
           "fill-opacity": ["case", ["boolean", ["feature-state", "selected"], false], 0.7, 0.28],
         },
       });

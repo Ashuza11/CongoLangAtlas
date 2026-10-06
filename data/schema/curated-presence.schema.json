@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://congolangatlas.org/schema/curated-presence.schema.json",
+  "title": "Curated language-presence candidates",
+  "type": "object",
+  "required": ["bundle_version", "reviewed_at", "sources", "supplemental_languages", "records"],
+  "properties": {
+    "bundle_version": {"const": 1},
+    "reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "publisher", "url", "published_at", "licence_id"],
+        "properties": {
+          "id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "title": {"type": "string", "minLength": 1},
+          "publisher": {"type": "string", "minLength": 1},
+          "url": {"$ref": "definitions.schema.json#/$defs/url"},
+          "published_at": {"type": ["string", "null"], "format": "date"},
+          "licence_id": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "supplemental_languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "preferred_name", "identifiers", "alternate_names", "region", "classification_note", "last_reviewed_at", "review"],
+        "properties": {
+          "id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "preferred_name": {"type": "string", "minLength": 1},
+          "identifiers": {"$ref": "definitions.schema.json#/$defs/languageIdentifier"},
+          "alternate_names": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {"name": {"type": "string", "minLength": 1}},
+              "additionalProperties": false
+            }
+          },
+          "region": {"type": "string", "minLength": 1},
+          "classification_note": {"type": "string", "minLength": 1},
+          "last_reviewed_at": {"$ref": "definitions.schema.json#/$defs/date"},
+          "review": {
+            "type": "object",
+            "required": ["review_status", "priority", "publication_blockers", "required_checks", "ready_for_promotion"],
+            "properties": {
+              "review_status": {"type": "string"},
+              "priority": {"type": "string"},
+              "publication_blockers": {"type": "array", "items": {"type": "string"}},
+              "required_checks": {"type": "object", "additionalProperties": {"enum": ["approved", "unresolved", "rejected"]}},
+              "ready_for_promotion": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "language_id", "place_id", "province_place_id", "source_id", "evidence_locator", "role", "confidence", "limitations"],
+        "properties": {
+          "id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "language_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "place_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "province_place_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "source_id": {"$ref": "definitions.schema.json#/$defs/id"},
+          "evidence_locator": {"type": "string", "minLength": 1},
+          "role": {"enum": ["national-language-region", "spoken-language", "lingua-franca"]},
+          "speaker_percentage": {"type": "number", "minimum": 0, "maximum": 100},
+          "confidence": {"enum": ["low", "medium", "high"]},
+          "limitations": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

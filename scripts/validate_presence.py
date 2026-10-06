@@ -7,11 +7,15 @@ import argparse
 import sys
 from pathlib import Path
 
-from scripts.build_presence_candidates import DEFAULT_MANIFEST, DEFAULT_REVIEWS, _validate_document
+from scripts.build_presence_candidates import DEFAULT_CURATED, DEFAULT_MANIFEST, DEFAULT_REVIEWS, _validate_document
 from scripts.validate_catalog import load_json
 
 
-def validate_presence(manifest_path: Path = DEFAULT_MANIFEST, review_dir: Path = DEFAULT_REVIEWS) -> list[str]:
+def validate_presence(
+    manifest_path: Path = DEFAULT_MANIFEST,
+    review_dir: Path = DEFAULT_REVIEWS,
+    curated_path: Path | None = DEFAULT_CURATED,
+) -> list[str]:
     errors: list[str] = []
     try:
         manifest = load_json(manifest_path)
@@ -22,6 +26,16 @@ def validate_presence(manifest_path: Path = DEFAULT_MANIFEST, review_dir: Path =
         for message in _validate_document(manifest, "presence-source-manifest.schema.json")
     )
     seen: dict[str, Path] = {}
+    if curated_path and curated_path.exists():
+        try:
+            curated = load_json(curated_path)
+        except Exception as exc:
+            errors.append(f"{curated_path}: cannot load curated presence: {exc}")
+        else:
+            errors.extend(
+                f"{curated_path}: {message}"
+                for message in _validate_document(curated, "curated-presence.schema.json")
+            )
     for path in sorted(review_dir.glob("*.json")):
         try:
             decision = load_json(path)
@@ -48,8 +62,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--reviews", type=Path, default=DEFAULT_REVIEWS)
+    parser.add_argument("--curated", type=Path, default=DEFAULT_CURATED)
     args = parser.parse_args(argv)
-    errors = validate_presence(args.manifest, args.reviews)
+    errors = validate_presence(args.manifest, args.reviews, args.curated)
     if errors:
         print(f"Presence validation failed with {len(errors)} error(s):", file=sys.stderr)
         for error in errors:

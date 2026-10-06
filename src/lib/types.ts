@@ -43,13 +43,18 @@ export interface GeographicCandidate {
   id: string;
   province_place_id: string;
   province_name: string;
-  territory_place_id: string;
-  territory_name: string;
-  point: { latitude: number; longitude: number };
-  glottocode: string;
-  source_language_name: string;
+  place_id?: string;
+  territory_place_id?: string;
+  territory_name?: string;
+  point?: { latitude: number; longitude: number };
+  glottocode?: string;
+  source_language_name?: string;
   source_url: string;
+  source_title: string;
   evidence_locator: string;
+  evidence_type: "representative-point" | "documented-presence";
+  role: string;
+  speaker_percentage?: number;
   review_status: "candidate" | "approve" | "reject" | "defer";
   limitations: string;
 }

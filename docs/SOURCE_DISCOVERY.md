@@ -1,7 +1,7 @@
 # Online source discovery
 
-The source-discovery pipeline expands every imported language profile with
-review candidates from public online indexes. Discovery is deliberately
+The source-discovery pipeline expands every imported or supplemental language
+profile with review candidates from public online indexes. Discovery is deliberately
 separate from verification: a search result is a lead, not evidence that the
 resource represents the intended language variety or a DRC population.
 
@@ -19,7 +19,9 @@ dataset content, model weights, repository contents, or publication text.
 
 ## Run discovery
 
-The generated CongoLangBench catalogue must already exist.
+The generated CongoLangBench catalogue and presence inventory must already
+exist. Run discovery after `make presence-candidates` so all supplemental DRC
+profiles receive at least their stable OLAC catalogue lead.
 
 ```bash
 make discover-sources
@@ -40,6 +42,11 @@ python3 -m scripts.discover_sources --offline
 
 Both the cache and `data/generated/source-discovery.json` are generated files
 and remain outside version control.
+
+An offline rebuild preserves cached provider results for the original tracks
+and still creates deterministic OLAC links for every supplemental profile.
+Missing Hugging Face, GitHub, or OpenAlex cache entries remain recorded as
+provider errors rather than silently appearing as negative search results.
 
 ## Relevance controls
 

@@ -55,6 +55,11 @@ a { color: inherit; }
 .map-toolbar { position: absolute; z-index: 3; left: 22px; right: 22px; top: 20px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 15px; background: rgba(255, 253, 248, .91); border: 1px solid rgba(23, 60, 53, .23); backdrop-filter: blur(10px); }
 .map-toolbar p { margin-bottom: 2px; }
 .map-toolbar strong { font: 600 16px Georgia, serif; }
+.national-language-switcher { position: absolute; z-index: 3; left: 22px; right: 22px; top: 96px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; pointer-events: none; }
+.national-language-switcher span, .national-language-switcher button { border: 1px solid rgba(23, 60, 53, .23); background: rgba(255, 253, 248, .93); color: var(--ink); backdrop-filter: blur(10px); }
+.national-language-switcher span { padding: 7px 9px; color: var(--ink-soft); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.national-language-switcher button { padding: 7px 9px; cursor: pointer; font-size: 10px; pointer-events: auto; }
+.national-language-switcher button.active { background: var(--ink); color: var(--white); }
 .map-disclosure { position: absolute; z-index: 3; left: 22px; bottom: 28px; max-width: 510px; padding: 13px 16px; background: rgba(23, 60, 53, .93); color: var(--paper); display: flex; gap: 12px; align-items: start; box-shadow: 0 10px 40px rgba(23, 60, 53, .2); }
 .map-disclosure > span { color: var(--yellow); font-size: 22px; }
 .map-disclosure p { margin: 0; font-size: 11px; line-height: 1.55; }
@@ -147,6 +152,8 @@ footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
   .language-list { min-height: 250px; }
   .map-panel { height: 610px; }
   .map-toolbar { flex-direction: column; align-items: stretch; }
+  .national-language-switcher { top: 125px; left: 15px; right: 15px; }
+  .national-language-switcher span { width: 100%; }
   .map-disclosure { right: 15px; left: 15px; bottom: 17px; }
   .profile { position: fixed; top: 66px; height: calc(100vh - 66px); width: 100%; }
   footer { align-items: start; flex-direction: column; }

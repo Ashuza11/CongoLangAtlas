@@ -8,10 +8,11 @@ resources, and NLP metadata in one explorable catalogue. It is designed for
 researchers, students, language communities, technologists, and funders who
 need a trustworthy starting point for work on Congolese languages.
 
-> **Project status:** Phase 2 research preview. The complete 47-track data audit
-> now feeds a static Next.js and MapLibre interface with catalogue search,
+> **Project status:** Phase 2 research preview. The complete 47-track resource
+> audit and a 236-language Glottolog-backed DRC inventory now feed a static
+> Next.js and MapLibre interface with catalogue search,
 > evidence filters, clickable province and territory context, and resource
-> profiles. The map can filter 41 representative-point candidates while
+> profiles. The map can filter 188 representative-point candidates while
 > distinguishing them from the current zero human-approved place claims. All
 > records remain visibly marked as drafts: none can be promoted without named
 > human approval and all unresolved licence, access, variety, and geographic
@@ -71,9 +72,17 @@ The repository currently provides:
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,
   GitHub, and OpenAlex, with ambiguous-name filtering and review labels;
-- a checksum-pinned Glottolog 5.3 coordinate workflow that maps 41
-  representative-point candidates into administrative context without
-  presenting them as language boundaries;
+- a checksum-pinned Glottolog 5.3 inventory workflow that exposes 235
+  ISO-coded DRC-associated rows and maps 188 representative-point candidates
+  into administrative context without presenting them as language boundaries;
+- 37 source-linked documented-presence candidates, including broad regional
+  localization for the four national languages and territory-level
+  Kinyarwanda evidence for Masisi, Nyiragongo, and Rutshuru;
+- 236 language profiles: the original 47 benchmark tracks plus 189 provisional
+  DRC inventory profiles whose identities and geographic evidence remain
+  visibly reviewable;
+- a reproducible province coverage audit that flags empty, thin, national-only,
+  territory-missing, and unapproved coverage without inventing data;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -154,11 +163,14 @@ record exists. This keeps the interface focused on sources users can actually
 investigate while retaining the complete audit trail in generated research
 records.
 
-An additional discovery pass currently identifies 451 candidate links across
-all 47 tracks: 64 datasets, 29 models, 40 GitHub repositories, 271 research
-records, and 47 OLAC catalogue pages. These are displayed as source leads—not
-verified records—and must pass language, variety, geographic, licence, and
-access review before promotion.
+An additional discovery pass identifies 453 candidate links across the original
+47 tracks: 64 datasets, 29 models, 40 GitHub repositories, 273 research records,
+and 47 OLAC catalogue pages. All 236 profiles now receive an OLAC link, while
+each of the 189 supplemental profiles also links back to its pinned Glottolog
+catalogue source, bringing the public bundle to 831 source leads. These are
+displayed as candidates—not verified records—and
+must pass language, variety, geographic, licence, and access review before
+promotion.
 
 Reviewed source metadata is applied as a separate overlay, leaving the pinned
 CongoLangBench registries unchanged. The generated records now link directly
@@ -173,6 +185,7 @@ dependencies, and start the research preview:
 make presence-candidates
 make discover-sources
 make web-data
+make coverage-report
 npm install
 npm run dev
 ```
@@ -182,11 +195,17 @@ been generated as described above. The map also expects the reproducible ADM1
 and ADM2 layers created by `make geodata`. Administrative polygons provide
 navigation context only and are never presented as language boundaries.
 Selecting a province or territory updates the catalogue context immediately.
-The current map filter uses Glottolog representative-point candidates and
-labels them accordingly. It never implies that the matched administrative area
-is the language's complete distribution. Five cross-border representative
-points fall outside the DRC layers, generic Kikongo has no one-to-one
-Glottolog language coordinate, and no place claim has named-human approval yet.
+The map combines labelled Glottolog representative-point candidates with a
+separate documented-presence layer. A national-language switcher highlights
+the broad sourced regions for Kikongo ya Leta, Lingala, Congo Swahili, and
+Ciluba. Lualaba now resolves to both a Congo Swahili regional candidate through
+an explicit former-Katanga-to-current-province crosswalk and a separately
+sourced Lunda presence candidate. At territory level,
+the CLEAR Global North Kivu source adds Kinyarwanda in Masisi and Nyiragongo,
+and preserves the source's Kinyabwisha note for Rutshuru. These highlights are
+not language borders or complete distributions. Forty-seven cross-border or
+catalogue points fall outside the DRC layers, generic Kikongo has no one-to-one
+Glottolog coordinate, and no place claim has named-human approval yet.
 Online discovery requires network access; cached results can be rebuilt with
 `python3 -m scripts.discover_sources --offline`. See the
 [source-discovery guide](docs/SOURCE_DISCOVERY.md) for providers, relevance

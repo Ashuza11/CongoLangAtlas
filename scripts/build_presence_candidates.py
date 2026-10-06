@@ -24,6 +24,7 @@ DEFAULT_LANGUAGES = ROOT / "data" / "generated" / "congolangbench" / "catalog" /
 DEFAULT_PLACES = ROOT / "data" / "generated" / "places" / "catalog" / "places"
 DEFAULT_GEODATA = ROOT / "public" / "generated" / "geodata"
 DEFAULT_REVIEWS = ROOT / "data" / "presence" / "reviews"
+DEFAULT_CURATED = ROOT / "data" / "presence" / "curated-presence.json"
 DEFAULT_SOURCE_DIR = ROOT / "data" / "generated" / "presence" / "source"
 DEFAULT_OUTPUT = ROOT / "data" / "generated" / "presence" / "candidates.json"
 
@@ -36,7 +37,9 @@ def validate_presence_bundle(bundle: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     candidate_ids: set[str] = set()
     mapped_ids: set[str] = set()
-    allowed_statuses = {"no-coordinate-match", "representative-point-outside-drc", "mapped-candidate"}
+    allowed_statuses = {
+        "no-coordinate-match", "representative-point-outside-drc", "mapped-candidate", "documented-presence"
+    }
     for index, candidate in enumerate(bundle.get("candidates", [])):
         prefix = f"candidates[{index}]"
         candidate_id = candidate.get("id")
@@ -52,6 +55,10 @@ def validate_presence_bundle(bundle: dict[str, Any]) -> list[str]:
             for field in ("province_place_id", "territory_place_id", "point", "evidence_locator", "limitations"):
                 if not candidate.get(field):
                     errors.append(f"{prefix}: mapped candidate lacks {field}")
+        if candidate.get("match_status") == "documented-presence":
+            for field in ("place_id", "province_place_id", "source_id", "evidence_locator", "limitations"):
+                if not candidate.get(field):
+                    errors.append(f"{prefix}: documented presence lacks {field}")
     for index, claim in enumerate(bundle.get("approved_claims", [])):
         candidate_id = str(claim.get("id", "")).removeprefix("claim-")
         if candidate_id not in mapped_ids:
@@ -139,6 +146,7 @@ def build_presence_candidates(
     source_dir: Path = DEFAULT_SOURCE_DIR,
     output: Path = DEFAULT_OUTPUT,
     offline: bool = False,
+    curated_path: Path | None = DEFAULT_CURATED,
 ) -> dict[str, Any]:
     manifest = load_json(manifest_path)
     manifest_errors = _validate_document(manifest, "presence-source-manifest.schema.json")
@@ -155,10 +163,51 @@ def build_presence_candidates(
     province_features = _features(geodata_dir / "cod-adm1.geojson")
     territory_features = _features(geodata_dir / "cod-adm2.geojson")
     decisions = _decision_map(review_dir)
+    curated = load_json(curated_path) if curated_path and curated_path.exists() else {
+        "sources": [], "supplemental_languages": [], "records": []
+    }
+    curated_supplemental = curated.get("supplemental_languages", [])
+    reserved_isos = {language["identifiers"]["iso_639_3"] for language in [*languages, *curated_supplemental]}
+    generated_supplemental = []
+    for iso, row in sorted(rows.items(), key=lambda item: item[1]["Name"]):
+        countries = row.get("Countries", "").split(";") if row.get("Countries") else []
+        if "CD" not in countries or iso in reserved_isos:
+            continue
+        generated_supplemental.append({
+            "id": f"language-{iso}",
+            "preferred_name": row["Name"],
+            "identifiers": {"iso_639_3": iso},
+            "alternate_names": [],
+            "region": "Unassigned",
+            "classification_note": (
+                "Supplemental DRC inventory candidate generated from the pinned Glottolog 5.3 "
+                f"country-code row ({row['Glottocode']}). Country association and language identity "
+                "still require named-human review."
+            ),
+            "last_reviewed_at": manifest["reviewed_at"],
+            "review": {
+                "review_status": "deferred",
+                "priority": "medium",
+                "publication_blockers": ["human-approval", "language-identity-review", "resource-review"],
+                "required_checks": {
+                    "language_identity": "unresolved",
+                    "variety_identity": "unresolved",
+                    "geographic_scope": "unresolved",
+                    "licence": "approved",
+                    "access": "approved",
+                    "source_links": "approved",
+                },
+                "ready_for_promotion": False,
+            },
+        })
+    supplemental_languages = sorted(
+        [*curated_supplemental, *generated_supplemental], key=lambda item: item["preferred_name"]
+    )
+    inventory_languages = sorted([*languages, *supplemental_languages], key=lambda item: item["preferred_name"])
     candidates = []
     approved_claims = []
 
-    for language in languages:
+    for language in inventory_languages:
         iso = language["identifiers"]["iso_639_3"]
         row = rows.get(iso)
         candidate_id = f"presence-glottolog-5-3-{iso}"
@@ -247,6 +296,34 @@ def build_presence_candidates(
                 })
         candidates.append(candidate)
 
+    if curated.get("records"):
+        source_by_id = {item["id"]: item for item in curated.get("sources", [])}
+        language_ids = {language["id"] for language in inventory_languages}
+        place_by_id = {place["id"]: place for place in places}
+        for record in curated.get("records", []):
+            if record["language_id"] not in language_ids:
+                raise PresenceBuildError(f"{record['id']}: unknown language {record['language_id']}")
+            place = place_by_id.get(record["place_id"])
+            province = place_by_id.get(record["province_place_id"])
+            source_record = source_by_id.get(record["source_id"])
+            if not place or not province:
+                raise PresenceBuildError(f"{record['id']}: unknown place reference")
+            if not source_record:
+                raise PresenceBuildError(f"{record['id']}: unknown source {record['source_id']}")
+            candidate = {
+                **record,
+                "match_status": "documented-presence",
+                "evidence_type": "documented-presence",
+                "province_name": province["name"],
+                "source_url": source_record["url"],
+                "source_title": source_record["title"],
+                "review_status": "candidate",
+            }
+            if place["admin_level"] == "territory":
+                candidate["territory_place_id"] = place["id"]
+                candidate["territory_name"] = place["name"]
+            candidates.append(candidate)
+
     candidate_ids = {candidate["id"] for candidate in candidates}
     unknown_decisions = sorted(set(decisions) - candidate_ids)
     if unknown_decisions:
@@ -261,13 +338,16 @@ def build_presence_candidates(
         "generated_at": manifest["reviewed_at"],
         "source": source,
         "summary": {
-            "languages": len(languages),
+            "languages": len(inventory_languages),
+            "benchmark_languages": len(languages),
+            "supplemental_languages": len(supplemental_languages),
             **status_counts,
             "reviewed": sum(candidate["review_status"] != "candidate" for candidate in candidates),
             "approved": len(approved_claims),
         },
         "candidates": candidates,
         "approved_claims": approved_claims,
+        "supplemental_languages": supplemental_languages,
     }
     bundle_errors = validate_presence_bundle(bundle)
     if bundle_errors:
@@ -287,18 +367,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--source-dir", type=Path, default=DEFAULT_SOURCE_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--curated", type=Path, default=DEFAULT_CURATED)
     args = parser.parse_args(argv)
     try:
         bundle = build_presence_candidates(
             args.manifest, args.languages, args.places, args.geodata,
-            args.reviews, args.source_dir, args.output, args.offline,
+            args.reviews, args.source_dir, args.output, args.offline, args.curated,
         )
     except PresenceBuildError as exc:
         print(f"Presence candidate build failed: {exc}", file=sys.stderr)
         return 1
     summary = bundle["summary"]
     print(
-        f"Built {summary.get('mapped-candidate', 0)} mapped candidate(s); "
+        f"Built {summary.get('mapped-candidate', 0)} point candidate(s) and "
+        f"{summary.get('documented-presence', 0)} documented presence candidate(s); "
         f"{summary['approved']} approved claim(s)."
     )
     return 0
