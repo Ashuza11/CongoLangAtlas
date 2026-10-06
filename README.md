@@ -8,14 +8,13 @@ resources, and NLP metadata in one explorable catalogue. It is designed for
 researchers, students, language communities, technologists, and funders who
 need a trustworthy starting point for work on Congolese languages.
 
-> **Project status:** Phase 0 — data foundations and governance. The schemas,
-> validation tooling, safety checks, reproducible geodata pipeline, tests, and
-> continuous integration are in place. Matched prototype province and
-> second-level sources pass the automated geometry quality gate. The first
-> CongoLangBench draft metadata exporter also reconciles and validates all 47
-> ready tracks. All 47 tracks now have evidence-linked automated source audits,
-> but none can be promoted without named human approval and all unresolved
-> licence, access, variety, and geographic questions being closed.
+> **Project status:** Phase 2 research preview. The complete 47-track data audit
+> now feeds a static Next.js and MapLibre interface with catalogue search,
+> evidence filters, clickable province and territory context, and resource
+> profiles. All
+> records remain visibly marked as drafts: none can be promoted without named
+> human approval and all unresolved licence, access, variety, and geographic
+> questions being closed.
 
 ## What the atlas will provide
 
@@ -62,6 +61,13 @@ The repository currently provides:
   topology-preserving simplification, and quality reporting;
 - an allow-listed, commit-pinned CongoLangBench metadata exporter that excludes
   sentence text and reconciles source totals before producing draft records;
+- a deterministic public-safe web bundle containing metadata only;
+- a responsive static atlas with language search, access and project-grouping
+  filters, province and territory selection, and evidence-aware profiles;
+- profile coverage summaries for speaker evidence, digital sources, datasets,
+  models, and linguistic research, with missing evidence shown explicitly;
+- a cached, reproducible candidate-source census across OLAC, Hugging Face,
+  GitHub, and OpenAlex, with ambiguous-name filtering and review labels;
 - draft fixtures that demonstrate the catalogue format;
 - unit tests and GitHub Actions validation.
 
@@ -72,6 +78,7 @@ Draft records are development fixtures, not verified public evidence.
 ### Requirements
 
 - Python 3.10 or newer
+- Node.js 20.9 or newer and `npm`
 - `pip`
 - `make` (optional)
 
@@ -132,11 +139,56 @@ provenance; and Nyanga retains a conflict between package public-domain
 metadata and the absence of matching publisher terms. Every copyrighted track
 also remains restricted regardless of later identity approval.
 
+The web bundle prefers the external dataset or repository for each language
+and omits the internal frozen-evaluation metadata card when that external
+record exists. This keeps the interface focused on sources users can actually
+investigate while retaining the complete audit trail in generated research
+records.
+
+An additional discovery pass currently identifies 451 candidate links across
+all 47 tracks: 64 datasets, 29 models, 40 GitHub repositories, 271 research
+records, and 47 OLAC catalogue pages. These are displayed as source leads—not
+verified records—and must pass language, variety, geographic, licence, and
+access review before promotion.
+
 Reviewed source metadata is applied as a separate overlay, leaving the pinned
 CongoLangBench registries unchanged. The generated records now link directly
 to CLEAR Global, Google SMOL, `multi-open`, MT560 wrappers, AfriSpeech Africa
 Corpus, eBible.org, or Bible in Every Language and preserve their actual
 access, licence, redistribution, and geographic-scope states.
+
+Build the metadata-only bundle used by the interface, install frontend
+dependencies, and start the research preview:
+
+```bash
+make discover-sources
+make web-data
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`. The importer and review queue must already have
+been generated as described above. The map also expects the reproducible ADM1
+and ADM2 layers created by `make geodata`. Administrative polygons provide
+navigation context only and are never presented as language boundaries.
+Selecting a province or territory updates the catalogue context immediately.
+Until reviewed presence claims are added, the panel continues to show the
+national catalogue and clearly labels the missing place-specific evidence.
+Online discovery requires network access; cached results can be rebuilt with
+`python3 -m scripts.discover_sources --offline`. See the
+[source-discovery guide](docs/SOURCE_DISCOVERY.md) for providers, relevance
+controls, rate limits, and the promotion checklist.
+
+Verify a production-ready static export:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
+The export is written to `out/`. Generated catalogue, map, worker, and build
+artifacts remain excluded from Git.
 
 ## Repository structure
 
@@ -146,9 +198,9 @@ CongoLangAtlas/
 │   ├── catalog/        # Version-controlled metadata records
 │   └── schema/         # JSON Schemas and controlled vocabularies
 ├── docs/               # Product, evidence, and import policies
-├── public/geodata/     # Future reviewed map artifacts
+├── public/geodata/     # Geographic source manifest and guidance
 ├── scripts/            # Validation and safety tooling
-├── src/                # Future web application
+├── src/                # Next.js atlas interface
 └── tests/              # Automated validation tests
 ```
 
@@ -191,9 +243,9 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 
 | Phase | Deliverable | Status |
 |---|---|---|
-| 0 | Schemas, governance, validation, geographic-source review | In progress — automated geometry gate passes; administrative review pending |
-| 1 | Verified CongoLangBench metadata seed | In progress — all 47 automated source audits complete; named human review pending |
-| 2 | Interactive map, search, profiles, filters, and exports | Planned |
+| 0 | Schemas, governance, validation, geographic-source review | Automated gate complete — administrative review pending |
+| 1 | Verified CongoLangBench metadata seed | Automated audit complete — named human review pending |
+| 2 | Interactive map, search, profiles, filters, and exports | In progress — static research preview implemented; export UI pending |
 | 3 | Expanded national language and resource catalogue | Planned |
 | 4 | Reproducible NLP benchmark and model-result integration | Planned |
 | 5 | Moderated community platform and sustainable releases | Planned |
@@ -219,7 +271,7 @@ Version-controlled CSV/YAML records
           Static CDN deployment
 ```
 
-The planned interface uses Next.js, TypeScript, and MapLibre GL JS. A
+The interface uses Next.js, TypeScript, and MapLibre GL JS. A
 static-first build keeps early releases affordable, reproducible, and easy to
 audit. PostgreSQL/PostGIS will be introduced only if authenticated editing or
 spatial query requirements justify it.
@@ -242,5 +294,6 @@ correspondence, or sensitive community locations.
 - [Verification and evidence policy](docs/VERIFICATION_POLICY.md)
 - [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md)
 - [Geographic data source decision](docs/GEOGRAPHIC_DATA_SOURCE.md)
+- [Online source discovery](docs/SOURCE_DISCOVERY.md)
 - [Catalogue guide](data/catalog/README.md)
 - [Schema guide](data/schema/README.md)

@@ -1,4 +1,4 @@
-.PHONY: validate test check geodata import-congolangbench review-congolangbench
+.PHONY: validate test check geodata import-congolangbench review-congolangbench discover-sources web-data
 
 CONGOLANGBENCH ?= ../DRCongo_Lang_Benchmark
 
@@ -20,3 +20,9 @@ import-congolangbench:
 
 review-congolangbench:
 	python3 -m scripts.build_import_review_queue
+
+discover-sources:
+	python3 -u -m scripts.discover_sources
+
+web-data:
+	python3 -m scripts.build_web_data

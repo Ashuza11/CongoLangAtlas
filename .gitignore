@@ -5,7 +5,9 @@
 __pycache__/
 .pytest_cache/
 *.py[cod]
+*.tsbuildinfo
 .next/
+out/
 node_modules/
 dist/
 coverage/
@@ -14,6 +16,7 @@ coverage/
 
 # Generated catalogue and map artifacts
 public/generated/
+public/maplibre/
 data/generated/
 
 # Private or restricted research material must stay outside the repository
