@@ -186,6 +186,7 @@ export default function AtlasExplorer() {
   const [bundle, setBundle] = useState<AtlasBundle | null>(null);
   const [places, setPlaces] = useState<AtlasPlaceOption[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [query, setQuery] = useState("");
   const [access, setAccess] = useState<AccessFilter>("all");
   const [region, setRegion] = useState("all");
@@ -215,7 +216,13 @@ export default function AtlasExplorer() {
       })
       .then(setBundle)
       .catch((reason: Error) => setError(reason.message));
-  }, []);
+  }, [reloadKey]);
+
+  const retryCatalogue = () => {
+    setError(null);
+    setBundle(null);
+    setReloadKey((value) => value + 1);
+  };
 
   useEffect(() => {
     Promise.all([
@@ -293,17 +300,18 @@ export default function AtlasExplorer() {
     ? [...new Set(selected.geographic_candidates.flatMap((candidate) => candidate.territory_place_id ? [candidate.territory_place_id] : []))]
     : [];
 
-  if (error) return <main className="state-page"><h1>Catalogue unavailable</h1><p>{error}</p><code>make web-data</code></main>;
-  if (!bundle) return <main className="state-page"><div className="loader" /><p>Preparing the atlas…</p></main>;
+  if (error) return <main className="state-page" role="alert"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><p className="eyebrow">Data connection interrupted</p><h1>Catalogue unavailable</h1><p>{error}</p><button className="state-action" onClick={retryCatalogue}>Try again</button></main>;
+  if (!bundle) return <main className="state-page" aria-live="polite"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><div className="loader" /><p>Preparing language and geographic evidence…</p><div className="loading-lines" aria-hidden><i /><i /><i /></div></main>;
 
   return (
     <main>
+      <a className="skip-link" href="#atlas-catalogue">Skip to language catalogue</a>
       <header className="site-header">
-        <a href="#atlas" className="wordmark" aria-label="CL Atlas home"><span className="wordmark__mark">CL</span><span>Atlas</span></a>
+        <a href="#atlas" className="wordmark" aria-label="CL Atlas home"><span className="wordmark__mark">CL</span><span className="wordmark__name">Atlas</span></a>
       </header>
 
       <section className="workspace" id="atlas">
-        <aside className="catalogue-panel">
+        <aside className="catalogue-panel" id="atlas-catalogue">
           <div className="panel-heading"><div><p className="eyebrow">{selectedPlace ? `${selectedPlace.adminLevel} selected` : "National catalogue"}</p><h2>{selectedPlace?.name || "Languages"}</h2></div><span>{languages.length} / {bundle.languages.length}</span></div>
           {selectedPlace && <div className="place-context">
             <div className="place-context__heading"><div><strong>{placeCounts?.candidates || 0} language lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed geographic claim{placeCounts?.approved === 1 ? "" : "s"}</span></div><button onClick={() => setSelectedPlace(null)}>Clear place</button></div>

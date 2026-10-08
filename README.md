@@ -68,7 +68,8 @@ The repository currently provides:
 - a deterministic public-safe web bundle containing metadata only;
 - a responsive static atlas with language search, access and project-grouping
   filters, province-to-territory drill-down, place-level coverage summaries,
-  synchronized map selection, and evidence-aware profiles;
+  synchronized map selection, evidence-aware profiles, keyboard-visible
+  controls, and compact mobile map navigation;
 - profile coverage summaries for speaker evidence, digital sources, datasets,
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,
