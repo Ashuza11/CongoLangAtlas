@@ -70,6 +70,8 @@ The repository currently provides:
   filters, province-to-territory drill-down, place-level coverage summaries,
   synchronized map selection, evidence-aware profiles, keyboard-visible
   controls, and compact mobile map navigation;
+- resource-coverage and geographic-evidence filters plus public-safe JSON and
+  CSV exports that preserve the currently selected place and visible results;
 - profile coverage summaries for speaker evidence, digital sources, datasets,
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,

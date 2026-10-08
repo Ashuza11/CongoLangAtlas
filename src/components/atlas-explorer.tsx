@@ -6,6 +6,8 @@ import type { AtlasBundle, AtlasLanguage, AtlasPlaceOption, AtlasPlaceSelection,
 
 const AtlasMap = dynamic(() => import("./atlas-map"), { ssr: false });
 type AccessFilter = "all" | "open" | "restricted";
+type CoverageFilter = "all" | "datasets" | "models" | "research" | "speaker-evidence";
+type EvidenceFilter = "all" | "documented-presence" | "representative-point" | "unmapped";
 const NATIONAL_LANGUAGE_IDS = ["language-ktu", "language-lin", "language-swc", "language-lua"];
 
 function resourceIsOpen(resource: AtlasResource) {
@@ -53,6 +55,27 @@ function coverageCounts(language: AtlasLanguage) {
     research,
     sources: language.resources.length + language.discovered_sources.length + geographicSources,
   };
+}
+
+function evidenceForPlace(language: AtlasLanguage, place: AtlasPlaceSelection | null) {
+  if (!place) return language.geographic_candidates;
+  return language.geographic_candidates.filter((candidate) =>
+    place.adminLevel === "province" ? candidate.province_place_id === place.id : candidate.territory_place_id === place.id,
+  );
+}
+
+function csvCell(value: string | number) {
+  const text = String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function downloadFile(filename: string, content: string, type: string) {
+  const url = URL.createObjectURL(new Blob([content], { type }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
 
 function ResourceCard({ resource }: { resource: AtlasResource }) {
@@ -190,6 +213,8 @@ export default function AtlasExplorer() {
   const [query, setQuery] = useState("");
   const [access, setAccess] = useState<AccessFilter>("all");
   const [region, setRegion] = useState("all");
+  const [coverageFilter, setCoverageFilter] = useState<CoverageFilter>("all");
+  const [evidenceFilter, setEvidenceFilter] = useState<EvidenceFilter>("all");
   const [selected, setSelected] = useState<AtlasLanguage | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<AtlasPlaceSelection | null>(null);
   const [detailLevel, setDetailLevel] = useState<"provinces" | "territories">("provinces");
@@ -250,12 +275,22 @@ export default function AtlasExplorer() {
   const languages = useMemo(() => {
     const term = query.trim().toLowerCase();
     return (bundle?.languages ?? []).filter((language) => {
+      const coverage = coverageCounts(language);
+      const relevantEvidence = evidenceForPlace(language, selectedPlace);
       const matchesText = !term || [language.name, language.iso, ...language.aliases].some((value) => value.toLowerCase().includes(term));
       const matchesAccess = access === "all" || (access === "open" ? language.resources.some(resourceIsOpen) : !language.resources.some(resourceIsOpen));
       const matchesGeography = !selectedPlace || matchesPlace(language, selectedPlace);
-      return matchesText && matchesAccess && matchesGeography && (region === "all" || language.region === region);
+      const matchesCoverage = coverageFilter === "all"
+        || (coverageFilter === "datasets" && coverage.datasets > 0)
+        || (coverageFilter === "models" && coverage.models > 0)
+        || (coverageFilter === "research" && coverage.research > 0)
+        || (coverageFilter === "speaker-evidence" && relevantEvidence.some((candidate) => candidate.speaker_percentage !== undefined));
+      const matchesEvidence = evidenceFilter === "all"
+        || (evidenceFilter === "unmapped" && relevantEvidence.length === 0)
+        || relevantEvidence.some((candidate) => candidate.evidence_type === evidenceFilter);
+      return matchesText && matchesAccess && matchesGeography && matchesCoverage && matchesEvidence && (region === "all" || language.region === region);
     });
-  }, [access, bundle, query, region, selectedPlace]);
+  }, [access, bundle, coverageFilter, evidenceFilter, query, region, selectedPlace]);
   const placeCounts = useMemo(() => {
     if (!selectedPlace || !bundle) return null;
     return {
@@ -299,6 +334,44 @@ export default function AtlasExplorer() {
   const highlightedTerritoryIds = selected
     ? [...new Set(selected.geographic_candidates.flatMap((candidate) => candidate.territory_place_id ? [candidate.territory_place_id] : []))]
     : [];
+  const activeFilterCount = Number(Boolean(query.trim())) + Number(access !== "all") + Number(region !== "all")
+    + Number(coverageFilter !== "all") + Number(evidenceFilter !== "all");
+  const resetLanguageFilters = () => {
+    setQuery("");
+    setAccess("all");
+    setRegion("all");
+    setCoverageFilter("all");
+    setEvidenceFilter("all");
+  };
+  const exportJson = () => {
+    const exported = languages.map((language) => ({
+      id: language.id,
+      name: language.name,
+      iso_639_3: language.iso,
+      aliases: language.aliases,
+      project_grouping: language.region,
+      review: language.review,
+      coverage: coverageCounts(language),
+      resources: language.resources,
+      discovered_sources: language.discovered_sources,
+      geographic_evidence: evidenceForPlace(language, selectedPlace),
+    }));
+    downloadFile("congo-lang-atlas-filtered.json", `${JSON.stringify({
+      bundle_version: bundle?.bundle_version,
+      data_generated_at: bundle?.generated_at,
+      selected_place: selectedPlace,
+      language_count: exported.length,
+      languages: exported,
+    }, null, 2)}\n`, "application/json");
+  };
+  const exportCsv = () => {
+    const header = ["name", "iso_639_3", "aliases", "project_grouping", "review_status", "digital_sources", "datasets", "models", "research", "geographic_evidence", "selected_place"];
+    const rows = languages.map((language) => {
+      const coverage = coverageCounts(language);
+      return [language.name, language.iso, language.aliases.join("; "), language.region, language.review.status, coverage.sources, coverage.datasets, coverage.models, coverage.research, evidenceForPlace(language, selectedPlace).length, selectedPlace?.name ?? "National catalogue"];
+    });
+    downloadFile("congo-lang-atlas-filtered.csv", `${[header, ...rows].map((row) => row.map(csvCell).join(",")).join("\n")}\n`, "text/csv;charset=utf-8");
+  };
 
   if (error) return <main className="state-page" role="alert"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><p className="eyebrow">Data connection interrupted</p><h1>Catalogue unavailable</h1><p>{error}</p><button className="state-action" onClick={retryCatalogue}>Try again</button></main>;
   if (!bundle) return <main className="state-page" aria-live="polite"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><div className="loader" /><p>Preparing language and geographic evidence…</p><div className="loading-lines" aria-hidden><i /><i /><i /></div></main>;
@@ -337,6 +410,12 @@ export default function AtlasExplorer() {
             <div className="segmented" aria-label="Filter by access">
               {(["all", "open", "restricted"] as const).map((value) => <button className={access === value ? "active" : ""} onClick={() => setAccess(value)} key={value}>{value}</button>)}
             </div>
+            <div className="filter-grid">
+              <label><span>Resource coverage</span><select value={coverageFilter} onChange={(event) => setCoverageFilter(event.target.value as CoverageFilter)}><option value="all">Any coverage</option><option value="datasets">Has datasets</option><option value="models">Has models</option><option value="research">Has research</option><option value="speaker-evidence">Has speaker evidence</option></select></label>
+              <label><span>Geographic evidence</span><select value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as EvidenceFilter)}><option value="all">Any evidence</option><option value="documented-presence">Documented presence</option><option value="representative-point">Representative point</option><option value="unmapped">Not mapped</option></select></label>
+            </div>
+            <div className="filter-actions"><span>{activeFilterCount ? `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}` : "No language filters"}</span><button onClick={resetLanguageFilters} disabled={!activeFilterCount}>Reset</button></div>
+            <div className="export-actions" aria-label="Export filtered metadata"><span>Export {languages.length} result{languages.length === 1 ? "" : "s"}</span><button onClick={exportCsv} disabled={!languages.length}>CSV</button><button onClick={exportJson} disabled={!languages.length}>JSON</button></div>
           </div>
           <div className="language-list">
             {languages.map((language) => {
@@ -351,7 +430,7 @@ export default function AtlasExplorer() {
             })}
             {!languages.length && <div className="empty-state">
               <p>{selectedPlace && placeLanguages.length ? "Language evidence exists here, but the active search or filters hide it." : "No source-backed language evidence is indexed for this place yet."}</p>
-              {selectedPlace && placeLanguages.length > 0 && <button onClick={() => { setQuery(""); setAccess("all"); setRegion("all"); }}>Reset language filters</button>}
+              {selectedPlace && placeLanguages.length > 0 && <button onClick={resetLanguageFilters}>Reset language filters</button>}
             </div>}
           </div>
         </aside>
