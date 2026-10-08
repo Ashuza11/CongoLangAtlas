@@ -15,7 +15,16 @@ coverage/
 *.log
 
 # Generated catalogue and map artifacts
-public/generated/
+# Browser-ready snapshots are versioned so clean CI checkouts can deploy the
+# exact reviewed atlas state without repeating rate-limited source discovery.
+public/generated/*
+!public/generated/atlas/
+!public/generated/geodata/
+public/generated/atlas/*
+public/generated/geodata/*
+!public/generated/atlas/catalog.json
+!public/generated/geodata/cod-adm1.geojson
+!public/generated/geodata/cod-adm2.geojson
 public/maplibre/
 data/generated/
 

@@ -239,8 +239,36 @@ npm run typecheck
 npm run build
 ```
 
-The export is written to `out/`. Generated catalogue, map, worker, and build
-artifacts remain excluded from Git.
+The export is written to `out/`. Browser-ready catalogue and map snapshots
+under `public/generated/` are versioned so deployment builds reproduce the
+reviewed public state. Internal caches, source downloads, review reports, and
+build artifacts under `data/generated/`, `.next/`, and `out/` remain excluded.
+
+## Continuous integration and deployment
+
+GitHub Actions provides continuous integration. The workflow at
+`.github/workflows/validate.yml` runs catalogue validation, all Python tests,
+ESLint, TypeScript checks, and a production Next.js build for every pull
+request and every push to `main`.
+
+Vercel provides continuous deployment through its Git integration:
+
+- `main` is the production environment;
+- every pull request and non-production branch receives an isolated preview
+  deployment; and
+- a commit is promoted only after Vercel completes its production build.
+
+For the one-time setup, import `Ashuza11/CongoLangAtlas` from the Vercel New
+Project screen, keep the detected **Next.js** framework preset and default
+`npm run build` command, and deploy. The current static export needs no runtime
+environment variables or deployment secrets. Vercel assigns the initial
+production domain; a custom domain can be added later from the project
+settings without changing application code.
+
+Before committing a data update, regenerate `public/generated/atlas/catalog.json`
+and the two public GeoJSON layers. Keeping these three deployment snapshots in
+the same commit as their source and code changes ensures the live site always
+matches the reviewed repository state.
 
 ## Repository structure
 
@@ -298,13 +326,21 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 |---|---|---|
 | 0 | Schemas, governance, validation, geographic-source review | Automated gate complete — administrative review pending |
 | 1 | Verified CongoLangBench metadata seed | Automated audit complete — named human review pending |
-| 2 | Interactive map, search, profiles, filters, and exports | In progress — static research preview implemented; export UI pending |
-| 3 | Expanded national language and resource catalogue | Planned |
+| 2 | Interactive map, search, profiles, filters, and exports | In progress — nationwide data and static preview complete; visual refinement and export UI next |
+| 3 | Expanded national language and resource catalogue | Draft nationwide inventory complete — human review and gap resolution ongoing |
 | 4 | Reproducible NLP benchmark and model-result integration | Planned |
 | 5 | Moderated community platform and sustainable releases | Planned |
 
 The detailed milestones and exit criteria are in the
 [project plan](docs/PROJECT_PLAN.md).
+
+The next implementation priorities are visual refinement of province,
+territory, and language detail views; accessible mobile interaction; public
+metadata exports; and clearer confidence and review-state controls. Parallel
+research work remains for named-human verification, ambiguous CAID labels,
+provider searches blocked by quotas, and community-reviewed names and
+locations. NLP result integration and moderated contributions remain later
+phases rather than blockers for the deployed research preview.
 
 ## Planned architecture
 
