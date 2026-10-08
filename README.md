@@ -212,7 +212,11 @@ estimate was reported.
 The map combines labelled Glottolog representative-point candidates with a
 separate documented-presence layer. A national-language switcher highlights
 the broad sourced regions for Kikongo ya Leta, Lingala, Congo Swahili, and
-Ciluba. Lualaba now resolves to both a Congo Swahili regional candidate through
+Ciluba, reports the number of provinces currently linked to each language, and
+zooms to the selected evidence context. A persistent legend separates a
+selected administrative place from language evidence and territory navigation;
+hover labels identify the province or territory before selection. Lualaba now
+resolves to both a Congo Swahili regional candidate through
 an explicit former-Katanga-to-current-province crosswalk and a separately
 sourced Lunda presence candidate. At territory level,
 the CLEAR Global North Kivu source adds Kinyarwanda in Masisi and Nyiragongo,

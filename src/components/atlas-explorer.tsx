@@ -355,7 +355,17 @@ export default function AtlasExplorer() {
           </div>
           <div className="national-language-switcher" aria-label="Locate a national language">
             <span>Locate a national language</span>
-            {nationalLanguages.map((language) => <button key={language.id} className={selected?.id === language.id ? "active" : ""} onClick={() => { setSelectedPlace(null); setDetailLevel("provinces"); setSelected(language); }}>{language.name}</button>)}
+            {nationalLanguages.map((language) => {
+              const provinceCount = new Set(language.geographic_candidates.map((candidate) => candidate.province_place_id)).size;
+              return <button key={language.id} aria-pressed={selected?.id === language.id} className={selected?.id === language.id ? "active" : ""} onClick={() => { setSelectedPlace(null); setDetailLevel("provinces"); setSelected(language); }}>{language.name}<small>{provinceCount} province{provinceCount === 1 ? "" : "s"}</small></button>;
+            })}
+            <button className="country-view" onClick={() => { setSelected(null); setSelectedPlace(null); setDetailLevel("provinces"); }}>Country view</button>
+          </div>
+          <div className="map-legend" aria-label="Map evidence legend">
+            <strong>{selected ? `${selected.name} evidence` : selectedPlace ? selectedPlace.name : "Map legend"}</strong>
+            <span><i className="legend-swatch legend-swatch--selected" />Selected place</span>
+            <span><i className="legend-swatch legend-swatch--evidence" />Sourced language context</span>
+            {detailLevel === "territories" && <span><i className="legend-swatch legend-swatch--territory" />Territory navigation</span>}
           </div>
           <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} selectedPlaceId={selectedPlace?.id} onPlaceSelect={handlePlaceSelect} />
           <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p></div>
