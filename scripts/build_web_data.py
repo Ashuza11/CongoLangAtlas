@@ -154,7 +154,7 @@ def build_web_data(
                 *discovered_sources,
             ]
         geographic_candidates = [
-            {
+            {key: value for key, value in {
                 "id": candidate["id"],
                 "province_place_id": candidate["province_place_id"],
                 "province_name": candidate["province_name"],
@@ -174,7 +174,7 @@ def build_web_data(
                 "confidence": candidate.get("confidence"),
                 "review_status": candidate["review_status"],
                 "limitations": candidate["limitations"],
-            }
+            }.items() if value is not None}
             for candidate in presence_candidates_by_language.get(language["id"], [])
         ]
         languages.append({

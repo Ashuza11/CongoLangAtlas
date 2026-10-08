@@ -163,7 +163,7 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
           <div className="evidence-status"><span className={`confidence-badge confidence-badge--${candidate.confidence ?? "unspecified"}`}>{candidate.confidence ? `${candidate.confidence} confidence` : "Confidence not stated"}</span><span>{humanize(candidate.review_status)}</span></div>
           {candidate.evidence_type === "documented-presence" ? (
             <p>
-              {candidate.speaker_percentage !== undefined
+              {typeof candidate.speaker_percentage === "number"
                 ? `${candidate.speaker_percentage}% — ${candidate.percentage_basis ?? "reported speaking the language"}. `
                 : ""}
               {candidate.evidence_locator}.
@@ -316,7 +316,7 @@ export default function AtlasExplorer() {
         || (coverageFilter === "datasets" && coverage.datasets > 0)
         || (coverageFilter === "models" && coverage.models > 0)
         || (coverageFilter === "research" && coverage.research > 0)
-        || (coverageFilter === "speaker-evidence" && relevantEvidence.some((candidate) => candidate.speaker_percentage !== undefined));
+        || (coverageFilter === "speaker-evidence" && relevantEvidence.some((candidate) => typeof candidate.speaker_percentage === "number"));
       const matchesEvidence = evidenceFilter === "all"
         || (evidenceFilter === "unmapped" && relevantEvidence.length === 0)
         || relevantEvidence.some((candidate) => candidate.evidence_type === evidenceFilter);
@@ -348,7 +348,7 @@ export default function AtlasExplorer() {
     total.research += coverage.research;
     if (language.geographic_candidates.some((candidate) =>
       (selectedPlace?.adminLevel === "province" ? candidate.province_place_id : candidate.territory_place_id) === selectedPlace?.id
-      && candidate.speaker_percentage !== undefined)) total.speakerEvidence += 1;
+      && typeof candidate.speaker_percentage === "number")) total.speakerEvidence += 1;
     return total;
   }, { sources: 0, datasets: 0, models: 0, research: 0, speakerEvidence: 0 }), [placeLanguages, selectedPlace]);
   const selectedProvince = selectedPlace?.adminLevel === "province"
@@ -471,7 +471,7 @@ export default function AtlasExplorer() {
               const coverage = coverageCounts(language);
               const hasSpeakerEvidence = selectedPlace && language.geographic_candidates.some((candidate) =>
                 (selectedPlace.adminLevel === "province" ? candidate.province_place_id : candidate.territory_place_id) === selectedPlace.id
-                && candidate.speaker_percentage !== undefined);
+                && typeof candidate.speaker_percentage === "number");
               return <button aria-pressed={selected?.id === language.id} className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => selectLanguage(language)} key={language.id}>
                 <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Documented geographic lead") : `${language.region} · ${coverage.sources} source links`}</small>{selectedPlace && <span className="language-row__coverage"><span>{hasSpeakerEvidence ? "Speaker data" : "No speaker estimate"}</span><span>{coverage.datasets} data</span><span>{coverage.models} models</span><span>{coverage.research} research</span></span>}</span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
               </button>;

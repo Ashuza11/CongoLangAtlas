@@ -219,7 +219,8 @@ opened. These are evidence counts, not demographic totals or completeness
 claims. Qualitative CAID notes are preserved even when a territory has no
 statistical percentages. For example, Kabare exposes the source's Swahili,
 Mashi, and Tembo presence statements while clearly showing that no speaker
-estimate was reported.
+estimate was reported. Missing percentages are omitted from the public bundle
+and interface rather than rendered as numeric values.
 The map combines labelled Glottolog representative-point candidates with a
 separate documented-presence layer. A national-language switcher highlights
 the broad sourced regions for Kikongo ya Leta, Lingala, Congo Swahili, and

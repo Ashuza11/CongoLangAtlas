@@ -77,6 +77,17 @@ class WebDataBuildTests(unittest.TestCase):
                     "speaker_percentage": 15, "confidence": "high", "review_status": "candidate",
                     "percentage_basis": "Share of the territory population in the source",
                     "limitations": "A test limitation."
+                }, {
+                    "id": "presence-qualitative", "language_id": "language-sup",
+                    "match_status": "documented-presence", "evidence_type": "documented-presence",
+                    "place_id": "place-cod-adm2-other", "province_place_id": "place-cod-adm1-test",
+                    "province_name": "Province", "territory_place_id": "place-cod-adm2-other",
+                    "territory_name": "Other territory", "source_id": "source-map",
+                    "source_url": "https://example.org/map", "source_title": "Test map",
+                    "evidence_locator": "Qualitative source note", "role": "spoken-language",
+                    "speaker_percentage": None, "percentage_basis": None,
+                    "confidence": "low", "review_status": "candidate",
+                    "limitations": "The source reports presence without a percentage."
                 }],
                 "approved_claims": [],
                 "supplemental_languages": [{
@@ -107,6 +118,9 @@ class WebDataBuildTests(unittest.TestCase):
                 "Share of the territory population in the source",
             )
             self.assertEqual(supplemental["geographic_candidates"][0]["confidence"], "high")
+            qualitative = supplemental["geographic_candidates"][1]
+            self.assertNotIn("speaker_percentage", qualitative)
+            self.assertNotIn("percentage_basis", qualitative)
             self.assertEqual(bundle["summary"]["languages"], 2)
             self.assertNotIn("source_text", json.dumps(bundle))
 
