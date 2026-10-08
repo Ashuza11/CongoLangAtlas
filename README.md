@@ -72,6 +72,9 @@ The repository currently provides:
   controls, and compact mobile map navigation;
 - resource-coverage and geographic-evidence filters plus public-safe JSON and
   CSV exports that preserve the currently selected place and visible results;
+- confidence and human-review filters, visible evidence-status badges, Escape
+  handling for language profiles, and a keyboard-accessible administrative
+  place picker that provides an alternative to direct map interaction;
 - profile coverage summaries for speaker evidence, digital sources, datasets,
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,
@@ -344,7 +347,7 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 |---|---|---|
 | 0 | Schemas, governance, validation, geographic-source review | Automated gate complete — administrative review pending |
 | 1 | Verified CongoLangBench metadata seed | Automated audit complete — named human review pending |
-| 2 | Interactive map, search, profiles, filters, and exports | In progress — nationwide data and static preview complete; visual refinement and export UI next |
+| 2 | Interactive map, search, profiles, filters, and exports | Deployed research preview complete — field testing and iterative polish ongoing |
 | 3 | Expanded national language and resource catalogue | Draft nationwide inventory complete — human review and gap resolution ongoing |
 | 4 | Reproducible NLP benchmark and model-result integration | Planned |
 | 5 | Moderated community platform and sustainable releases | Planned |
@@ -352,11 +355,10 @@ the [CongoLangBench import plan](docs/CONGOLANGBENCH_IMPORT.md).
 The detailed milestones and exit criteria are in the
 [project plan](docs/PROJECT_PLAN.md).
 
-The next implementation priorities are visual refinement of province,
-territory, and language detail views; accessible mobile interaction; public
-metadata exports; and clearer confidence and review-state controls. Parallel
-research work remains for named-human verification, ambiguous CAID labels,
-provider searches blocked by quotas, and community-reviewed names and
+The next implementation priorities are stable shareable catalogue URLs,
+field testing on low-bandwidth mobile devices, and citation-ready release
+snapshots. Research work remains for named-human verification, ambiguous CAID
+labels, provider searches blocked by quotas, and community-reviewed names and
 locations. NLP result integration and moderated contributions remain later
 phases rather than blockers for the deployed research preview.
 

@@ -8,6 +8,8 @@ const AtlasMap = dynamic(() => import("./atlas-map"), { ssr: false });
 type AccessFilter = "all" | "open" | "restricted";
 type CoverageFilter = "all" | "datasets" | "models" | "research" | "speaker-evidence";
 type EvidenceFilter = "all" | "documented-presence" | "representative-point" | "unmapped";
+type ConfidenceFilter = "all" | "high" | "medium" | "low" | "unspecified";
+type ReviewFilter = "all" | "ready" | "needs-review";
 const NATIONAL_LANGUAGE_IDS = ["language-ktu", "language-lin", "language-swc", "language-lua"];
 
 function resourceIsOpen(resource: AtlasResource) {
@@ -130,10 +132,10 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
   const filteredSources = language.discovered_sources.filter((source) => sourceKind === "all" || source.kind === sourceKind);
   const visibleSources = showAllSources ? filteredSources : filteredSources.slice(0, 10);
   return (
-    <section className="profile" aria-label={`${language.name} profile`}>
-      <button className="close-button" onClick={onClose} aria-label="Close language profile">×</button>
+    <section className="profile" role="region" aria-labelledby="language-profile-title">
+      <button className="close-button" onClick={onClose} aria-label="Close language profile" autoFocus>×</button>
       <p className="eyebrow">Draft language profile · ISO 639-3</p>
-      <div className="profile__title"><h2>{language.name}</h2><span className="iso-badge">{language.iso}</span></div>
+      <div className="profile__title"><h2 id="language-profile-title">{language.name}</h2><span className="iso-badge">{language.iso}</span></div>
       {language.aliases.length > 0 && <p className="aliases">Also indexed as {language.aliases.join(", ")}</p>}
       <div className="notice notice--warm">
         <strong>Review state: {humanize(language.review.status)}</strong>
@@ -156,8 +158,9 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
       <p className="classification">{language.classification_note}</p>
       {language.geographic_candidates.map((candidate) => (
         <div className="geographic-lead" key={candidate.id}>
-          <div><p className="eyebrow">{candidate.evidence_type === "documented-presence" ? "Documented presence" : "Geographic candidate"}</p><span>{humanize(candidate.role)}</span></div>
+          <div className="geographic-lead__heading"><p className="eyebrow">{candidate.evidence_type === "documented-presence" ? "Documented presence" : "Geographic candidate"}</p><span>{humanize(candidate.role)}</span></div>
           <strong>{candidate.territory_name ? `${candidate.territory_name}, ` : ""}{candidate.province_name}</strong>
+          <div className="evidence-status"><span className={`confidence-badge confidence-badge--${candidate.confidence ?? "unspecified"}`}>{candidate.confidence ? `${candidate.confidence} confidence` : "Confidence not stated"}</span><span>{humanize(candidate.review_status)}</span></div>
           {candidate.evidence_type === "documented-presence" ? (
             <p>
               {candidate.speaker_percentage !== undefined
@@ -190,7 +193,7 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
         <p className="candidate-note">Automatically discovered links. Check language identity, variety, geography, licence, and access before treating them as verified.</p>
         <div className="source-filters" aria-label="Filter source leads">
           {(["all", "dataset", "model", "repository", "research", "catalogue"] as const).map((kind) => (
-            <button key={kind} className={sourceKind === kind ? "active" : ""} onClick={() => { setSourceKind(kind); setShowAllSources(false); }}>
+            <button key={kind} aria-pressed={sourceKind === kind} className={sourceKind === kind ? "active" : ""} onClick={() => { setSourceKind(kind); setShowAllSources(false); }}>
               {kind === "all" ? "All" : resourceLabel(kind)}
             </button>
           ))}
@@ -215,6 +218,8 @@ export default function AtlasExplorer() {
   const [region, setRegion] = useState("all");
   const [coverageFilter, setCoverageFilter] = useState<CoverageFilter>("all");
   const [evidenceFilter, setEvidenceFilter] = useState<EvidenceFilter>("all");
+  const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("all");
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
   const [selected, setSelected] = useState<AtlasLanguage | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<AtlasPlaceSelection | null>(null);
   const [detailLevel, setDetailLevel] = useState<"provinces" | "territories">("provinces");
@@ -225,6 +230,17 @@ export default function AtlasExplorer() {
   const changeDetailLevel = (level: "provinces" | "territories") => {
     setDetailLevel(level);
     setSelectedPlace(null);
+  };
+  const selectPlaceById = (placeId: string) => {
+    if (!placeId) {
+      setSelectedPlace(null);
+      return;
+    }
+    const place = places.find((item) => item.id === placeId);
+    if (!place) return;
+    setSelectedPlace(place);
+    setDetailLevel(place.adminLevel === "territory" ? "territories" : "provinces");
+    setSelected(null);
   };
   const selectLanguage = (language: AtlasLanguage) => {
     setSelected(language);
@@ -271,6 +287,15 @@ export default function AtlasExplorer() {
     }).catch(() => setPlaces([]));
   }, []);
 
+  useEffect(() => {
+    if (!selected) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [selected]);
+
   const regions = useMemo(() => [...new Set(bundle?.languages.map((item) => item.region) ?? [])].sort(), [bundle]);
   const languages = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -288,9 +313,15 @@ export default function AtlasExplorer() {
       const matchesEvidence = evidenceFilter === "all"
         || (evidenceFilter === "unmapped" && relevantEvidence.length === 0)
         || relevantEvidence.some((candidate) => candidate.evidence_type === evidenceFilter);
-      return matchesText && matchesAccess && matchesGeography && matchesCoverage && matchesEvidence && (region === "all" || language.region === region);
+      const matchesConfidence = confidenceFilter === "all"
+        || (confidenceFilter === "unspecified" && relevantEvidence.some((candidate) => !candidate.confidence))
+        || relevantEvidence.some((candidate) => candidate.confidence === confidenceFilter);
+      const matchesReview = reviewFilter === "all"
+        || (reviewFilter === "ready" && language.review.ready_for_promotion)
+        || (reviewFilter === "needs-review" && !language.review.ready_for_promotion);
+      return matchesText && matchesAccess && matchesGeography && matchesCoverage && matchesEvidence && matchesConfidence && matchesReview && (region === "all" || language.region === region);
     });
-  }, [access, bundle, coverageFilter, evidenceFilter, query, region, selectedPlace]);
+  }, [access, bundle, confidenceFilter, coverageFilter, evidenceFilter, query, region, reviewFilter, selectedPlace]);
   const placeCounts = useMemo(() => {
     if (!selectedPlace || !bundle) return null;
     return {
@@ -325,6 +356,8 @@ export default function AtlasExplorer() {
       }))
       .sort((left, right) => right.languageCount - left.languageCount || left.name.localeCompare(right.name))
     : [], [bundle, places, selectedProvince]);
+  const provinceOptions = useMemo(() => places.filter((place) => place.adminLevel === "province").sort((left, right) => left.name.localeCompare(right.name)), [places]);
+  const territoryOptions = useMemo(() => places.filter((place) => place.adminLevel === "territory").sort((left, right) => left.name.localeCompare(right.name) || left.sourceCode.localeCompare(right.sourceCode)), [places]);
   const nationalLanguages = NATIONAL_LANGUAGE_IDS
     .map((id) => bundle?.languages.find((language) => language.id === id))
     .filter((language): language is AtlasLanguage => Boolean(language));
@@ -335,13 +368,16 @@ export default function AtlasExplorer() {
     ? [...new Set(selected.geographic_candidates.flatMap((candidate) => candidate.territory_place_id ? [candidate.territory_place_id] : []))]
     : [];
   const activeFilterCount = Number(Boolean(query.trim())) + Number(access !== "all") + Number(region !== "all")
-    + Number(coverageFilter !== "all") + Number(evidenceFilter !== "all");
+    + Number(coverageFilter !== "all") + Number(evidenceFilter !== "all") + Number(confidenceFilter !== "all")
+    + Number(reviewFilter !== "all");
   const resetLanguageFilters = () => {
     setQuery("");
     setAccess("all");
     setRegion("all");
     setCoverageFilter("all");
     setEvidenceFilter("all");
+    setConfidenceFilter("all");
+    setReviewFilter("all");
   };
   const exportJson = () => {
     const exported = languages.map((language) => ({
@@ -376,6 +412,8 @@ export default function AtlasExplorer() {
   if (error) return <main className="state-page" role="alert"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><p className="eyebrow">Data connection interrupted</p><h1>Catalogue unavailable</h1><p>{error}</p><button className="state-action" onClick={retryCatalogue}>Try again</button></main>;
   if (!bundle) return <main className="state-page" aria-live="polite"><div className="state-brand"><span>CL</span><strong>Atlas</strong></div><div className="loader" /><p>Preparing language and geographic evidence…</p><div className="loading-lines" aria-hidden><i /><i /><i /></div></main>;
 
+  const closeProfile = () => setSelected(null);
+
   return (
     <main>
       <a className="skip-link" href="#atlas-catalogue">Skip to language catalogue</a>
@@ -408,29 +446,32 @@ export default function AtlasExplorer() {
           <div className="filters">
             <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
             <div className="segmented" aria-label="Filter by access">
-              {(["all", "open", "restricted"] as const).map((value) => <button className={access === value ? "active" : ""} onClick={() => setAccess(value)} key={value}>{value}</button>)}
+              {(["all", "open", "restricted"] as const).map((value) => <button aria-pressed={access === value} className={access === value ? "active" : ""} onClick={() => setAccess(value)} key={value}>{value}</button>)}
             </div>
             <div className="filter-grid">
               <label><span>Resource coverage</span><select value={coverageFilter} onChange={(event) => setCoverageFilter(event.target.value as CoverageFilter)}><option value="all">Any coverage</option><option value="datasets">Has datasets</option><option value="models">Has models</option><option value="research">Has research</option><option value="speaker-evidence">Has speaker evidence</option></select></label>
               <label><span>Geographic evidence</span><select value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as EvidenceFilter)}><option value="all">Any evidence</option><option value="documented-presence">Documented presence</option><option value="representative-point">Representative point</option><option value="unmapped">Not mapped</option></select></label>
+              <label><span>Evidence confidence</span><select value={confidenceFilter} onChange={(event) => setConfidenceFilter(event.target.value as ConfidenceFilter)}><option value="all">Any confidence</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option><option value="unspecified">Not stated</option></select></label>
+              <label><span>Human review</span><select value={reviewFilter} onChange={(event) => setReviewFilter(event.target.value as ReviewFilter)}><option value="all">Any review state</option><option value="ready">Ready for promotion</option><option value="needs-review">Needs human review</option></select></label>
             </div>
             <div className="filter-actions"><span>{activeFilterCount ? `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}` : "No language filters"}</span><button onClick={resetLanguageFilters} disabled={!activeFilterCount}>Reset</button></div>
             <div className="export-actions" aria-label="Export filtered metadata"><span>Export {languages.length} result{languages.length === 1 ? "" : "s"}</span><button onClick={exportCsv} disabled={!languages.length}>CSV</button><button onClick={exportJson} disabled={!languages.length}>JSON</button></div>
           </div>
-          <div className="language-list">
+          <p className="sr-only" aria-live="polite">{languages.length} language results</p>
+          <div className="language-list" aria-label={`${languages.length} language results`}>
             {languages.map((language) => {
               const hasOpen = language.resources.some(resourceIsOpen);
               const coverage = coverageCounts(language);
               const hasSpeakerEvidence = selectedPlace && language.geographic_candidates.some((candidate) =>
                 (selectedPlace.adminLevel === "province" ? candidate.province_place_id : candidate.territory_place_id) === selectedPlace.id
                 && candidate.speaker_percentage !== undefined);
-              return <button className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => selectLanguage(language)} key={language.id}>
+              return <button aria-pressed={selected?.id === language.id} className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => selectLanguage(language)} key={language.id}>
                 <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Documented geographic lead") : `${language.region} · ${coverage.sources} source links`}</small>{selectedPlace && <span className="language-row__coverage"><span>{hasSpeakerEvidence ? "Speaker data" : "No speaker estimate"}</span><span>{coverage.datasets} data</span><span>{coverage.models} models</span><span>{coverage.research} research</span></span>}</span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
               </button>;
             })}
             {!languages.length && <div className="empty-state">
-              <p>{selectedPlace && placeLanguages.length ? "Language evidence exists here, but the active search or filters hide it." : "No source-backed language evidence is indexed for this place yet."}</p>
-              {selectedPlace && placeLanguages.length > 0 && <button onClick={resetLanguageFilters}>Reset language filters</button>}
+              <p>{activeFilterCount ? "No languages match the active search and filters." : selectedPlace ? "No source-backed language evidence is indexed for this place yet." : "No languages are available in the public catalogue."}</p>
+              {activeFilterCount > 0 && <button onClick={resetLanguageFilters}>Reset language filters</button>}
             </div>}
           </div>
         </aside>
@@ -438,7 +479,10 @@ export default function AtlasExplorer() {
         <section className="map-panel">
           <div className="map-toolbar">
             <div><p className="eyebrow">{selectedPlace?.adminLevel || "Map"}</p><strong>{selectedPlace?.name || "Select a province or territory"}</strong></div>
-            <div className="segmented"><button className={detailLevel === "provinces" ? "active" : ""} onClick={() => changeDetailLevel("provinces")}>Provinces</button><button className={detailLevel === "territories" ? "active" : ""} onClick={() => changeDetailLevel("territories")}>Territories</button></div>
+            <div className="map-controls">
+              <label className="place-picker"><span className="sr-only">Choose a province or territory</span><select value={selectedPlace?.id ?? ""} onChange={(event) => selectPlaceById(event.target.value)}><option value="">Choose a place</option><optgroup label="Provinces">{provinceOptions.map((place) => <option value={place.id} key={place.id}>{place.name}</option>)}</optgroup><optgroup label="Territories and cities">{territoryOptions.map((place) => <option value={place.id} key={place.id}>{place.name} · {place.sourceCode}</option>)}</optgroup></select></label>
+              <div className="segmented" aria-label="Administrative detail level"><button aria-pressed={detailLevel === "provinces"} className={detailLevel === "provinces" ? "active" : ""} onClick={() => changeDetailLevel("provinces")}>Provinces</button><button aria-pressed={detailLevel === "territories"} className={detailLevel === "territories" ? "active" : ""} onClick={() => changeDetailLevel("territories")}>Territories</button></div>
+            </div>
           </div>
           <div className="national-language-switcher" aria-label="Locate a national language">
             <span>Locate a national language</span>
@@ -458,7 +502,7 @@ export default function AtlasExplorer() {
           <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p></div>
         </section>
 
-        {selected && <LanguageProfile key={selected.id} language={selected} onClose={() => setSelected(null)} />}
+        {selected && <LanguageProfile key={selected.id} language={selected} onClose={closeProfile} />}
       </section>
 
       <footer><p>CongoLangAtlas is a research guide. Names, groupings, access, and geographic claims remain open to documented correction.</p><a href="https://github.com/Ashuza11/CongoLangAtlas" target="_blank" rel="noreferrer">View methodology and contribute ↗</a></footer>

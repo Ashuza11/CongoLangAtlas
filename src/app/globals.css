@@ -96,6 +96,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .map-toolbar { position: absolute; z-index: 3; left: 22px; right: 22px; top: 20px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 15px; background: rgba(255, 253, 248, .91); border: 1px solid rgba(23, 60, 53, .23); backdrop-filter: blur(10px); }
 .map-toolbar p { margin-bottom: 2px; }
 .map-toolbar strong { font: 600 16px Georgia, serif; }
+.map-controls { display: flex; align-items: stretch; gap: 7px; }
+.place-picker select { width: 190px; height: 100%; min-height: 34px; border: 1px solid var(--line); border-radius: 0; padding: 0 8px; background: var(--white); color: var(--ink); font-size: 9px; }
 .national-language-switcher { position: absolute; z-index: 3; left: 22px; right: 22px; top: 96px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; pointer-events: none; }
 .national-language-switcher span, .national-language-switcher button { border: 1px solid rgba(23, 60, 53, .23); background: rgba(255, 253, 248, .93); color: var(--ink); backdrop-filter: blur(10px); }
 .national-language-switcher span { padding: 7px 9px; color: var(--ink-soft); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
@@ -143,10 +145,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .coverage-grid small { margin-top: 3px; color: var(--ink-soft); font-size: 8px; }
 .classification { color: var(--ink-soft); font-size: 11px; line-height: 1.55; }
 .geographic-lead { margin: 20px 0; padding: 16px; border: 1px solid var(--line); background: #eef3ed; }
-.geographic-lead > div { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
-.geographic-lead > div span { color: #30745e; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+.geographic-lead__heading { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.geographic-lead__heading > span { color: #30745e; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
 .geographic-lead > strong { display: block; margin: 3px 0 10px; font: 600 16px Georgia, serif; }
 .geographic-lead p:not(.eyebrow) { color: var(--ink-soft); font-size: 10px; line-height: 1.55; }
+.evidence-status { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.evidence-status span { padding: 4px 6px; background: var(--paper-deep); color: var(--ink-soft); font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.evidence-status .confidence-badge--high { background: #d8eee5; color: #22634f; }
+.evidence-status .confidence-badge--medium { background: #f7e3c1; color: #80521d; }
+.evidence-status .confidence-badge--low { background: #f1d3c6; color: #8c3d20; }
 .review-box { padding: 18px; border: 1px solid var(--line); margin: 22px 0 28px; }
 .review-box h3, .section-heading h3 { margin: 0; font: 600 18px Georgia, serif; }
 .review-box p { color: var(--ink-soft); font-size: 11px; line-height: 1.55; }
@@ -214,6 +221,8 @@ footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
   .language-list { min-height: 250px; }
   .map-panel { height: 650px; }
   .map-toolbar { left: 15px; right: 15px; top: 15px; flex-direction: column; align-items: stretch; }
+  .map-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .place-picker select { width: 100%; }
   .national-language-switcher { top: 122px; left: 15px; right: 15px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; scrollbar-width: thin; pointer-events: auto; }
   .national-language-switcher > span, .national-language-switcher button { flex: 0 0 auto; }
   .map-legend { top: 187px; right: 15px; min-width: 152px; }
