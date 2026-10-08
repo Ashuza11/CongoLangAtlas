@@ -113,10 +113,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .legend-swatch--selected { background: var(--orange); }
 .legend-swatch--evidence { background: #356f66; }
 .legend-swatch--territory { background: var(--yellow); }
-.map-disclosure { position: absolute; z-index: 3; left: 22px; bottom: 28px; max-width: 510px; padding: 13px 16px; background: rgba(23, 60, 53, .93); color: var(--paper); display: flex; gap: 12px; align-items: start; box-shadow: 0 10px 40px rgba(23, 60, 53, .2); }
+.map-disclosure { position: absolute; z-index: 3; left: 22px; bottom: 28px; max-width: 560px; padding: 13px 14px 13px 16px; background: rgba(23, 60, 53, .95); color: var(--paper); display: flex; gap: 12px; align-items: start; box-shadow: 0 10px 40px rgba(23, 60, 53, .2); animation: guide-in .28s ease-out; }
 .map-disclosure > span { color: var(--yellow); font-size: 22px; }
 .map-disclosure p { margin: 0; font-size: 11px; line-height: 1.55; }
 .map-disclosure strong { color: var(--yellow); }
+.map-disclosure button { width: 26px; height: 26px; flex: 0 0 auto; border: 1px solid rgba(255, 253, 248, .45); background: transparent; color: var(--white); cursor: pointer; font-size: 17px; line-height: 1; }
+.map-guide-trigger { position: absolute; z-index: 3; left: 22px; bottom: 28px; padding: 8px 10px; border: 1px solid var(--ink); background: rgba(255, 253, 248, .94); color: var(--ink); box-shadow: 0 6px 20px rgba(23, 60, 53, .16); cursor: pointer; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+@keyframes guide-in { from { opacity: 0; transform: translateY(10px); } }
 .maplibregl-ctrl-group { border-radius: 0 !important; box-shadow: none !important; border: 1px solid var(--line); }
 .maplibregl-ctrl-attrib { font-size: 9px !important; }
 .maplibregl-popup.place-tooltip .maplibregl-popup-content { padding: 7px 9px; border-radius: 0; background: var(--ink); color: var(--white); box-shadow: 0 5px 18px rgba(23, 60, 53, .2); font-size: 10px; font-weight: 700; }
@@ -189,9 +192,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .candidate-details { text-transform: capitalize; }
 .show-more { width: 100%; margin-top: 12px; padding: 9px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
 
-footer { min-height: 130px; padding: 35px clamp(22px, 5vw, 72px); display: flex; justify-content: space-between; gap: 30px; align-items: center; background: var(--ink); color: var(--paper); font-size: 12px; }
-footer p { max-width: 650px; color: #cbd7d1; line-height: 1.6; }
-footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
+.site-footer { min-height: 190px; padding: 34px clamp(22px, 5vw, 72px); display: grid; grid-template-columns: auto minmax(220px, 1fr) minmax(360px, 1.25fr); gap: clamp(24px, 4vw, 58px); align-items: center; background: var(--ink); color: var(--paper); font-size: 12px; }
+.footer-brand { display: flex; align-items: center; gap: 11px; }
+.footer-brand > span { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 7px; background: var(--orange); color: var(--white); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.footer-brand strong { display: block; font: 700 19px Georgia, serif; }
+.footer-brand p { margin: 4px 0 0; color: #cbd7d1; font-size: 9px; }
+.footer-brand a { color: var(--yellow); font-weight: 800; text-underline-offset: 3px; }
+.footer-note { max-width: 460px; margin: 0; color: #cbd7d1; line-height: 1.65; }
+.footer-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.footer-card { min-width: 0; min-height: 82px; padding: 13px 36px 13px 14px; position: relative; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(203, 215, 209, .35); color: var(--paper); text-decoration: none; }
+.footer-card--primary { border-color: var(--yellow); }
+.footer-card span { color: var(--yellow); font: 600 13px/1.25 Georgia, serif; }
+.footer-card small { margin-top: 6px; color: #cbd7d1; font-size: 8px; line-height: 1.4; }
+.footer-card i { position: absolute; top: 12px; right: 13px; color: var(--yellow); font-style: normal; }
+.footer-card:hover { background: rgba(255, 253, 248, .07); }
 .state-page { min-height: 100svh; padding: 24px; display: grid; place-content: center; justify-items: center; text-align: center; gap: 12px; background: radial-gradient(circle at 50% 40%, var(--white), var(--paper) 55%, var(--paper-deep)); }
 .state-page h1 { font: 400 40px Georgia, serif; margin: 0; }
 .state-page > p:not(.eyebrow) { max-width: 430px; margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
@@ -210,6 +224,8 @@ footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
 @media (max-width: 900px) {
   .workspace { grid-template-columns: 320px minmax(0, 1fr); }
   .profile { width: 420px; }
+  .site-footer { grid-template-columns: auto 1fr; }
+  .footer-actions { grid-column: 1 / -1; }
 }
 
 @media (max-width: 700px) {
@@ -227,8 +243,10 @@ footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
   .national-language-switcher > span, .national-language-switcher button { flex: 0 0 auto; }
   .map-legend { top: 187px; right: 15px; min-width: 152px; }
   .map-disclosure { right: 15px; left: 15px; bottom: 17px; }
+  .map-guide-trigger { left: 15px; bottom: 17px; }
   .profile { position: fixed; top: 66px; height: calc(100vh - 66px); width: 100%; }
-  footer { align-items: start; flex-direction: column; }
+  .site-footer { grid-template-columns: 1fr; align-items: start; }
+  .footer-actions { grid-column: auto; }
 }
 
 @media (max-width: 420px) {
@@ -240,6 +258,7 @@ footer a { color: var(--yellow); font-weight: 700; white-space: nowrap; }
   .map-legend { top: 182px; padding: 8px 10px; }
   .map-disclosure { padding: 10px 12px; }
   .map-disclosure > span { display: none; }
+  .footer-actions { grid-template-columns: 1fr; }
   .profile { padding-inline: 20px; }
   .profile__title h2 { font-size: 33px; }
 }

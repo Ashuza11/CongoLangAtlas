@@ -8,6 +8,9 @@ resources, and NLP metadata in one explorable catalogue. It is designed for
 researchers, students, language communities, technologists, and funders who
 need a trustworthy starting point for work on Congolese languages.
 
+CongoLangAtlas is a project by [KivuLingua AI](https://kivulinguaai.org/), a
+community-led African language technology initiative.
+
 > **Project status:** Phase 2 research preview. The complete 47-track resource
 > audit and a 236-language Glottolog-backed DRC inventory now feed a static
 > Next.js and MapLibre interface with catalogue search,
@@ -205,6 +208,8 @@ been generated as described above. The map also expects the reproducible ADM1
 and ADM2 layers created by `make geodata`. Administrative polygons provide
 navigation context only and are never presented as language boundaries.
 Selecting a province or territory updates the catalogue context immediately.
+The map guidance appears briefly when the atlas loads, dismisses automatically,
+and remains available through the **Map guide** control.
 Province selections expose their complete territory list, ordered by current
 language-evidence coverage, so users can move from a province to a territory
 without searching the map. The place panel summarizes speaker evidence,

@@ -220,6 +220,7 @@ export default function AtlasExplorer() {
   const [evidenceFilter, setEvidenceFilter] = useState<EvidenceFilter>("all");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("all");
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
+  const [showMapGuide, setShowMapGuide] = useState(true);
   const [selected, setSelected] = useState<AtlasLanguage | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<AtlasPlaceSelection | null>(null);
   const [detailLevel, setDetailLevel] = useState<"provinces" | "territories">("provinces");
@@ -295,6 +296,12 @@ export default function AtlasExplorer() {
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [selected]);
+
+  useEffect(() => {
+    if (!showMapGuide) return;
+    const timer = window.setTimeout(() => setShowMapGuide(false), 9000);
+    return () => window.clearTimeout(timer);
+  }, [showMapGuide]);
 
   const regions = useMemo(() => [...new Set(bundle?.languages.map((item) => item.region) ?? [])].sort(), [bundle]);
   const languages = useMemo(() => {
@@ -499,13 +506,20 @@ export default function AtlasExplorer() {
             {detailLevel === "territories" && <span><i className="legend-swatch legend-swatch--territory" />Territory navigation</span>}
           </div>
           <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} selectedPlaceId={selectedPlace?.id} onPlaceSelect={handlePlaceSelect} />
-          <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p></div>
+          {showMapGuide ? <aside className="map-disclosure" aria-label="Map guidance"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p><button onClick={() => setShowMapGuide(false)} aria-label="Dismiss map guidance">×</button></aside> : <button className="map-guide-trigger" onClick={() => setShowMapGuide(true)}>Map guide</button>}
         </section>
 
         {selected && <LanguageProfile key={selected.id} language={selected} onClose={closeProfile} />}
       </section>
 
-      <footer><p>CongoLangAtlas is a research guide. Names, groupings, access, and geographic claims remain open to documented correction.</p><a href="https://github.com/Ashuza11/CongoLangAtlas" target="_blank" rel="noreferrer">View methodology and contribute ↗</a></footer>
+      <footer className="site-footer">
+        <div className="footer-brand"><span>CL</span><div><strong>Atlas</strong><p>A project by <a href="https://kivulinguaai.org/" target="_blank" rel="noreferrer">KivuLingua AI</a></p></div></div>
+        <p className="footer-note">CongoLangAtlas is a research guide. Names, groupings, access, and geographic claims remain open to documented correction.</p>
+        <nav className="footer-actions" aria-label="Project links">
+          <a className="footer-card footer-card--primary" href="https://github.com/Ashuza11/CongoLangAtlas" target="_blank" rel="noreferrer"><span>Methodology & contributions</span><small>Review the evidence process or improve the atlas</small><i aria-hidden>↗</i></a>
+          <a className="footer-card" href="https://kivulinguaai.org/" target="_blank" rel="noreferrer"><span>Visit KivuLingua AI</span><small>Community-led African language technology</small><i aria-hidden>↗</i></a>
+        </nav>
+      </footer>
     </main>
   );
 }
