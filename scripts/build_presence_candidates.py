@@ -130,7 +130,7 @@ def _caid_documented_presence(
     places: list[dict[str, Any]],
     existing_pairs: set[tuple[str, str]],
 ) -> list[dict[str, Any]]:
-    """Convert exact HXL ISO mappings and percentages into review candidates."""
+    """Convert quantitative and qualitative CAID language evidence into candidates."""
     with source_path.open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.reader(handle)
         try:
@@ -159,9 +159,11 @@ def _caid_documented_presence(
             language_columns.append((index, label, iso))
 
     language_ids = {language["id"] for language in inventory_languages}
+    language_by_label = {label.casefold(): (label, iso) for _, label, iso in language_columns}
     place_by_id = {place["id"]: place for place in places}
     candidates: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
+    generated_pairs: set[tuple[str, str]] = set()
     for row_number, row in enumerate(rows, start=3):
         if len(row) != len(headers):
             raise PresenceBuildError(f"CLEAR Global/CAID CSV row {row_number} has an unexpected width")
@@ -202,6 +204,7 @@ def _caid_documented_presence(
             if candidate_id in seen_ids:
                 raise PresenceBuildError(f"duplicate generated CLEAR Global/CAID candidate {candidate_id}")
             seen_ids.add(candidate_id)
+            generated_pairs.add(pair)
             percentage = round(fraction * 100, 6)
             candidates.append({
                 "id": candidate_id,
@@ -227,6 +230,57 @@ def _caid_documented_presence(
                     f"The source marks this row's data confidence as {source_confidence}. The value "
                     "does not measure proficiency, first-language identity, or exclusive distribution; "
                     "the HXL ISO mapping and 2017 administrative crosswalk still require human review."
+                ),
+                "match_status": "documented-presence",
+                "evidence_type": "documented-presence",
+                "province_name": province["name"],
+                "territory_place_id": territory_id,
+                "territory_name": territory["name"],
+                "review_status": "candidate",
+            })
+
+        notes = row[header_index["notes"]].strip() if "notes" in header_index else ""
+        primary = row[header_index["Primary language"]].strip() if "Primary language" in header_index else ""
+        qualitative_languages: dict[str, tuple[str, str]] = {}
+        primary_match = language_by_label.get(primary.casefold())
+        if primary_match:
+            qualitative_languages[primary_match[1]] = primary_match
+        if notes:
+            for _, source_label, iso in language_columns:
+                if re.search(rf"(?<!\w){re.escape(source_label.strip())}(?!\w)", notes, re.IGNORECASE):
+                    qualitative_languages[iso] = (source_label, iso)
+
+        for iso, (source_label, _) in qualitative_languages.items():
+            language_id = f"language-{iso}"
+            pair = (language_id, territory_id)
+            if language_id not in language_ids or pair in existing_pairs or pair in generated_pairs:
+                continue
+            label_slug = re.sub(r"[^a-z0-9]+", "-", source_label.casefold()).strip("-")
+            candidate_id = f"presence-caid-2016-note-{iso}-{territory_code}-{label_slug}"
+            if candidate_id in seen_ids:
+                raise PresenceBuildError(f"duplicate generated CLEAR Global/CAID candidate {candidate_id}")
+            seen_ids.add(candidate_id)
+            generated_pairs.add(pair)
+            evidence = notes or f"Primary language: {primary}"
+            candidates.append({
+                "id": candidate_id,
+                "language_id": language_id,
+                "place_id": territory_id,
+                "province_place_id": province_id,
+                "source_id": source["id"],
+                "source_version": source["version"],
+                "source_url": source["landing_page"],
+                "source_title": "DRC: Languages (2016 CAID territory data)",
+                "evidence_locator": (
+                    f"CSV row {row_number}: Adm 2 Pcode={row[header_index['Adm 2 Pcode']]}, "
+                    f"qualitative evidence: {evidence}"
+                ),
+                "role": "spoken-language",
+                "confidence": "low",
+                "limitations": (
+                    f"The source marks this row's data confidence as {source_confidence} and provides "
+                    "qualitative presence only, with no speaker percentage. The language identity and "
+                    "2017 administrative crosswalk still require human review."
                 ),
                 "match_status": "documented-presence",
                 "evidence_type": "documented-presence",

@@ -81,7 +81,7 @@ layers, 47 fall outside, and generic Kikongo has no one-to-one coordinate.
 These are catalogue points—not distribution polygons or speaker locations—and
 zero candidates currently have named-human approval.
 
-A separate presence pipeline contributes 460 source-linked candidates. Its 99
+A separate presence pipeline contributes 551 source-linked candidates. Its 99
 individually curated records localize the four national languages as broad, non-exclusive regional
 contexts and adds CLEAR Global's territory-level Kinyarwanda evidence for
 Masisi (15%), Nyiragongo (60%), and Rutshuru (70% Kinyabwisha, retained as a
@@ -104,15 +104,15 @@ Broad labels such as Luba and Hemba retain explicit variety-review warnings,
 and duplicate city/territory names retain their administrative crosswalk notes.
 
 The same pipeline downloads CLEAR Global's open CSV from HDX, verifies its
-SHA-256 checksum, reads the HXL ISO mappings, and generates 361 additional
-non-duplicative candidates. These cover 128 second-level areas, all 25
+SHA-256 checksum, reads the HXL ISO mappings, and generates 452 additional
+non-duplicative candidates. These cover 165 second-level areas, all 25
 non-Kinshasa provinces, and 71 matched language identities. The source marks
 the data confidence as low, so the atlas preserves that rating and does not
 reinterpret the 2016 CAID fractions as modern census results. Rows without an
 exact ISO mapping remain excluded unless the repository documents a narrow,
 reviewable override; this currently applies only to Nande, Tshiluba, and
 Tshokwe. Together with the Glottolog candidates, the public bundle now contains
-648 geographic leads across 236 language profiles. All presence records remain
+739 geographic leads across 236 language profiles. All presence records remain
 candidates pending named-human review.
 
 `make coverage-report` audits all 26 provinces against the generated bundle.

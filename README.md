@@ -67,7 +67,8 @@ The repository currently provides:
   sentence text and reconciles source totals before producing draft records;
 - a deterministic public-safe web bundle containing metadata only;
 - a responsive static atlas with language search, access and project-grouping
-  filters, province and territory selection, and evidence-aware profiles;
+  filters, province-to-territory drill-down, place-level coverage summaries,
+  synchronized map selection, and evidence-aware profiles;
 - profile coverage summaries for speaker evidence, digital sources, datasets,
   models, and linguistic research, with missing evidence shown explicitly;
 - a cached, reproducible candidate-source census across OLAC, Hugging Face,
@@ -75,8 +76,8 @@ The repository currently provides:
 - a checksum-pinned Glottolog 5.3 inventory workflow that exposes 235
   ISO-coded DRC-associated rows and maps 188 representative-point candidates
   into administrative context without presenting them as language boundaries;
-- 460 source-linked documented-presence candidates: 99 individually curated
-  records plus 361 non-duplicative territory records generated from CLEAR
+- 551 source-linked documented-presence candidates: 99 individually curated
+  records plus 452 non-duplicative territory records generated from CLEAR
   Global's checksum-pinned 2016 CAID dataset;
 - 236 language profiles: the original 47 benchmark tracks plus 189 provisional
   DRC inventory profiles whose identities and geographic evidence remain
@@ -198,6 +199,16 @@ been generated as described above. The map also expects the reproducible ADM1
 and ADM2 layers created by `make geodata`. Administrative polygons provide
 navigation context only and are never presented as language boundaries.
 Selecting a province or territory updates the catalogue context immediately.
+Province selections expose their complete territory list, ordered by current
+language-evidence coverage, so users can move from a province to a territory
+without searching the map. The place panel summarizes speaker evidence,
+digital sources, datasets, models, and research linked to the visible language
+leads; each language row exposes the same categories before its full profile is
+opened. These are evidence counts, not demographic totals or completeness
+claims. Qualitative CAID notes are preserved even when a territory has no
+statistical percentages. For example, Kabare exposes the source's Swahili,
+Mashi, and Tembo presence statements while clearly showing that no speaker
+estimate was reported.
 The map combines labelled Glottolog representative-point candidates with a
 separate documented-presence layer. A national-language switcher highlights
 the broad sourced regions for Kikongo ya Leta, Lingala, Congo Swahili, and
@@ -216,9 +227,9 @@ candidates rather than silently resolved varieties. A separate 2026 Ngaliema
 school study adds explicit Kinshasa candidates for Lingala, Kikongo,
 Kiswahili, and Tshiluba; its percentages are labelled as shares of 500
 surveyed students rather than citywide speaker estimates. Together with 188
-catalogue points, the public bundle contains 648 geographic leads. The pinned
-CLEAR Global/CAID import contributes low-confidence numeric evidence across
-128 territories, 25 provinces, and 71 ISO-matched language identities. With
+catalogue points, the public bundle contains 739 geographic leads. The pinned
+CLEAR Global/CAID import contributes low-confidence quantitative or qualitative
+evidence across 165 territories, 25 provinces, and 71 ISO-matched language identities. With
 the separate Kinshasa evidence, every province now has locally grounded
 documentary evidence and at least one territory-level record. This is coverage
 of evidence availability, not proof that every language or territory has been

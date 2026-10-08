@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { AtlasBundle, AtlasLanguage, AtlasPlaceSelection, AtlasResource, DiscoveredSource } from "@/lib/types";
+import type { AtlasBundle, AtlasLanguage, AtlasPlaceOption, AtlasPlaceSelection, AtlasResource, DiscoveredSource } from "@/lib/types";
 
 const AtlasMap = dynamic(() => import("./atlas-map"), { ssr: false });
 type AccessFilter = "all" | "open" | "restricted";
@@ -37,6 +37,22 @@ function matchesPlace(language: AtlasLanguage, place: AtlasPlaceSelection, appro
       ? candidate.province_place_id === place.id
       : candidate.territory_place_id === place.id,
   );
+}
+
+function coverageCounts(language: AtlasLanguage) {
+  const datasets = language.resources.filter((resource) => ["dataset", "corpus", "bitext", "speech"].includes(resource.type)).length
+    + language.discovered_sources.filter((source) => source.kind === "dataset").length;
+  const models = language.resources.filter((resource) => resource.type === "model").length
+    + language.discovered_sources.filter((source) => source.kind === "model").length;
+  const research = language.resources.filter((resource) => ["publication", "grammar", "dictionary", "orthography"].includes(resource.type)).length
+    + language.discovered_sources.filter((source) => source.kind === "research").length;
+  const geographicSources = new Set(language.geographic_candidates.map((candidate) => candidate.source_url)).size;
+  return {
+    datasets,
+    models,
+    research,
+    sources: language.resources.length + language.discovered_sources.length + geographicSources,
+  };
 }
 
 function ResourceCard({ resource }: { resource: AtlasResource }) {
@@ -87,14 +103,7 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
   const [sourceKind, setSourceKind] = useState<"all" | DiscoveredSource["kind"]>("all");
   const [showAllSources, setShowAllSources] = useState(false);
   const unresolved = Object.entries(language.review.checks).filter(([, value]) => value !== "approved");
-  const datasets = language.resources.filter((resource) => ["dataset", "corpus", "bitext", "speech"].includes(resource.type)).length
-    + language.discovered_sources.filter((source) => source.kind === "dataset").length;
-  const models = language.resources.filter((resource) => resource.type === "model").length
-    + language.discovered_sources.filter((source) => source.kind === "model").length;
-  const research = language.resources.filter((resource) => ["publication", "grammar", "dictionary", "orthography"].includes(resource.type)).length
-    + language.discovered_sources.filter((source) => source.kind === "research").length;
-  const geographicSources = new Set(language.geographic_candidates.map((candidate) => candidate.source_url)).size;
-  const sourceTotal = language.resources.length + language.discovered_sources.length + geographicSources;
+  const coverage = coverageCounts(language);
   const filteredSources = language.discovered_sources.filter((source) => sourceKind === "all" || source.kind === sourceKind);
   const visibleSources = showAllSources ? filteredSources : filteredSources.slice(0, 10);
   return (
@@ -111,10 +120,10 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
         <h3>Coverage at a glance</h3>
         <div className="coverage-grid">
           <div><strong>—</strong><span>Speakers</span><small>No reviewed estimate</small></div>
-          <div><strong>{sourceTotal}</strong><span>Digital sources</span><small>Resource and geographic evidence links</small></div>
-          <div><strong>{datasets}</strong><span>Datasets</span><small>Text or speech</small></div>
-          <div><strong>{models}</strong><span>Models</span><small>Verified records</small></div>
-          <div><strong>{research}</strong><span>Linguistic research</span><small>Publications and descriptions</small></div>
+          <div><strong>{coverage.sources}</strong><span>Digital sources</span><small>Resource and geographic evidence links</small></div>
+          <div><strong>{coverage.datasets}</strong><span>Datasets</span><small>Text or speech</small></div>
+          <div><strong>{coverage.models}</strong><span>Models</span><small>Verified records</small></div>
+          <div><strong>{coverage.research}</strong><span>Linguistic research</span><small>Publications and descriptions</small></div>
         </div>
       </div>
       <div className="profile-grid">
@@ -175,6 +184,7 @@ function LanguageProfile({ language, onClose }: { language: AtlasLanguage; onClo
 
 export default function AtlasExplorer() {
   const [bundle, setBundle] = useState<AtlasBundle | null>(null);
+  const [places, setPlaces] = useState<AtlasPlaceOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [access, setAccess] = useState<AccessFilter>("all");
@@ -207,6 +217,28 @@ export default function AtlasExplorer() {
       .catch((reason: Error) => setError(reason.message));
   }, []);
 
+  useEffect(() => {
+    Promise.all([
+      fetch("/generated/geodata/cod-adm1.geojson").then((response) => response.json()),
+      fetch("/generated/geodata/cod-adm2.geojson").then((response) => response.json()),
+    ]).then(([provinces, territories]) => {
+      const provinceOptions: AtlasPlaceOption[] = provinces.features.map((feature: { properties: Record<string, string> }) => ({
+        id: `place-${feature.properties.id}`,
+        name: feature.properties.name,
+        adminLevel: "province",
+        sourceCode: feature.properties.source_code,
+      }));
+      const territoryOptions: AtlasPlaceOption[] = territories.features.map((feature: { properties: Record<string, string> }) => ({
+        id: `place-${feature.properties.id}`,
+        name: feature.properties.name,
+        adminLevel: "territory",
+        parentId: `place-${feature.properties.parent_id}`,
+        sourceCode: feature.properties.source_code,
+      }));
+      setPlaces([...provinceOptions, ...territoryOptions]);
+    }).catch(() => setPlaces([]));
+  }, []);
+
   const regions = useMemo(() => [...new Set(bundle?.languages.map((item) => item.region) ?? [])].sort(), [bundle]);
   const languages = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -224,6 +256,33 @@ export default function AtlasExplorer() {
       candidates: bundle.languages.filter((language) => matchesPlace(language, selectedPlace)).length,
     };
   }, [bundle, selectedPlace]);
+  const placeLanguages = useMemo(
+    () => selectedPlace ? (bundle?.languages ?? []).filter((language) => matchesPlace(language, selectedPlace)) : [],
+    [bundle, selectedPlace],
+  );
+  const placeCoverage = useMemo(() => placeLanguages.reduce((total, language) => {
+    const coverage = coverageCounts(language);
+    total.sources += coverage.sources;
+    total.datasets += coverage.datasets;
+    total.models += coverage.models;
+    total.research += coverage.research;
+    if (language.geographic_candidates.some((candidate) =>
+      (selectedPlace?.adminLevel === "province" ? candidate.province_place_id : candidate.territory_place_id) === selectedPlace?.id
+      && candidate.speaker_percentage !== undefined)) total.speakerEvidence += 1;
+    return total;
+  }, { sources: 0, datasets: 0, models: 0, research: 0, speakerEvidence: 0 }), [placeLanguages, selectedPlace]);
+  const selectedProvince = selectedPlace?.adminLevel === "province"
+    ? selectedPlace
+    : places.find((place) => place.id === selectedPlace?.parentId);
+  const provinceTerritories = useMemo(() => selectedProvince
+    ? places
+      .filter((place) => place.adminLevel === "territory" && place.parentId === selectedProvince.id)
+      .map((place) => ({
+        ...place,
+        languageCount: (bundle?.languages ?? []).filter((language) => matchesPlace(language, place)).length,
+      }))
+      .sort((left, right) => right.languageCount - left.languageCount || left.name.localeCompare(right.name))
+    : [], [bundle, places, selectedProvince]);
   const nationalLanguages = NATIONAL_LANGUAGE_IDS
     .map((id) => bundle?.languages.find((language) => language.id === id))
     .filter((language): language is AtlasLanguage => Boolean(language));
@@ -246,7 +305,24 @@ export default function AtlasExplorer() {
       <section className="workspace" id="atlas">
         <aside className="catalogue-panel">
           <div className="panel-heading"><div><p className="eyebrow">{selectedPlace ? `${selectedPlace.adminLevel} selected` : "National catalogue"}</p><h2>{selectedPlace?.name || "Languages"}</h2></div><span>{languages.length} / {bundle.languages.length}</span></div>
-          {selectedPlace && <div className="place-context"><strong>{placeCounts?.candidates || 0} geographic lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed claim{placeCounts?.approved === 1 ? "" : "s"}; other matches are documented candidates or representative points, never complete language distributions.</span><button onClick={() => setSelectedPlace(null)}>Show all languages</button></div>}
+          {selectedPlace && <div className="place-context">
+            <div className="place-context__heading"><div><strong>{placeCounts?.candidates || 0} language lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed geographic claim{placeCounts?.approved === 1 ? "" : "s"}</span></div><button onClick={() => setSelectedPlace(null)}>Clear place</button></div>
+            <div className="place-stats" aria-label={`Resource coverage for ${selectedPlace.name}`}>
+              <div><strong>{placeCoverage.speakerEvidence || "—"}</strong><span>Speaker evidence</span></div>
+              <div><strong>{placeCoverage.sources}</strong><span>Digital sources</span></div>
+              <div><strong>{placeCoverage.datasets}</strong><span>Datasets</span></div>
+              <div><strong>{placeCoverage.models}</strong><span>Models</span></div>
+              <div><strong>{placeCoverage.research}</strong><span>Research</span></div>
+            </div>
+            {selectedPlace.adminLevel === "territory" && selectedProvince && <button className="province-return" onClick={() => { setSelectedPlace(selectedProvince); setDetailLevel("provinces"); }}>← {selectedProvince.name} province</button>}
+            {provinceTerritories.length > 0 && <div className="territory-browser">
+              <div><strong>{selectedProvince?.name} territories</strong><span>Select a territory to inspect its language evidence</span></div>
+              <div className="territory-list">
+                {provinceTerritories.map((territory) => <button key={territory.id} className={selectedPlace.id === territory.id ? "active" : ""} onClick={() => { setSelectedPlace(territory); setDetailLevel("territories"); setSelected(null); }}><span>{territory.name}<small>{territory.sourceCode}</small></span><strong>{territory.languageCount}</strong></button>)}
+              </div>
+            </div>}
+            <p>Counts combine reviewed records and visible candidates. They do not define complete language distributions.</p>
+          </div>}
           <label className="search-field"><span className="sr-only">Search languages</span><span aria-hidden>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, alias, or ISO code" /></label>
           <div className="filters">
             <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
@@ -257,11 +333,18 @@ export default function AtlasExplorer() {
           <div className="language-list">
             {languages.map((language) => {
               const hasOpen = language.resources.some(resourceIsOpen);
+              const coverage = coverageCounts(language);
+              const hasSpeakerEvidence = selectedPlace && language.geographic_candidates.some((candidate) =>
+                (selectedPlace.adminLevel === "province" ? candidate.province_place_id : candidate.territory_place_id) === selectedPlace.id
+                && candidate.speaker_percentage !== undefined);
               return <button className={`language-row ${selected?.id === language.id ? "selected" : ""}`} onClick={() => selectLanguage(language)} key={language.id}>
-                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Documented geographic lead") : `${language.region} · ${language.resources.length + language.discovered_sources.length + new Set(language.geographic_candidates.map((candidate) => candidate.source_url)).size} source links`}</small></span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
+                <span className="language-row__code">{language.iso}</span><span><strong>{language.name}</strong><small>{selectedPlace ? (matchesPlace(language, selectedPlace, true) ? "Reviewed place claim" : "Documented geographic lead") : `${language.region} · ${coverage.sources} source links`}</small>{selectedPlace && <span className="language-row__coverage"><span>{hasSpeakerEvidence ? "Speaker data" : "No speaker estimate"}</span><span>{coverage.datasets} data</span><span>{coverage.models} models</span><span>{coverage.research} research</span></span>}</span><span className={`access-dot ${hasOpen ? "is-open" : ""}`} title={hasOpen ? "Has an open download" : "No open download"} />
               </button>;
             })}
-            {!languages.length && <p className="empty-state">No mapped language leads match this place and the active filters.</p>}
+            {!languages.length && <div className="empty-state">
+              <p>{selectedPlace && placeLanguages.length ? "Language evidence exists here, but the active search or filters hide it." : "No source-backed language evidence is indexed for this place yet."}</p>
+              {selectedPlace && placeLanguages.length > 0 && <button onClick={() => { setQuery(""); setAccess("all"); setRegion("all"); }}>Reset language filters</button>}
+            </div>}
           </div>
         </aside>
 
@@ -274,7 +357,7 @@ export default function AtlasExplorer() {
             <span>Locate a national language</span>
             {nationalLanguages.map((language) => <button key={language.id} className={selected?.id === language.id ? "active" : ""} onClick={() => { setSelectedPlace(null); setDetailLevel("provinces"); setSelected(language); }}>{language.name}</button>)}
           </div>
-          <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} onPlaceSelect={handlePlaceSelect} />
+          <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} selectedPlaceId={selectedPlace?.id} onPlaceSelect={handlePlaceSelect} />
           <div className="map-disclosure"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p></div>
         </section>
 

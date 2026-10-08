@@ -9,6 +9,7 @@ interface AtlasMapProps {
   detailLevel: "provinces" | "territories";
   highlightedProvinceIds: string[];
   highlightedTerritoryIds: string[];
+  selectedPlaceId?: string;
   onPlaceSelect: (place: AtlasPlaceSelection) => void;
 }
 
@@ -22,10 +23,10 @@ function geometryIds(placeIds: string[]) {
   return placeIds.map((id) => id.replace(/^place-/, ""));
 }
 
-function fillExpression(ids: string[], baseColor: string): maplibregl.ExpressionSpecification {
+function fillExpression(ids: string[], selectedPlaceId: string | undefined, baseColor: string): maplibregl.ExpressionSpecification {
   return [
     "case",
-    ["boolean", ["feature-state", "selected"], false], "#d96f43",
+    ["==", ["get", "id"], selectedPlaceId?.replace(/^place-/, "") ?? ""], "#d96f43",
     ["in", ["get", "id"], ["literal", geometryIds(ids)]], "#356f66",
     baseColor,
   ];
@@ -35,20 +36,21 @@ export default function AtlasMap({
   detailLevel,
   highlightedProvinceIds,
   highlightedTerritoryIds,
+  selectedPlaceId,
   onPlaceSelect,
 }: AtlasMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const detailRef = useRef(detailLevel);
-  const highlightsRef = useRef({ provinces: highlightedProvinceIds, territories: highlightedTerritoryIds });
+  const highlightsRef = useRef({ provinces: highlightedProvinceIds, territories: highlightedTerritoryIds, selectedPlaceId });
 
   useEffect(() => {
-    highlightsRef.current = { provinces: highlightedProvinceIds, territories: highlightedTerritoryIds };
+    highlightsRef.current = { provinces: highlightedProvinceIds, territories: highlightedTerritoryIds, selectedPlaceId };
     const map = mapRef.current;
     if (!map?.isStyleLoaded()) return;
-    map.setPaintProperty("province-fill", "fill-color", fillExpression(highlightedProvinceIds, "#c9d7c7"));
-    map.setPaintProperty("territory-fill", "fill-color", fillExpression(highlightedTerritoryIds, "#f1cf87"));
-  }, [highlightedProvinceIds, highlightedTerritoryIds]);
+    map.setPaintProperty("province-fill", "fill-color", fillExpression(highlightedProvinceIds, selectedPlaceId, "#c9d7c7"));
+    map.setPaintProperty("territory-fill", "fill-color", fillExpression(highlightedTerritoryIds, selectedPlaceId, "#f1cf87"));
+  }, [highlightedProvinceIds, highlightedTerritoryIds, selectedPlaceId]);
 
   useEffect(() => {
     detailRef.current = detailLevel;
@@ -83,8 +85,8 @@ export default function AtlasMap({
         type: "fill",
         source: "provinces",
         paint: {
-          "fill-color": fillExpression(highlightsRef.current.provinces, "#c9d7c7"),
-          "fill-opacity": ["case", ["boolean", ["feature-state", "selected"], false], 0.72, 0.78],
+          "fill-color": fillExpression(highlightsRef.current.provinces, highlightsRef.current.selectedPlaceId, "#c9d7c7"),
+          "fill-opacity": 0.78,
         },
       });
       map.addLayer({
@@ -99,8 +101,8 @@ export default function AtlasMap({
         source: "territories",
         layout: { visibility: detailRef.current === "territories" ? "visible" : "none" },
         paint: {
-          "fill-color": fillExpression(highlightsRef.current.territories, "#f1cf87"),
-          "fill-opacity": ["case", ["boolean", ["feature-state", "selected"], false], 0.7, 0.28],
+          "fill-color": fillExpression(highlightsRef.current.territories, highlightsRef.current.selectedPlaceId, "#f1cf87"),
+          "fill-opacity": 0.28,
         },
       });
       map.addLayer({
@@ -112,27 +114,15 @@ export default function AtlasMap({
       });
     });
 
-    const selectedIds: Record<"provinces" | "territories", string | number | undefined> = {
-      provinces: undefined,
-      territories: undefined,
-    };
     const selectPlace = (event: MapMouseEvent) => {
       const layer = detailRef.current === "territories" ? "territory-fill" : "province-fill";
-      const source = detailRef.current === "territories" ? "territories" : "provinces";
       const feature = map.queryRenderedFeatures(event.point, { layers: [layer] })[0];
       if (!feature) return;
-      if (selectedIds[source] !== undefined) {
-        map.setFeatureState({ source, id: selectedIds[source] }, { selected: false });
-      }
-      selectedIds[source] = feature.id;
-      if (selectedIds[source] !== undefined) {
-        map.setFeatureState({ source, id: selectedIds[source] }, { selected: true });
-      }
       onPlaceSelect({
         id: `place-${String(feature.properties?.id ?? feature.id ?? "unknown")}`,
         name: String(feature.properties?.name ?? "Unknown place"),
         adminLevel: detailRef.current === "territories" ? "territory" : "province",
-        parentId: feature.properties?.parent_id ? String(feature.properties.parent_id) : undefined,
+        parentId: feature.properties?.parent_id ? `place-${String(feature.properties.parent_id)}` : undefined,
       });
     };
     map.on("click", selectPlace);

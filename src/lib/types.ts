@@ -130,3 +130,7 @@ export interface AtlasPlaceSelection {
   adminLevel: "province" | "territory";
   parentId?: string;
 }
+
+export interface AtlasPlaceOption extends AtlasPlaceSelection {
+  sourceCode: string;
+}

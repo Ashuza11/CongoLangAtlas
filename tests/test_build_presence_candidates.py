@@ -90,10 +90,11 @@ class PresenceCandidateBuildTests(unittest.TestCase):
             root = Path(temporary)
             source_path = root / "caid.csv"
             source_path.write_text(
-                "Admin 2,Adm 2 Pcode,Admin 1,Adm 1 Pcode,data_confidence,Lingala,Nande\n"
-                "#adm2+name,#adm2+code,#adm1+name,#adm1+code,#meta+confidence,"
+                "Admin 2,Adm 2 Pcode,Admin 1,Adm 1 Pcode,Primary language,data_confidence,notes,Lingala,Nande\n"
+                "#adm2+name,#adm2+code,#adm1+name,#adm1+code,#indicator+lang+main,#meta+confidence,#meta+text,"
                 "#indicator+lang+pct+iso639-3_lin,#indicator+lang+pct+iso639-3_nmb\n"
-                "Example,CD1001,Province,CD10,Low,0.8,0.25\n",
+                "Example,CD1001,Province,CD10,Lingala,Low,,0.8,0.25\n"
+                "Notes-only,CD1002,Province,CD10,Lingala,Low,Lingala and Nande are present.,,\n",
                 encoding="utf-8",
             )
             languages = [
@@ -104,6 +105,10 @@ class PresenceCandidateBuildTests(unittest.TestCase):
                 {"id": "place-cod-adm1-cd10", "name": "Province", "admin_level": "province"},
                 {
                     "id": "place-cod-adm2-cd1001", "name": "Example",
+                    "admin_level": "territory", "parent_id": "place-cod-adm1-cd10",
+                },
+                {
+                    "id": "place-cod-adm2-cd1002", "name": "Notes-only",
                     "admin_level": "territory", "parent_id": "place-cod-adm1-cd10",
                 },
             ]
@@ -117,11 +122,15 @@ class PresenceCandidateBuildTests(unittest.TestCase):
                 {("language-lin", "place-cod-adm2-cd1001")},
             )
 
-            self.assertEqual(len(records), 1)
+            self.assertEqual(len(records), 3)
             self.assertEqual(records[0]["language_id"], "language-nnb")
             self.assertEqual(records[0]["speaker_percentage"], 25)
             self.assertEqual(records[0]["confidence"], "low")
             self.assertIn("HXL ISO mapping", records[0]["limitations"])
+            qualitative = records[1:]
+            self.assertEqual({record["language_id"] for record in qualitative}, {"language-lin", "language-nnb"})
+            self.assertTrue(all("speaker_percentage" not in record for record in qualitative))
+            self.assertTrue(all("qualitative presence only" in record["limitations"] for record in qualitative))
 
 
 if __name__ == "__main__":

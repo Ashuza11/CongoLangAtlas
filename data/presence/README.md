@@ -33,10 +33,15 @@ identity, exclusive language areas, or complete population statistics.
 
 The source manifest also pins CLEAR Global's open 2016 CAID territory CSV by
 download URL, version, licence, and SHA-256 checksum. The build reads its HXL
-ISO tags and produces 361 additional non-duplicative candidates across 128
-second-level areas. Every generated row retains the publisher's low confidence
+ISO tags and produces 452 additional non-duplicative candidates across 165
+second-level areas: 361 quantitative records and 91 qualitative records. Every
+generated row retains the publisher's low confidence
 rating and an exact CSV row, administrative code, column, and raw-value
-locator. Unmapped source labels are not guessed; only the documented Nande,
+locator. Qualitative primary-language and notes fields are also retained when
+they mention an HXL-mapped language but provide no percentage; these records
+are explicitly displayed without a speaker estimate. This includes the CAID
+row identifying Swahili, Mashi, and Tembo in Kabare. Unmapped source labels are
+not guessed; only the documented Nande,
 Tshiluba, and Tshokwe corrections are applied as explicit reviewable
 overrides.
 
