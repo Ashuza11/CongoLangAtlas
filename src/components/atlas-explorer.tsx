@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AtlasBundle, AtlasLanguage, AtlasPlaceOption, AtlasPlaceSelection, AtlasResource, DiscoveredSource } from "@/lib/types";
 
@@ -220,6 +221,7 @@ export default function AtlasExplorer() {
   const [evidenceFilter, setEvidenceFilter] = useState<EvidenceFilter>("all");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("all");
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMapGuide, setShowMapGuide] = useState(true);
   const [selected, setSelected] = useState<AtlasLanguage | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<AtlasPlaceSelection | null>(null);
@@ -227,6 +229,7 @@ export default function AtlasExplorer() {
   const handlePlaceSelect = useCallback((place: AtlasPlaceSelection) => {
     setSelectedPlace(place);
     setSelected(null);
+    setShowMobileFilters(false);
   }, []);
   const changeDetailLevel = (level: "provinces" | "territories") => {
     setDetailLevel(level);
@@ -242,6 +245,7 @@ export default function AtlasExplorer() {
     setSelectedPlace(place);
     setDetailLevel(place.adminLevel === "territory" ? "territories" : "provinces");
     setSelected(null);
+    setShowMobileFilters(false);
   };
   const selectLanguage = (language: AtlasLanguage) => {
     setSelected(language);
@@ -429,7 +433,7 @@ export default function AtlasExplorer() {
       </header>
 
       <section className="workspace" id="atlas">
-        <aside className="catalogue-panel" id="atlas-catalogue">
+        <aside className={`catalogue-panel ${selectedPlace ? "has-place-selection" : ""}`} id="atlas-catalogue">
           <div className="panel-heading"><div><p className="eyebrow">{selectedPlace ? `${selectedPlace.adminLevel} selected` : "National catalogue"}</p><h2>{selectedPlace?.name || "Languages"}</h2></div><span>{languages.length} / {bundle.languages.length}</span></div>
           {selectedPlace && <div className="place-context">
             <div className="place-context__heading"><div><strong>{placeCounts?.candidates || 0} language lead{placeCounts?.candidates === 1 ? "" : "s"}</strong><span>{placeCounts?.approved || 0} reviewed geographic claim{placeCounts?.approved === 1 ? "" : "s"}</span></div><button onClick={() => setSelectedPlace(null)}>Clear place</button></div>
@@ -444,25 +448,29 @@ export default function AtlasExplorer() {
             {provinceTerritories.length > 0 && <div className="territory-browser">
               <div><strong>{selectedProvince?.name} territories</strong><span>Select a territory to inspect its language evidence</span></div>
               <div className="territory-list">
-                {provinceTerritories.map((territory) => <button key={territory.id} className={selectedPlace.id === territory.id ? "active" : ""} onClick={() => { setSelectedPlace(territory); setDetailLevel("territories"); setSelected(null); }}><span>{territory.name}<small>{territory.sourceCode}</small></span><strong>{territory.languageCount}</strong></button>)}
+                {provinceTerritories.map((territory) => <button key={territory.id} className={selectedPlace.id === territory.id ? "active" : ""} onClick={() => { setSelectedPlace(territory); setDetailLevel("territories"); setSelected(null); setShowMobileFilters(false); }}><span>{territory.name}<small>{territory.sourceCode}</small></span><strong>{territory.languageCount}</strong></button>)}
               </div>
             </div>}
             <p>Counts combine reviewed records and visible candidates. They do not define complete language distributions.</p>
           </div>}
           <label className="search-field"><span className="sr-only">Search languages</span><span aria-hidden>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name, alias, or ISO code" /></label>
-          <div className="filters">
-            <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
-            <div className="segmented" aria-label="Filter by access">
-              {(["all", "open", "restricted"] as const).map((value) => <button aria-pressed={access === value} className={access === value ? "active" : ""} onClick={() => setAccess(value)} key={value}>{value}</button>)}
+          <div className={`filters ${showMobileFilters ? "is-open" : ""}`}>
+            <button className="mobile-filter-toggle" type="button" aria-expanded={showMobileFilters} onClick={() => setShowMobileFilters((value) => !value)}>
+              <span>Filters</span><small>{activeFilterCount ? `${activeFilterCount} active` : "Optional"}</small><i aria-hidden>{showMobileFilters ? "−" : "+"}</i>
+            </button>
+            <div className="filter-content">
+              <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Filter by project grouping"><option value="all">All project groupings</option>{regions.map((value) => <option key={value}>{value}</option>)}</select>
+              <div className="segmented" aria-label="Filter by access">
+                {(["all", "open", "restricted"] as const).map((value) => <button aria-pressed={access === value} className={access === value ? "active" : ""} onClick={() => setAccess(value)} key={value}>{value}</button>)}
+              </div>
+              <div className="filter-grid">
+                <label><span>Resource coverage</span><select value={coverageFilter} onChange={(event) => setCoverageFilter(event.target.value as CoverageFilter)}><option value="all">Any coverage</option><option value="datasets">Has datasets</option><option value="models">Has models</option><option value="research">Has research</option><option value="speaker-evidence">Has speaker evidence</option></select></label>
+                <label><span>Geographic evidence</span><select value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as EvidenceFilter)}><option value="all">Any evidence</option><option value="documented-presence">Documented presence</option><option value="representative-point">Representative point</option><option value="unmapped">Not mapped</option></select></label>
+                <label><span>Evidence confidence</span><select value={confidenceFilter} onChange={(event) => setConfidenceFilter(event.target.value as ConfidenceFilter)}><option value="all">Any confidence</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option><option value="unspecified">Not stated</option></select></label>
+                <label><span>Human review</span><select value={reviewFilter} onChange={(event) => setReviewFilter(event.target.value as ReviewFilter)}><option value="all">Any review state</option><option value="ready">Ready for promotion</option><option value="needs-review">Needs human review</option></select></label>
+              </div>
+              <div className="filter-actions"><span>{activeFilterCount ? `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}` : "No language filters"}</span><button onClick={resetLanguageFilters} disabled={!activeFilterCount}>Reset</button></div>
             </div>
-            <div className="filter-grid">
-              <label><span>Resource coverage</span><select value={coverageFilter} onChange={(event) => setCoverageFilter(event.target.value as CoverageFilter)}><option value="all">Any coverage</option><option value="datasets">Has datasets</option><option value="models">Has models</option><option value="research">Has research</option><option value="speaker-evidence">Has speaker evidence</option></select></label>
-              <label><span>Geographic evidence</span><select value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as EvidenceFilter)}><option value="all">Any evidence</option><option value="documented-presence">Documented presence</option><option value="representative-point">Representative point</option><option value="unmapped">Not mapped</option></select></label>
-              <label><span>Evidence confidence</span><select value={confidenceFilter} onChange={(event) => setConfidenceFilter(event.target.value as ConfidenceFilter)}><option value="all">Any confidence</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option><option value="unspecified">Not stated</option></select></label>
-              <label><span>Human review</span><select value={reviewFilter} onChange={(event) => setReviewFilter(event.target.value as ReviewFilter)}><option value="all">Any review state</option><option value="ready">Ready for promotion</option><option value="needs-review">Needs human review</option></select></label>
-            </div>
-            <div className="filter-actions"><span>{activeFilterCount ? `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}` : "No language filters"}</span><button onClick={resetLanguageFilters} disabled={!activeFilterCount}>Reset</button></div>
-            <div className="export-actions" aria-label="Export filtered metadata"><span>Export {languages.length} result{languages.length === 1 ? "" : "s"}</span><button onClick={exportCsv} disabled={!languages.length}>CSV</button><button onClick={exportJson} disabled={!languages.length}>JSON</button></div>
           </div>
           <p className="sr-only" aria-live="polite">{languages.length} language results</p>
           <div className="language-list" aria-label={`${languages.length} language results`}>
@@ -481,6 +489,7 @@ export default function AtlasExplorer() {
               {activeFilterCount > 0 && <button onClick={resetLanguageFilters}>Reset language filters</button>}
             </div>}
           </div>
+          <div className="export-actions catalogue-export" aria-label="Export filtered metadata"><span>Export {languages.length} result{languages.length === 1 ? "" : "s"}</span><button onClick={exportCsv} disabled={!languages.length}>CSV</button><button onClick={exportJson} disabled={!languages.length}>JSON</button></div>
         </aside>
 
         <section className="map-panel">
@@ -506,7 +515,7 @@ export default function AtlasExplorer() {
             {detailLevel === "territories" && <span><i className="legend-swatch legend-swatch--territory" />Territory navigation</span>}
           </div>
           <AtlasMap detailLevel={detailLevel} highlightedProvinceIds={highlightedProvinceIds} highlightedTerritoryIds={highlightedTerritoryIds} selectedPlaceId={selectedPlace?.id} onPlaceSelect={handlePlaceSelect} />
-          {showMapGuide ? <aside className="map-disclosure" aria-label="Map guidance"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts—not exclusive language borders or complete distributions.</p><button onClick={() => setShowMapGuide(false)} aria-label="Dismiss map guidance">×</button></aside> : <button className="map-guide-trigger" onClick={() => setShowMapGuide(true)}>Map guide</button>}
+          {showMapGuide ? <aside className="map-disclosure" aria-label="Map guidance"><span aria-hidden>◇</span><p><strong>Click any area to filter geographic leads, or select a national language to locate its documented broad region.</strong> Highlights are evidence contexts, not exclusive language borders or complete distributions.</p><button onClick={() => setShowMapGuide(false)} aria-label="Dismiss map guidance">×</button></aside> : <button className="map-guide-trigger" onClick={() => setShowMapGuide(true)}>Map guide</button>}
         </section>
 
         {selected && <LanguageProfile key={selected.id} language={selected} onClose={closeProfile} />}
@@ -516,7 +525,7 @@ export default function AtlasExplorer() {
         <div className="footer-brand"><span>CL</span><div><strong>Atlas</strong><p>A project by <a href="https://kivulinguaai.org/" target="_blank" rel="noreferrer">KivuLingua AI</a></p></div></div>
         <p className="footer-note">CongoLangAtlas is a research guide. Names, groupings, access, and geographic claims remain open to documented correction.</p>
         <nav className="footer-actions" aria-label="Project links">
-          <a className="footer-card footer-card--primary" href="https://github.com/Ashuza11/CongoLangAtlas" target="_blank" rel="noreferrer"><span>Methodology & contributions</span><small>Review the evidence process or improve the atlas</small><i aria-hidden>↗</i></a>
+          <Link className="footer-card footer-card--primary" href="/methodology"><span>Methodology & contributions</span><small>Review the evidence process or improve the atlas</small><i aria-hidden>→</i></Link>
           <a className="footer-card" href="https://kivulinguaai.org/" target="_blank" rel="noreferrer"><span>Visit KivuLingua AI</span><small>Community-led African language technology</small><i aria-hidden>↗</i></a>
         </nav>
       </footer>
