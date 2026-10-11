@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap, MapMouseEvent } from "maplibre-gl";
+import { getUi, type Locale } from "@/lib/i18n";
 import type { AtlasPlaceSelection } from "@/lib/types";
 
 interface AtlasMapProps {
+  locale: Locale;
   detailLevel: "provinces" | "territories";
   highlightedProvinceIds: string[];
   highlightedTerritoryIds: string[];
@@ -89,12 +91,14 @@ function boundaryBounds(collection: BoundaryFeatureCollection | null, placeIds: 
 }
 
 export default function AtlasMap({
+  locale,
   detailLevel,
   highlightedProvinceIds,
   highlightedTerritoryIds,
   selectedPlaceId,
   onPlaceSelect,
 }: AtlasMapProps) {
+  const c = getUi(locale);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const introActiveRef = useRef(false);
@@ -144,7 +148,7 @@ export default function AtlasMap({
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
     map.addControl(
-      new maplibregl.AttributionControl({ customAttribution: "Administrative data: OCHA/RGC" }),
+      new maplibregl.AttributionControl({ customAttribution: c.administrativeData }),
       "bottom-left",
     );
 
@@ -265,7 +269,7 @@ export default function AtlasMap({
       if (!feature) return;
       onPlaceSelect({
         id: `place-${String(feature.properties?.id ?? feature.id ?? "unknown")}`,
-        name: String(feature.properties?.name ?? "Unknown place"),
+        name: String(feature.properties?.name ?? c.unknownPlace),
         adminLevel: detailRef.current === "territories" ? "territory" : "province",
         parentId: feature.properties?.parent_id ? `place-${String(feature.properties.parent_id)}` : undefined,
       });
@@ -277,7 +281,7 @@ export default function AtlasMap({
       if (!map.getLayer(layer)) return;
       const feature = map.queryRenderedFeatures(event.point, { layers: [layer] })[0];
       map.getCanvas().style.cursor = feature ? "pointer" : "";
-      if (feature) hoverPopup.setLngLat(event.lngLat).setText(String(feature.properties?.name ?? "Unknown place")).addTo(map);
+      if (feature) hoverPopup.setLngLat(event.lngLat).setText(String(feature.properties?.name ?? c.unknownPlace)).addTo(map);
       else hoverPopup.remove();
     });
     map.getCanvas().addEventListener("mouseleave", () => hoverPopup.remove());
@@ -289,7 +293,7 @@ export default function AtlasMap({
       map.remove();
       mapRef.current = null;
     };
-  }, [onPlaceSelect]);
+  }, [c.administrativeData, c.unknownPlace, onPlaceSelect]);
 
-  return <div ref={containerRef} className="map-canvas" aria-label="Administrative map of the Democratic Republic of Congo" />;
+  return <div ref={containerRef} className="map-canvas" aria-label={c.administrativeMap} />;
 }

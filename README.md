@@ -73,6 +73,8 @@ The repository currently provides:
   filters, province-to-territory drill-down, place-level coverage summaries,
   synchronized map selection, evidence-aware profiles, keyboard-visible
   controls, and compact mobile map navigation;
+- complete English and French interface routes, localized metadata, controls,
+  map guidance, language profiles, methodology, and contribution guidance;
 - resource-coverage and geographic-evidence filters plus public-safe JSON and
   CSV exports that preserve the currently selected place and visible results;
 - confidence and human-review filters, visible evidence-status badges, Escape
@@ -207,6 +209,9 @@ Open `http://localhost:3000`. The importer and review queue must already have
 been generated as described above. The map also expects the reproducible ADM1
 and ADM2 layers created by `make geodata`. Administrative polygons provide
 navigation context only and are never presented as language boundaries.
+The English atlas is available at `/` and the French atlas at `/fr`; each page
+includes a persistent EN/FR switcher, including the corresponding methodology
+pages at `/methodology` and `/fr/methodology`.
 Selecting a province or territory updates the catalogue context immediately.
 The map guidance appears briefly when the atlas loads, dismisses automatically,
 and remains available through the **Map guide** control.
